@@ -5,22 +5,18 @@
 
 set -e
 
-# Wait for surrealdb to be resolvable and add to /etc/hosts
+# Wait for surrealdb to be resolvable
 MAX_ATTEMPTS=30
 ATTEMPT=0
+SURREALDB_IP=""
 
 echo "Waiting for surrealdb DNS resolution..."
 
 while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
     # Try to resolve surrealdb using getent
-    if IP=$(getent hosts surrealdb 2>/dev/null | awk '{print $1}'); then
-        if [ -n "$IP" ]; then
-            echo "Resolved surrealdb to $IP"
-            # Add to /etc/hosts if not already there
-            if ! grep -q "surrealdb" /etc/hosts 2>/dev/null; then
-                echo "$IP surrealdb" >> /etc/hosts
-                echo "Added surrealdb to /etc/hosts"
-            fi
+    if SURREALDB_IP=$(getent hosts surrealdb 2>/dev/null | awk '{print $1}'); then
+        if [ -n "$SURREALDB_IP" ]; then
+            echo "Resolved surrealdb to $SURREALDB_IP"
             break
         fi
     fi
@@ -30,8 +26,20 @@ while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
     sleep 1
 done
 
-if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
-    echo "Warning: Could not resolve surrealdb, proceeding anyway"
+if [ -z "$SURREALDB_IP" ]; then
+    echo "Error: Could not resolve surrealdb hostname"
+    exit 1
+fi
+
+# Add to /etc/hosts
+echo "$SURREALDB_IP surrealdb" >> /etc/hosts
+echo "Added surrealdb to /etc/hosts"
+
+# Replace hostname with IP in SURREAL_URL to bypass Rust DNS issues
+if [ -n "$SURREAL_URL" ]; then
+    NEW_URL=$(echo "$SURREAL_URL" | sed "s/surrealdb/$SURREALDB_IP/g")
+    echo "Rewriting SURREAL_URL: $SURREAL_URL -> $NEW_URL"
+    export SURREAL_URL="$NEW_URL"
 fi
 
 # Drop privileges and start the API
