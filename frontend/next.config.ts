@@ -22,6 +22,9 @@ const nextConfig: NextConfig = {
 	// React Compiler - stable in Next.js 16
 	reactCompiler: true,
 
+	// Output standalone for Docker deployment
+	output: 'standalone',
+
 	images: {
 		remotePatterns: imageRemotePatterns,
 	},

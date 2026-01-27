@@ -3,8 +3,16 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@9.15.0 --activate
+# Build-time arguments for NEXT_PUBLIC_* variables (baked at build time)
+ARG NEXT_PUBLIC_APP_URL=http://localhost:3000
+ARG NEXT_PUBLIC_API_URL=http://localhost:3001
+
+# Set as environment variables for build
+ENV NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+
+# Install pnpm (matching packageManager version in package.json)
+RUN corepack enable && corepack prepare pnpm@10.28.2 --activate
 
 # Copy package files
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml* ./

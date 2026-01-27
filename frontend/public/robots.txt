@@ -1,0 +1,6 @@
+# RFSbase robots.txt
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://rfsbase.com/sitemap.xml

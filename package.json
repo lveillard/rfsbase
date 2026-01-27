@@ -17,7 +17,10 @@
     "db:seed": "surreal import --conn http://localhost:8000 --ns rfsbase --db rfsbase --user root --pass root backend/seed.surql",
     "docker:dev": "docker compose up",
     "docker:build": "docker compose -f docker-compose.prod.yml build",
-    "docker:prod": "docker compose -f docker-compose.prod.yml up -d"
+    "docker:prod": "docker compose -f docker-compose.prod.yml up -d",
+    "docker:ec2": "docker compose -f docker-compose.ec2.yml up -d",
+    "docker:ec2:build": "docker compose -f docker-compose.ec2.yml build",
+    "docker:ec2:logs": "docker compose -f docker-compose.ec2.yml logs -f"
   },
   "devDependencies": {
     "turbo": "^2.7.6"
