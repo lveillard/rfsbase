@@ -1,0 +1,60 @@
+# RFSbase Production Caddyfile
+# Automatic SSL via Let's Encrypt
+
+{
+    admin off
+    email admin@rfsbase.com
+}
+
+# Main domain - Frontend
+rfsbase.com {
+    header {
+        X-Frame-Options "DENY"
+        X-Content-Type-Options "nosniff"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        -Server
+    }
+
+    reverse_proxy frontend:3000
+
+    encode gzip zstd
+
+    log {
+        output stdout
+        format json
+    }
+}
+
+# API subdomain
+api.rfsbase.com {
+    header {
+        X-Content-Type-Options "nosniff"
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        Access-Control-Allow-Origin "https://rfsbase.com"
+        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+        Access-Control-Allow-Headers "Content-Type, Authorization"
+        Access-Control-Allow-Credentials "true"
+        -Server
+    }
+
+    @options method OPTIONS
+    handle @options {
+        respond 204
+    }
+
+    reverse_proxy backend:3001
+
+    encode gzip zstd
+
+    log {
+        output stdout
+        format json
+    }
+}
+
+# Redirect www to non-www
+www.rfsbase.com {
+    redir https://rfsbase.com{uri} permanent
+}
