@@ -67,6 +67,20 @@ resource "aws_iam_role_policy_attachment" "cloudwatch" {
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
+# Bedrock - for Claude Code
+resource "aws_iam_role_policy" "bedrock" {
+  name = "bedrock-invoke"
+  role = aws_iam_role.ec2.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"]
+      Resource = "arn:aws:bedrock:*::foundation-model/anthropic.*"
+    }]
+  })
+}
+
 # Security Group
 resource "aws_security_group" "main" {
   name        = "rfsbase-${var.environment}"
