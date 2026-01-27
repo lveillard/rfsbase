@@ -48,14 +48,12 @@ services:
       dockerfile: ../docker/backend.Dockerfile
     image: rfsbase/api:${TAG:-latest}
     container_name: rfsbase-api
-    # Use Docker's embedded DNS
-    dns: 127.0.0.11
-    # Add link for /etc/hosts fallback
-    links:
-      - surrealdb:surrealdb
+    # Share network namespace with surrealdb to avoid DNS issues
+    network_mode: "service:surrealdb"
     environment:
       - RUST_LOG=info
-      - SURREAL_URL=ws://surrealdb:8000
+      # Use localhost since we share network namespace with surrealdb
+      - SURREAL_URL=ws://localhost:8000
       - SURREAL_NS=${SURREAL_NS:-rfsbase}
       - SURREAL_DB=${SURREAL_DB:-main}
       - SURREAL_USER=${SURREAL_USER:-root}
@@ -79,8 +77,6 @@ services:
           memory: 512M
         reservations:
           memory: 128M
-    networks:
-      - rfsbase-internal
     security_opt:
       - no-new-privileges:true
 
