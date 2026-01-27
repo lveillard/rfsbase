@@ -35,9 +35,6 @@ RUN groupadd --gid 1001 rfsbase \
 # Copy binary from builder
 COPY --from=builder /app/target/release/rfsbase-api /usr/local/bin/rfsbase-api
 
-# Copy config files (if any)
-COPY --from=builder /app/config ./config 2>/dev/null || true
-
 USER rfsbase
 
 EXPOSE 3001
