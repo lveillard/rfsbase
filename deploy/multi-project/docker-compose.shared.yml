@@ -1,0 +1,35 @@
+version: '3.8'
+
+# Shared Infrastructure for Multi-Project EC2
+# This runs a single Caddy reverse proxy that routes to all projects
+#
+# Usage:
+#   1. Start this first: docker compose -f docker-compose.shared.yml up -d
+#   2. Then start each project with their own docker-compose
+#   3. Projects connect to 'shared-proxy' network
+
+services:
+  # Shared Reverse Proxy (Caddy)
+  # Routes traffic based on domain to different projects
+  caddy:
+    image: caddy:2-alpine
+    container_name: shared-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: always
+    networks:
+      - shared-proxy
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  shared-proxy:
+    name: shared-proxy
+    driver: bridge

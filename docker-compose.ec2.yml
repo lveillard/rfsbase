@@ -1,19 +1,27 @@
 version: '3.8'
 
-# EC2 Deployment Docker Compose
-# For IP-based access (no domain/SSL yet)
-# Usage: docker compose -f docker-compose.ec2.yml up -d
+# EC2 Deployment - Secure Configuration
+# All services behind Caddy reverse proxy
+# Only ports 80/443 exposed to internet
+#
+# Security:
+# - SurrealDB: Internal only, no public access
+# - Backend API: Internal only, proxied via Caddy with rate limiting
+# - Frontend: Internal only, proxied via Caddy
+# - Caddy: Only exposed service, handles SSL/TLS, security headers
 
 services:
-  # SurrealDB Database
+  # ===========================================
+  # SurrealDB - INTERNAL ONLY
+  # ===========================================
   surrealdb:
     image: surrealdb/surrealdb:v2.1
     container_name: rfsbase-db
     command: start --log warn --user ${SURREAL_USER:-root} --pass ${SURREAL_PASS:-root} file:/data/database.db
     volumes:
       - surrealdb_data:/data
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     environment:
       - SURREAL_PATH=/data/database.db
     restart: always
@@ -30,9 +38,13 @@ services:
         reservations:
           memory: 512M
     networks:
-      - rfsbase-network
+      - rfsbase-internal
+    security_opt:
+      - no-new-privileges:true
 
-  # Backend API (Axum/Rust)
+  # ===========================================
+  # Backend API - INTERNAL ONLY (proxied by Caddy)
+  # ===========================================
   backend:
     build:
       context: ./backend
@@ -51,8 +63,10 @@ services:
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
       - RESEND_API_KEY=${RESEND_API_KEY:-}
       - FROM_EMAIL=${FROM_EMAIL:-noreply@rfsbase.com}
-    ports:
-      - "3001:3001"
+      - APP_URL=${APP_URL:-http://localhost}
+      - API_URL=${API_URL:-http://localhost/api}
+    expose:
+      - "3001"
     depends_on:
       surrealdb:
         condition: service_healthy
@@ -64,26 +78,30 @@ services:
         reservations:
           memory: 128M
     networks:
-      - rfsbase-network
+      - rfsbase-internal
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
 
-  # Frontend (Next.js)
+  # ===========================================
+  # Frontend - INTERNAL ONLY (proxied by Caddy)
+  # ===========================================
   frontend:
     build:
       context: .
       dockerfile: docker/frontend.Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
-        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-/api}
+        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-}
     image: rfsbase/web:${TAG:-latest}
     container_name: rfsbase-web
     environment:
       - NODE_ENV=production
       - API_URL=http://backend:3001
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
-      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     depends_on:
       - backend
     restart: always
@@ -94,13 +112,44 @@ services:
         reservations:
           memory: 128M
     networks:
-      - rfsbase-network
+      - rfsbase-internal
+    security_opt:
+      - no-new-privileges:true
+
+  # ===========================================
+  # Caddy Reverse Proxy - ONLY PUBLIC SERVICE
+  # ===========================================
+  caddy:
+    image: caddy:2-alpine
+    container_name: rfsbase-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/Caddyfile.ec2:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+      - backend
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    networks:
+      - rfsbase-internal
+    security_opt:
+      - no-new-privileges:true
 
 volumes:
   surrealdb_data:
     driver: local
+  caddy_data:
+  caddy_config:
 
 networks:
-  rfsbase-network:
-    name: rfsbase-network
+  rfsbase-internal:
+    name: rfsbase-internal
     driver: bridge
+    internal: false  # Needs internet for SSL cert provisioning
