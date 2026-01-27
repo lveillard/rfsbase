@@ -21,7 +21,6 @@ rfsbase.com {
 
     # API routes - proxy to internal backend (NOT public)
     handle /api/* {
-        uri strip_prefix /api
         reverse_proxy backend:3001
     }
 
