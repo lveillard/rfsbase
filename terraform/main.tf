@@ -73,11 +73,18 @@ resource "aws_iam_role_policy" "bedrock" {
   role = aws_iam_role.ec2.id
   policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [{
-      Effect   = "Allow"
-      Action   = ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"]
-      Resource = "arn:aws:bedrock:*::foundation-model/anthropic.*"
-    }]
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"]
+        Resource = "arn:aws:bedrock:*::foundation-model/anthropic.*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["bedrock:ListFoundationModels", "bedrock:GetFoundationModel"]
+        Resource = "*"
+      }
+    ]
   })
 }
 
