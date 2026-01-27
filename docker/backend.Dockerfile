@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy manifests
-COPY Cargo.toml Cargo.lock ./
-COPY src ./src
+COPY backend/Cargo.toml backend/Cargo.lock ./
+COPY backend/src ./src
 
 # Build release binary
 RUN cargo build --release
@@ -27,6 +27,7 @@ RUN apt-get update && apt-get install -y \
     libssl3 \
     curl \
     libnss-myhostname \
+    gosu \
     && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
@@ -36,11 +37,14 @@ RUN groupadd --gid 1001 rfsbase \
 # Copy binary from builder
 COPY --from=builder /app/target/release/rfsbase-api /usr/local/bin/rfsbase-api
 
-USER rfsbase
+# Copy entrypoint script
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
+# Run as root initially, entrypoint drops to rfsbase user
 EXPOSE 3001
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=5 \
     CMD curl -f http://localhost:3001/api/health || exit 1
 
-CMD ["rfsbase-api"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
