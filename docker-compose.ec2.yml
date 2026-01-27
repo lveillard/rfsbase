@@ -13,10 +13,12 @@ services:
   # SurrealDB - INTERNAL ONLY
   # ===========================================
   surrealdb:
-    image: surrealdb/surrealdb:v2.6.0
+    build:
+      context: .
+      dockerfile: docker/surrealdb.Dockerfile
+    image: rfsbase/surrealdb:${TAG:-latest}
     container_name: rfsbase-db
-    user: root
-    command: start --log warn --user ${SURREAL_USER:-root} --pass ${SURREAL_PASS:-root} surrealkv:/data/database
+    command: ["start", "--log", "warn", "--user", "${SURREAL_USER:-root}", "--pass", "${SURREAL_PASS:-root}", "surrealkv:/data/database"]
     volumes:
       - surrealdb_data:/data
     expose:
@@ -114,7 +116,10 @@ services:
   # Caddy Reverse Proxy - ONLY PUBLIC SERVICE
   # ===========================================
   caddy:
-    image: caddy:2-alpine
+    build:
+      context: .
+      dockerfile: docker/caddy.Dockerfile
+    image: rfsbase/caddy:${TAG:-latest}
     container_name: rfsbase-proxy
     ports:
       - "80:80"
