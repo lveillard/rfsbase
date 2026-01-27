@@ -48,8 +48,11 @@ services:
       dockerfile: ../docker/backend.Dockerfile
     image: rfsbase/api:${TAG:-latest}
     container_name: rfsbase-api
-    # Add startup delay to ensure DNS is ready
-    command: ["sh", "-c", "sleep 5 && rfsbase-api"]
+    # Use Docker's embedded DNS
+    dns: 127.0.0.11
+    # Add link for /etc/hosts fallback
+    links:
+      - surrealdb:surrealdb
     environment:
       - RUST_LOG=info
       - SURREAL_URL=ws://surrealdb:8000
