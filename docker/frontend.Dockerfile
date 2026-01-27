@@ -46,10 +46,10 @@ ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy built files
+# Copy built files - monorepo structure puts server.js in subfolder
 COPY --from=builder /app/frontend/public ./public
 COPY --from=builder /app/frontend/.next/standalone ./
-COPY --from=builder /app/frontend/.next/static ./.next/static
+COPY --from=builder /app/frontend/.next/static ./frontend/.next/static
 
 USER nextjs
 
@@ -58,4 +58,5 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+# In monorepo, server.js is in frontend subdirectory
+CMD ["node", "frontend/server.js"]

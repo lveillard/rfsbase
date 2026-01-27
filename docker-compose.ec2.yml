@@ -78,9 +78,6 @@ services:
       - rfsbase-internal
     security_opt:
       - no-new-privileges:true
-    read_only: true
-    tmpfs:
-      - /tmp
 
   # ===========================================
   # Frontend - INTERNAL ONLY (proxied by Caddy)
