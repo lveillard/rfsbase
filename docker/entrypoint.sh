@@ -36,14 +36,12 @@ echo "$SURREALDB_IP surrealdb" >> /etc/hosts
 echo "Added surrealdb to /etc/hosts"
 
 # Replace hostname with IP in SURREAL_URL to bypass Rust DNS issues
+# Note: SurrealDB HTTP client expects host:port format without http:// prefix
 if [ -n "$SURREAL_URL" ]; then
     NEW_URL=$(echo "$SURREAL_URL" | sed "s/surrealdb/$SURREALDB_IP/g")
     echo "Rewriting SURREAL_URL: $SURREAL_URL -> $NEW_URL"
     export SURREAL_URL="$NEW_URL"
 fi
-
-# Also export as environment variable for the rfsbase user
-export SURREAL_URL
 
 # Drop privileges and start the API
 echo "Starting rfsbase-api as user rfsbase..."

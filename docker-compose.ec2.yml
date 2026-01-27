@@ -50,7 +50,7 @@ services:
     container_name: rfsbase-api
     environment:
       - RUST_LOG=info
-      - SURREAL_URL=http://surrealdb:8000
+      - SURREAL_URL=surrealdb:8000
       - SURREAL_NS=${SURREAL_NS:-rfsbase}
       - SURREAL_DB=${SURREAL_DB:-main}
       - SURREAL_USER=${SURREAL_USER:-root}
