@@ -13,7 +13,7 @@ services:
   # SurrealDB - INTERNAL ONLY
   # ===========================================
   surrealdb:
-    image: surrealdb/surrealdb:v2.1
+    image: surrealdb/surrealdb:latest
     container_name: rfsbase-db
     user: root
     command: start --log warn --user ${SURREAL_USER:-root} --pass ${SURREAL_PASS:-root} surrealkv:/data/database
