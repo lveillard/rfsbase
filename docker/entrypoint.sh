@@ -42,6 +42,9 @@ if [ -n "$SURREAL_URL" ]; then
     export SURREAL_URL="$NEW_URL"
 fi
 
+# Also export as environment variable for the rfsbase user
+export SURREAL_URL
+
 # Drop privileges and start the API
 echo "Starting rfsbase-api as user rfsbase..."
 exec gosu rfsbase rfsbase-api

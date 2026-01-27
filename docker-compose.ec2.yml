@@ -13,7 +13,7 @@ services:
   # SurrealDB - INTERNAL ONLY
   # ===========================================
   surrealdb:
-    image: surrealdb/surrealdb:latest
+    image: surrealdb/surrealdb:v2.6.0
     container_name: rfsbase-db
     user: root
     command: start --log warn --user ${SURREAL_USER:-root} --pass ${SURREAL_PASS:-root} surrealkv:/data/database
@@ -50,7 +50,7 @@ services:
     container_name: rfsbase-api
     environment:
       - RUST_LOG=info
-      - SURREAL_URL=ws://surrealdb:8000
+      - SURREAL_URL=http://surrealdb:8000
       - SURREAL_NS=${SURREAL_NS:-rfsbase}
       - SURREAL_DB=${SURREAL_DB:-main}
       - SURREAL_USER=${SURREAL_USER:-root}

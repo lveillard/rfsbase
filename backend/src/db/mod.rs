@@ -1,4 +1,4 @@
-use surrealdb::engine::remote::ws::{Client, Ws};
+use surrealdb::engine::remote::http::{Client, Http};
 use surrealdb::opt::auth::Root;
 use surrealdb::Surreal;
 
@@ -10,7 +10,7 @@ pub struct Database {
 
 impl Database {
     pub async fn connect(config: &Config) -> anyhow::Result<Self> {
-        let client = Surreal::new::<Ws>(&config.surreal_url).await?;
+        let client = Surreal::new::<Http>(&config.surreal_url).await?;
 
         client
             .signin(Root {
