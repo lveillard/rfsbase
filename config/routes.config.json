@@ -1,0 +1,76 @@
+{
+  "$schema": "./schemas/routes.schema.json",
+  "marketing": {
+    "home": "/",
+    "about": "/about",
+    "pricing": "/pricing",
+    "blog": "/blog",
+    "blogPost": "/blog/[slug]",
+    "changelog": "/changelog",
+    "terms": "/terms",
+    "privacy": "/privacy"
+  },
+  "auth": {
+    "login": "/login",
+    "signup": "/signup",
+    "verify": "/auth/verify",
+    "callback": "/auth/callback/[provider]",
+    "forgotPassword": "/auth/forgot-password",
+    "resetPassword": "/auth/reset-password"
+  },
+  "app": {
+    "dashboard": "/app",
+    "ideas": "/app/ideas",
+    "ideaNew": "/app/ideas/new",
+    "ideaDetail": "/app/ideas/[id]",
+    "ideaEdit": "/app/ideas/[id]/edit",
+    "profile": "/app/profile/[id]",
+    "profileEdit": "/app/profile/edit",
+    "settings": "/app/settings",
+    "notifications": "/app/notifications",
+    "search": "/app/search"
+  },
+  "api": {
+    "prefix": "/api/v1",
+    "health": "/api/health",
+    "auth": {
+      "base": "/api/v1/auth",
+      "login": "/api/v1/auth/login",
+      "logout": "/api/v1/auth/logout",
+      "register": "/api/v1/auth/register",
+      "magicLink": "/api/v1/auth/magic-link",
+      "verify": "/api/v1/auth/verify",
+      "refresh": "/api/v1/auth/refresh",
+      "me": "/api/v1/auth/me",
+      "ycVerify": "/api/v1/auth/yc-verify"
+    },
+    "ideas": {
+      "base": "/api/v1/ideas",
+      "detail": "/api/v1/ideas/[id]",
+      "vote": "/api/v1/ideas/[id]/vote",
+      "similar": "/api/v1/ideas/similar",
+      "search": "/api/v1/ideas/search"
+    },
+    "comments": {
+      "base": "/api/v1/comments",
+      "byIdea": "/api/v1/ideas/[id]/comments",
+      "detail": "/api/v1/comments/[id]",
+      "upvote": "/api/v1/comments/[id]/upvote"
+    },
+    "users": {
+      "base": "/api/v1/users",
+      "detail": "/api/v1/users/[id]",
+      "ideas": "/api/v1/users/[id]/ideas",
+      "follow": "/api/v1/users/[id]/follow",
+      "followers": "/api/v1/users/[id]/followers",
+      "following": "/api/v1/users/[id]/following"
+    },
+    "notifications": {
+      "base": "/api/v1/notifications",
+      "read": "/api/v1/notifications/[id]/read",
+      "readAll": "/api/v1/notifications/read-all"
+    },
+    "categories": "/api/v1/categories",
+    "tags": "/api/v1/tags"
+  }
+}

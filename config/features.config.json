@@ -1,0 +1,42 @@
+{
+  "$schema": "./schemas/features.schema.json",
+  "flags": {
+    "enableAIAssistant": true,
+    "enableSemanticSearch": true,
+    "enableRealTimeUpdates": false,
+    "enableEmailDigest": false,
+    "enableReferrals": false,
+    "enableYCVerification": true,
+    "maintenanceMode": false,
+    "showBetaBadge": true
+  },
+  "rollout": {
+    "aiRefinement": {
+      "enabled": true,
+      "percentage": 100,
+      "allowList": []
+    },
+    "newEditor": {
+      "enabled": true,
+      "percentage": 100,
+      "allowList": []
+    },
+    "betaFeatures": {
+      "enabled": false,
+      "percentage": 0,
+      "allowList": []
+    }
+  },
+  "limits": {
+    "freeUser": {
+      "ideasPerDay": 5,
+      "commentsPerDay": 20,
+      "aiRequestsPerDay": 10
+    },
+    "verifiedUser": {
+      "ideasPerDay": 20,
+      "commentsPerDay": 100,
+      "aiRequestsPerDay": 50
+    }
+  }
+}

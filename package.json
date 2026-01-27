@@ -1,0 +1,29 @@
+{
+  "name": "rfsbase",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "db:start": "docker compose up -d surrealdb",
+    "db:stop": "docker compose down",
+    "db:migrate": "cd backend && cargo run --bin migrate",
+    "db:seed": "surreal import --conn http://localhost:8000 --ns rfsbase --db rfsbase --user root --pass root backend/seed.surql",
+    "docker:dev": "docker compose up",
+    "docker:build": "docker compose -f docker-compose.prod.yml build",
+    "docker:prod": "docker compose -f docker-compose.prod.yml up -d"
+  },
+  "devDependencies": {
+    "turbo": "^2.7.6"
+  },
+  "packageManager": "pnpm@10.28.2",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

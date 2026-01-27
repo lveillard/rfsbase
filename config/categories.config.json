@@ -1,0 +1,35 @@
+{
+  "$schema": "./schemas/categories.schema.json",
+  "categories": [
+    { "id": "ai-ml", "label": "AI/ML", "icon": "brain", "color": "#8B5CF6", "description": "Artificial intelligence and machine learning" },
+    { "id": "devtools", "label": "Developer Tools", "icon": "code", "color": "#06B6D4", "description": "Tools for software developers" },
+    { "id": "fintech", "label": "Fintech", "icon": "dollar-sign", "color": "#10B981", "description": "Financial technology and services" },
+    { "id": "healthcare", "label": "Healthcare", "icon": "heart-pulse", "color": "#EF4444", "description": "Healthcare and medical technology" },
+    { "id": "climate", "label": "Climate/Energy", "icon": "leaf", "color": "#22C55E", "description": "Climate tech and clean energy" },
+    { "id": "consumer", "label": "Consumer", "icon": "users", "color": "#F59E0B", "description": "Consumer products and services" },
+    { "id": "b2b-saas", "label": "B2B SaaS", "icon": "building-2", "color": "#3B82F6", "description": "Business-to-business software" },
+    { "id": "education", "label": "Education", "icon": "graduation-cap", "color": "#EC4899", "description": "Education and learning" },
+    { "id": "marketplace", "label": "Marketplaces", "icon": "store", "color": "#F97316", "description": "Two-sided marketplaces" },
+    { "id": "hardware", "label": "Hardware", "icon": "cpu", "color": "#6366F1", "description": "Physical products and devices" },
+    { "id": "infrastructure", "label": "Infrastructure", "icon": "server", "color": "#14B8A6", "description": "Cloud and infrastructure" },
+    { "id": "security", "label": "Security", "icon": "shield", "color": "#DC2626", "description": "Cybersecurity and privacy" },
+    { "id": "other", "label": "Other", "icon": "sparkles", "color": "#71717A", "description": "Other categories" }
+  ],
+  "popularTags": [
+    "open-source",
+    "api",
+    "automation",
+    "productivity",
+    "mobile",
+    "web3",
+    "security",
+    "analytics",
+    "collaboration",
+    "infrastructure",
+    "no-code",
+    "data",
+    "payments",
+    "messaging",
+    "video"
+  ]
+}

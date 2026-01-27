@@ -1,0 +1,46 @@
+{
+  "$schema": "./schemas/app.schema.json",
+  "name": "RFSbase",
+  "tagline": "Where startup ideas come to life",
+  "description": "A living idea board where founders share problems and solutions. Vote on ideas that matter.",
+  "domain": "rfsbase.com",
+  "social": {
+    "twitter": "@rfsbase",
+    "github": "rfsbase/rfsbase"
+  },
+  "features": {
+    "magicLink": true,
+    "googleOAuth": true,
+    "githubOAuth": true,
+    "ycVerification": true,
+    "aiAssistant": true,
+    "semanticSearch": true,
+    "notifications": true
+  },
+  "limits": {
+    "titleMinLength": 10,
+    "titleMaxLength": 100,
+    "problemMinLength": 50,
+    "problemMaxLength": 5000,
+    "solutionMaxLength": 5000,
+    "commentMinLength": 1,
+    "commentMaxLength": 2000,
+    "bioMaxLength": 500,
+    "tagsMax": 5,
+    "linksMax": 5
+  },
+  "pagination": {
+    "defaultPageSize": 20,
+    "maxPageSize": 100
+  },
+  "similarity": {
+    "threshold": 0.75,
+    "maxResults": 5,
+    "minTextLength": 50
+  },
+  "auth": {
+    "magicLinkExpiry": 900,
+    "sessionDuration": 604800,
+    "refreshTokenDuration": 2592000
+  }
+}

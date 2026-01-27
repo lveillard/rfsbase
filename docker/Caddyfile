@@ -1,0 +1,59 @@
+# Production Caddyfile for RFSbase
+# Automatically provisions SSL certificates via Let's Encrypt
+
+{
+    email {$ADMIN_EMAIL:admin@rfsbase.com}
+}
+
+# Main domain - serves the frontend
+{$DOMAIN:rfsbase.com} {
+    reverse_proxy frontend:3000
+
+    # Security headers
+    header {
+        X-Frame-Options "DENY"
+        X-Content-Type-Options "nosniff"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    }
+
+    # Gzip compression
+    encode gzip
+
+    # Logging
+    log {
+        output file /data/access.log
+        format json
+    }
+}
+
+# API subdomain - serves the backend
+api.{$DOMAIN:rfsbase.com} {
+    reverse_proxy backend:3001
+
+    # CORS headers for API
+    header {
+        Access-Control-Allow-Origin "{$CORS_ORIGIN:https://rfsbase.com}"
+        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        Access-Control-Allow-Headers "Content-Type, Authorization"
+        Access-Control-Max-Age "86400"
+    }
+
+    # Security headers
+    header {
+        X-Content-Type-Options "nosniff"
+        X-XSS-Protection "1; mode=block"
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    }
+
+    # Gzip compression
+    encode gzip
+
+    # Logging
+    log {
+        output file /data/api-access.log
+        format json
+    }
+}

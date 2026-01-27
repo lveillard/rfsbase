@@ -1,0 +1,116 @@
+version: '3.8'
+
+# Production Docker Compose configuration
+# Usage: docker compose -f docker-compose.prod.yml up -d
+
+services:
+  # SurrealDB Database
+  surrealdb:
+    image: surrealdb/surrealdb:v2.1
+    container_name: rfsbase-db
+    command: start --log warn --user ${SURREAL_USER} --pass ${SURREAL_PASS} file:/data/database.db
+    volumes:
+      - surrealdb_data:/data
+    expose:
+      - "8000"
+    environment:
+      - SURREAL_PATH=/data/database.db
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 512M
+
+  # Backend API (Axum/Rust)
+  backend:
+    image: ${REGISTRY:-ghcr.io}/rfsbase/api:${TAG:-latest}
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend.Dockerfile
+    container_name: rfsbase-api
+    environment:
+      - RUST_LOG=info
+      - SURREAL_URL=ws://surrealdb:8000
+      - SURREAL_NS=rfsbase
+      - SURREAL_DB=main
+      - SURREAL_USER=${SURREAL_USER}
+      - SURREAL_PASS=${SURREAL_PASS}
+      - JWT_SECRET=${JWT_SECRET}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - FROM_EMAIL=${FROM_EMAIL:-noreply@rfsbase.com}
+    expose:
+      - "3001"
+    depends_on:
+      surrealdb:
+        condition: service_healthy
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 128M
+
+  # Frontend (Next.js)
+  frontend:
+    image: ${REGISTRY:-ghcr.io}/rfsbase/web:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: docker/frontend.Dockerfile
+    container_name: rfsbase-web
+    environment:
+      - NODE_ENV=production
+      - API_URL=http://backend:3001
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-https://api.rfsbase.com}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-https://rfsbase.com}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    expose:
+      - "3000"
+    depends_on:
+      - backend
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 128M
+
+  # Reverse Proxy (Caddy)
+  caddy:
+    image: caddy:2-alpine
+    container_name: rfsbase-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+      - backend
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+
+volumes:
+  surrealdb_data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  default:
+    name: rfsbase-network
