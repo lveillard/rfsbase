@@ -33,9 +33,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2G
+          memory: 8G
         reservations:
-          memory: 512M
+          memory: 2G
     networks:
       - rfsbase-internal
     security_opt:

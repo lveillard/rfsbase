@@ -15,23 +15,25 @@ variable "environment" {
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
-  default     = "t3.medium"
-
-  validation {
-    condition     = can(regex("^t3\\.(micro|small|medium|large)$", var.instance_type))
-    error_message = "Instance type must be t3.micro, t3.small, t3.medium, or t3.large."
-  }
+  default     = "t3.xlarge"  # 16GB RAM - good for SurrealDB + multiple apps
 }
 
 variable "volume_size" {
   description = "Root EBS volume size in GB"
   type        = number
-  default     = 25
+  default     = 50
+}
 
-  validation {
-    condition     = var.volume_size >= 20 && var.volume_size <= 100
-    error_message = "Volume size must be between 20 and 100 GB."
-  }
+variable "volume_iops" {
+  description = "gp3 IOPS (baseline 3000, max 16000)"
+  type        = number
+  default     = 6000
+}
+
+variable "volume_throughput" {
+  description = "gp3 throughput in MB/s (baseline 125, max 1000)"
+  type        = number
+  default     = 400
 }
 
 variable "use_elastic_ip" {
@@ -47,7 +49,7 @@ variable "domain" {
 }
 
 variable "ssh_public_key" {
-  description = "SSH public key for EC2 access via SSM (optional)"
+  description = "SSH public key for ubuntu user (SSH-over-SSM access)"
   type        = string
   default     = ""
 }
