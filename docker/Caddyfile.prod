@@ -1,50 +1,34 @@
 # RFSbase Production Caddyfile
-# Automatic SSL via Let's Encrypt
+# Only frontend exposed - API is internal only
 
 {
     admin off
     email admin@rfsbase.com
 }
 
-# Main domain - Frontend
+# Main domain - Frontend + API proxy
 rfsbase.com {
+    # Security headers
     header {
         X-Frame-Options "DENY"
         X-Content-Type-Options "nosniff"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
         -Server
     }
 
-    reverse_proxy frontend:3000
-
-    encode gzip zstd
-
-    log {
-        output stdout
-        format json
-    }
-}
-
-# API subdomain
-api.rfsbase.com {
-    header {
-        X-Content-Type-Options "nosniff"
-        Strict-Transport-Security "max-age=31536000; includeSubDomains"
-        Access-Control-Allow-Origin "https://rfsbase.com"
-        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-        Access-Control-Allow-Headers "Content-Type, Authorization"
-        Access-Control-Allow-Credentials "true"
-        -Server
+    # API routes - proxy to internal backend (NOT public)
+    handle /api/* {
+        uri strip_prefix /api
+        reverse_proxy backend:3001
     }
 
-    @options method OPTIONS
-    handle @options {
-        respond 204
+    # Everything else goes to frontend
+    handle {
+        reverse_proxy frontend:3000
     }
-
-    reverse_proxy backend:3001
 
     encode gzip zstd
 
