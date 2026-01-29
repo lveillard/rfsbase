@@ -1,5 +1,5 @@
 import appConfig from '@config/app.config.json'
-import { Sparkles } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 
@@ -11,21 +11,23 @@ interface BrandProps {
 }
 
 const sizes = {
-	sm: { icon: 'h-6 w-6', iconInner: 'h-3 w-3', text: 'text-sm' },
-	md: { icon: 'h-8 w-8', iconInner: 'h-4 w-4', text: 'text-lg' },
-	lg: { icon: 'h-10 w-10', iconInner: 'h-5 w-5', text: 'text-xl' },
+	sm: { logo: 24, text: 'text-sm' },
+	md: { logo: 32, text: 'text-lg' },
+	lg: { logo: 40, text: 'text-xl' },
 } as const
 
 export function Brand({ href = '/', size = 'md', showName = true, className }: BrandProps) {
-	const { icon, iconInner, text } = sizes[size]
+	const { logo, text } = sizes[size]
 
 	const content = (
 		<div className={cn('flex items-center gap-2', className)}>
-			<div
-				className={cn('flex items-center justify-center rounded-lg bg-primary text-white', icon)}
-			>
-				<Sparkles className={iconInner} />
-			</div>
+			<Image
+				src="/logo.svg"
+				alt={appConfig.name}
+				width={logo}
+				height={logo}
+				className="flex-shrink-0"
+			/>
 			{showName && <span className={cn('font-semibold', text)}>{appConfig.name}</span>}
 		</div>
 	)
