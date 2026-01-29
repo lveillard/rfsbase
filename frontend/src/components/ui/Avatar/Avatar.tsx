@@ -14,6 +14,7 @@ interface AvatarProps {
 	size?: AvatarSize
 	className?: string
 	verified?: boolean
+	ycVerified?: boolean
 }
 
 const SIZE_CLASSES: Record<AvatarSize, string> = {
@@ -42,12 +43,25 @@ const BADGE_CONTAINER_SIZE: Record<AvatarSize, string> = {
 
 const isSmallSize = (size: AvatarSize): boolean => size === 'xs' || size === 'sm'
 
+const YC_BADGE_SIZE: Record<AvatarSize, number> = {
+	xs: 12,
+	sm: 12,
+	md: 16,
+	lg: 16,
+	xl: 20,
+} as const
+
 const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
-	{ src, alt, name = '', size = 'md', className, verified },
+	{ src, alt, name = '', size = 'md', className, verified, ycVerified },
 	ref,
 ) {
 	const initials = getInitials(name)
 	const pixelSize = SIZE_PX[size]
+	const ycBadgeSize = YC_BADGE_SIZE[size]
+
+	// YC verification takes precedence over email verification
+	const showYcBadge = ycVerified
+	const showVerifiedBadge = verified && !ycVerified
 
 	return (
 		<div className="relative inline-block">
@@ -74,7 +88,25 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
 					<span>{initials}</span>
 				)}
 			</div>
-			{verified && (
+			{showYcBadge && (
+				<div
+					className={cn(
+						'absolute -bottom-0.5 -right-0.5',
+						'rounded-full overflow-hidden',
+						BADGE_CONTAINER_SIZE[size],
+					)}
+					title="YC Verified"
+				>
+					<Image
+						src="/icons/yc-badge.png"
+						alt="YC Verified"
+						width={ycBadgeSize}
+						height={ycBadgeSize}
+						className="object-contain"
+					/>
+				</div>
+			)}
+			{showVerifiedBadge && (
 				<div
 					className={cn(
 						'absolute -bottom-0.5 -right-0.5',

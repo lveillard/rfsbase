@@ -42,8 +42,6 @@ export function ProfileHeader({
 		}
 	}
 
-	const isVerified = user.verified_email || !!user.verified_yc
-
 	return (
 		<Card padding="lg">
 			<div className="flex flex-col sm:flex-row gap-6">
@@ -51,7 +49,8 @@ export function ProfileHeader({
 					src={user.avatar}
 					name={user.name}
 					size="xl"
-					verified={isVerified}
+					verified={user.verified_email}
+					ycVerified={!!user.verified_yc}
 					className="shrink-0"
 				/>
 

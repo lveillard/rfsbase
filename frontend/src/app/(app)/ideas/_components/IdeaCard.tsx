@@ -57,7 +57,6 @@ function TagList({ tags }: { readonly tags: readonly string[] }) {
 
 export function IdeaCard({ idea, onVote }: IdeaCardProps) {
 	const ideaUrl = `/ideas/${parseId(idea.id)}`
-	const isVerified = idea.author.verified || idea.author.ycVerified
 	const isVoted = idea.userVote === 'problem'
 
 	const handleVote = (e: React.MouseEvent) => {
@@ -73,7 +72,8 @@ export function IdeaCard({ idea, onVote }: IdeaCardProps) {
 						src={idea.author.avatar}
 						name={idea.author.name}
 						size="md"
-						verified={isVerified}
+						verified={idea.author.verified}
+						ycVerified={idea.author.ycVerified}
 					/>
 					<div className="flex-1 min-w-0">
 						<div className="flex items-center gap-2">

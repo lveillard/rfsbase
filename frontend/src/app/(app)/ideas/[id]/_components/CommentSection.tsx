@@ -26,7 +26,6 @@ interface CommentItemProps {
 
 function CommentItem({ comment, onReply, onUpvote, depth = 0 }: CommentItemProps) {
 	const [showReplies, setShowReplies] = useState(true)
-	const isVerified = comment.author.verified || comment.author.ycVerified
 	const hasReplies = comment.replies.length > 0
 	const canReply = depth === 0
 
@@ -37,7 +36,8 @@ function CommentItem({ comment, onReply, onUpvote, depth = 0 }: CommentItemProps
 					src={comment.author.avatar}
 					name={comment.author.name}
 					size="sm"
-					verified={isVerified}
+					verified={comment.author.verified}
+					ycVerified={comment.author.ycVerified}
 				/>
 				<div className="flex-1 min-w-0">
 					<div className="flex items-center gap-2">

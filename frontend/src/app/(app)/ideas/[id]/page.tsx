@@ -131,7 +131,6 @@ export default function IdeaPage() {
 	}
 
 	const category = getCategoryById(idea.category)
-	const isVerified = idea.author.verified || idea.author.ycVerified
 
 	return (
 		<div className="max-w-4xl mx-auto">
@@ -151,7 +150,8 @@ export default function IdeaPage() {
 								src={idea.author.avatar}
 								name={idea.author.name}
 								size="lg"
-								verified={isVerified}
+								verified={idea.author.verified}
+								ycVerified={idea.author.ycVerified}
 							/>
 							<div>
 								<div className="flex items-center gap-2">
