@@ -3,13 +3,12 @@
 
 {
     admin off
-    # Disable automatic HTTPS since Cloudflare handles SSL termination
-    auto_https off
 }
 
 # Main domain - Next.js handles frontend and API
-# Using :80 since Cloudflare terminates SSL at edge and connects to origin via HTTP
-:80 {
+# Using internal TLS (self-signed) for Cloudflare "Full" mode
+:443 {
+    tls internal
     # Security headers
     header {
         X-Frame-Options "DENY"
