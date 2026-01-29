@@ -142,13 +142,13 @@ CREATE idea:retraining_workers_for_the_ai_economy_c67a SET
   tags = ['F25', 'voice', 'education', 'infrastructure'],
   video_url = 'https://youtube.com/watch?v=F40PQKJVWJY',
   author = user:harj_taggar,
-  votes_problem = 47,
+  votes_problem = 30,
   votes_solution = 10,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-09-03T09:00:00.000Z',
+  updated_at = '2025-09-03T09:00:00.000Z';
 
 CREATE idea:video_generation_as_a_primitive_fea4 SET
   title = 'Video Generation as a Primitive',
@@ -157,13 +157,13 @@ CREATE idea:video_generation_as_a_primitive_fea4 SET
   tags = ['F25', 'video', 'robotics', 'infrastructure'],
   video_url = 'https://youtube.com/watch?v=tJ2C9a5GBOs',
   author = user:david_lieb,
-  votes_problem = 48,
-  votes_solution = 31,
+  votes_problem = 49,
+  votes_solution = 14,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-09-03T09:00:00.000Z',
+  updated_at = '2025-09-03T09:00:00.000Z';
 
 CREATE idea:the_first_10person_100b_company_2c69 SET
   title = 'The First 10-person, $100B Company',
@@ -172,13 +172,13 @@ CREATE idea:the_first_10person_100b_company_2c69 SET
   tags = ['F25', 'infrastructure'],
   video_url = 'https://youtube.com/watch?v=lkFiTvXu9Zw',
   author = user:aaron_epstein,
-  votes_problem = 18,
-  votes_solution = 21,
+  votes_problem = 32,
+  votes_solution = 34,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-09-04T09:00:00.000Z',
+  updated_at = '2025-09-04T09:00:00.000Z';
 
 CREATE idea:infrastructure_for_multiagent_systems_d757 SET
   title = 'Infrastructure for Multi-Agent Systems',
@@ -187,13 +187,13 @@ CREATE idea:infrastructure_for_multiagent_systems_d757 SET
   tags = ['F25', 'agents', 'infrastructure'],
   video_url = 'https://youtube.com/watch?v=0qGjxsMzuxc',
   author = user:pete_koomen,
-  votes_problem = 26,
-  votes_solution = 33,
+  votes_problem = 10,
+  votes_solution = 8,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-09-05T09:00:00.000Z',
+  updated_at = '2025-09-05T09:00:00.000Z';
 
 CREATE idea:ai_native_enterprise_software_f1c2 SET
   title = 'AI Native Enterprise Software',
@@ -202,13 +202,13 @@ CREATE idea:ai_native_enterprise_software_f1c2 SET
   tags = ['F25', 'enterprise'],
   video_url = 'https://youtube.com/watch?v=amNO1hHARqI',
   author = user:andrew_miklas,
-  votes_problem = 26,
-  votes_solution = 29,
+  votes_problem = 12,
+  votes_solution = 19,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-09-07T09:00:00.000Z',
+  updated_at = '2025-09-07T09:00:00.000Z';
 
 CREATE idea:using_llms_instead_of_government_consult_4b7a SET
   title = 'Using LLMs Instead of Government Consulting',
@@ -217,13 +217,13 @@ CREATE idea:using_llms_instead_of_government_consult_4b7a SET
   tags = ['F25', 'llm'],
   video_url = 'https://youtube.com/watch?v=MbFcWCCqImk',
   author = user:gustaf_alstromer,
-  votes_problem = 14,
-  votes_solution = 21,
+  votes_problem = 26,
+  votes_solution = 7,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-09-08T09:00:00.000Z',
+  updated_at = '2025-09-08T09:00:00.000Z';
 
 CREATE idea:fullstack_ai_companies_32dc SET
   title = 'Full-stack AI Companies',
@@ -232,13 +232,13 @@ CREATE idea:fullstack_ai_companies_32dc SET
   tags = ['S25', 'agents', 'llm'],
   video_url = 'https://youtube.com/watch?v=s-okz_-pUHo',
   author = user:jared_friedman,
-  votes_problem = 34,
-  votes_solution = 15,
+  votes_problem = 32,
+  votes_solution = 21,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-04-04T09:00:00.000Z',
+  updated_at = '2025-04-04T09:00:00.000Z';
 
 CREATE idea:more_design_founders_4b5f SET
   title = 'More Design Founders',
@@ -247,13 +247,13 @@ CREATE idea:more_design_founders_4b5f SET
   tags = ['S25'],
   video_url = 'https://youtube.com/watch?v=DvxPuRbeNwY',
   author = user:aaron_epstein,
-  votes_problem = 47,
-  votes_solution = 6,
+  votes_problem = 30,
+  votes_solution = 19,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-04-05T09:00:00.000Z',
+  updated_at = '2025-04-05T09:00:00.000Z';
 
 CREATE idea:voice_ai_ddfd SET
   title = 'Voice AI',
@@ -262,13 +262,13 @@ CREATE idea:voice_ai_ddfd SET
   tags = ['S25', 'agents', 'voice', 'llm'],
   video_url = 'https://youtube.com/watch?v=_NGqEjFjB0U',
   author = user:gustaf_alstr_mer,
-  votes_problem = 33,
-  votes_solution = 30,
+  votes_problem = 53,
+  votes_solution = 17,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-04-05T09:00:00.000Z',
+  updated_at = '2025-04-05T09:00:00.000Z';
 
 CREATE idea:ai_for_scientific_advancement_da29 SET
   title = 'AI for Scientific Advancement',
@@ -277,13 +277,13 @@ CREATE idea:ai_for_scientific_advancement_da29 SET
   tags = ['S25'],
   video_url = 'https://youtube.com/watch?v=NNwoLCGgN7o',
   author = user:diana_hu,
-  votes_problem = 31,
-  votes_solution = 27,
+  votes_problem = 35,
+  votes_solution = 16,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-04-07T09:00:00.000Z',
+  updated_at = '2025-04-07T09:00:00.000Z';
 
 CREATE idea:ai_personal_assistant_6a42 SET
   title = 'AI Personal Assistant',
@@ -292,13 +292,13 @@ CREATE idea:ai_personal_assistant_6a42 SET
   tags = ['S25', 'llm'],
   video_url = 'https://youtube.com/watch?v=-B3j7NtqU5o',
   author = user:tom_blomfield,
-  votes_problem = 20,
-  votes_solution = 24,
+  votes_problem = 30,
+  votes_solution = 11,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-04-08T09:00:00.000Z',
+  updated_at = '2025-04-08T09:00:00.000Z';
 
 CREATE idea:healthcare_ai_c199 SET
   title = 'Healthcare AI',
@@ -307,13 +307,13 @@ CREATE idea:healthcare_ai_c199 SET
   tags = ['S25', 'agents', 'llm', 'healthcare', 'infrastructure'],
   video_url = 'https://youtube.com/watch?v=hJ4L9SseAuE',
   author = user:gustaf_alstr_mer,
-  votes_problem = 33,
-  votes_solution = 22,
+  votes_problem = 14,
+  votes_solution = 7,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-04-08T09:00:00.000Z',
+  updated_at = '2025-04-08T09:00:00.000Z';
 
 CREATE idea:ai_personal_tutor_for_everyone_25b8 SET
   title = 'AI Personal Tutor for Everyone',
@@ -322,13 +322,13 @@ CREATE idea:ai_personal_tutor_for_everyone_25b8 SET
   tags = ['S25', 'voice', 'video', 'education'],
   video_url = 'https://youtube.com/watch?v=c0MJdUVYp3w',
   author = user:harj_taggar,
-  votes_problem = 20,
-  votes_solution = 19,
+  votes_problem = 23,
+  votes_solution = 32,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-04-10T09:00:00.000Z',
+  updated_at = '2025-04-10T09:00:00.000Z';
 
 CREATE idea:software_tools_to_make_robots_0dfa SET
   title = 'Software Tools To Make Robots',
@@ -337,13 +337,13 @@ CREATE idea:software_tools_to_make_robots_0dfa SET
   tags = ['S25', 'robotics'],
   video_url = 'https://youtube.com/watch?v=D4yPM52G5_o',
   author = user:diana_hu,
-  votes_problem = 54,
-  votes_solution = 8,
+  votes_problem = 44,
+  votes_solution = 31,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-04-11T09:00:00.000Z',
+  updated_at = '2025-04-11T09:00:00.000Z';
 
 CREATE idea:the_future_of_education_73c7 SET
   title = 'The Future of Education',
@@ -353,12 +353,12 @@ CREATE idea:the_future_of_education_73c7 SET
   video_url = 'https://youtube.com/watch?v=trr8NiH1ZQI',
   author = user:tom_blomfield,
   votes_problem = 27,
-  votes_solution = 21,
+  votes_solution = 28,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-04-11T09:00:00.000Z',
+  updated_at = '2025-04-11T09:00:00.000Z';
 
 CREATE idea:ai_residential_security_4aba SET
   title = 'AI Residential Security',
@@ -367,13 +367,13 @@ CREATE idea:ai_residential_security_4aba SET
   tags = ['S25', 'video', 'security'],
   video_url = 'https://youtube.com/watch?v=AteajI2KG2w',
   author = user:tyler_bosmeny,
-  votes_problem = 58,
-  votes_solution = 34,
+  votes_problem = 55,
+  votes_solution = 16,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-04-12T09:00:00.000Z',
+  updated_at = '2025-04-12T09:00:00.000Z';
 
 CREATE idea:internal_agent_builder_7343 SET
   title = 'Internal Agent Builder',
@@ -382,13 +382,13 @@ CREATE idea:internal_agent_builder_7343 SET
   tags = ['S25', 'agents', 'llm', 'infrastructure'],
   video_url = 'https://youtube.com/watch?v=op9g4HjxrGQ',
   author = user:pete_koomen,
-  votes_problem = 35,
-  votes_solution = 15,
+  votes_problem = 26,
+  votes_solution = 23,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-04-12T09:00:00.000Z',
+  updated_at = '2025-04-12T09:00:00.000Z';
 
 CREATE idea:ai_research_labs_68fb SET
   title = 'AI Research Labs',
@@ -397,13 +397,13 @@ CREATE idea:ai_research_labs_68fb SET
   tags = ['S25'],
   video_url = 'https://youtube.com/watch?v=Xzu8BuxMHHw',
   author = user:jared_friedman,
-  votes_problem = 40,
-  votes_solution = 25,
+  votes_problem = 53,
+  votes_solution = 17,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-04-15T09:00:00.000Z',
+  updated_at = '2025-04-15T09:00:00.000Z';
 
 CREATE idea:ai_voice_assistants_for_email_c84f SET
   title = 'AI Voice Assistants for Email',
@@ -412,13 +412,13 @@ CREATE idea:ai_voice_assistants_for_email_c84f SET
   tags = ['S25', 'agents', 'voice'],
   video_url = 'https://youtube.com/watch?v=JNq9eTCi5Xo',
   author = user:tyler_bosmeny,
-  votes_problem = 51,
-  votes_solution = 11,
+  votes_problem = 54,
+  votes_solution = 33,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-04-15T09:00:00.000Z',
+  updated_at = '2025-04-15T09:00:00.000Z';
 
 CREATE idea:ai_for_personal_finance_b3fd SET
   title = 'AI for Personal Finance',
@@ -427,13 +427,13 @@ CREATE idea:ai_for_personal_finance_b3fd SET
   tags = ['S25', 'llm', 'fintech'],
   video_url = 'https://youtube.com/watch?v=-6YQTNlIzbQ',
   author = user:gustaf_alstr_mer,
-  votes_problem = 52,
-  votes_solution = 9,
+  votes_problem = 19,
+  votes_solution = 31,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-04-01T09:00:00.000Z',
+  updated_at = '2025-04-01T09:00:00.000Z';
 
 CREATE idea:a_secure_ai_app_store_dd28 SET
   title = 'A Secure AI App Store',
@@ -442,13 +442,13 @@ CREATE idea:a_secure_ai_app_store_dd28 SET
   tags = ['Sp25', 'devtools', 'infrastructure'],
   video_url = 'https://youtube.com/watch?v=TFXPfy7sWG8',
   author = user:garry_tan,
-  votes_problem = 14,
-  votes_solution = 24,
+  votes_problem = 51,
+  votes_solution = 34,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-02T09:00:00.000Z',
+  updated_at = '2025-01-02T09:00:00.000Z';
 
 CREATE idea:datacenters_eed5 SET
   title = 'Datacenters',
@@ -457,13 +457,13 @@ CREATE idea:datacenters_eed5 SET
   tags = ['Sp25', 'robotics', 'infrastructure'],
   video_url = 'https://youtube.com/watch?v=B4KsLeOZcqU',
   author = user:diana_hu,
-  votes_problem = 59,
-  votes_solution = 32,
+  votes_problem = 33,
+  votes_solution = 34,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-03T09:00:00.000Z',
+  updated_at = '2025-01-03T09:00:00.000Z';
 
 CREATE idea:compliance_and_audit_acb4 SET
   title = 'Compliance and Audit',
@@ -472,13 +472,13 @@ CREATE idea:compliance_and_audit_acb4 SET
   tags = ['Sp25', 'llm'],
   video_url = 'https://youtube.com/watch?v=Vi4c51aq-SQ',
   author = user:tom_blomfield,
-  votes_problem = 46,
-  votes_solution = 5,
+  votes_problem = 13,
+  votes_solution = 23,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-06T09:00:00.000Z',
+  updated_at = '2025-01-06T09:00:00.000Z';
 
 CREATE idea:browser_computer_automation_3faf SET
   title = 'Browser & Computer Automation',
@@ -487,13 +487,13 @@ CREATE idea:browser_computer_automation_3faf SET
   tags = ['Sp25', 'agents'],
   video_url = 'https://youtube.com/watch?v=v73RSJi8-mY',
   author = user:jared_friedman,
-  votes_problem = 40,
-  votes_solution = 17,
+  votes_problem = 39,
+  votes_solution = 10,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-05T09:00:00.000Z',
+  updated_at = '2025-01-05T09:00:00.000Z';
 
 CREATE idea:ai_personal_staff_for_everyone_bffa SET
   title = 'AI Personal Staff for Everyone',
@@ -502,13 +502,13 @@ CREATE idea:ai_personal_staff_for_everyone_bffa SET
   tags = ['Sp25', 'education'],
   video_url = 'https://youtube.com/watch?v=2S1Z6YEKVoM',
   author = user:david_lieb,
-  votes_problem = 18,
-  votes_solution = 5,
+  votes_problem = 57,
+  votes_solution = 28,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-08T09:00:00.000Z',
+  updated_at = '2025-01-08T09:00:00.000Z';
 
 CREATE idea:devtools_for_ai_agents_8d30 SET
   title = 'Devtools for AI Agents',
@@ -517,13 +517,13 @@ CREATE idea:devtools_for_ai_agents_8d30 SET
   tags = ['Sp25', 'agents', 'devtools'],
   video_url = 'https://youtube.com/watch?v=yFcWSvR6c14',
   author = user:nicolas_dessaigne,
-  votes_problem = 36,
-  votes_solution = 13,
+  votes_problem = 31,
+  votes_solution = 32,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-07T09:00:00.000Z',
+  updated_at = '2025-01-07T09:00:00.000Z';
 
 CREATE idea:the_future_of_software_engineering_daec SET
   title = 'The Future of Software Engineering',
@@ -532,13 +532,13 @@ CREATE idea:the_future_of_software_engineering_daec SET
   tags = ['Sp25', 'agents', 'llm', 'security', 'devtools'],
   video_url = 'https://youtube.com/watch?v=a-O7vv0ZfNg',
   author = user:pete_koomen,
-  votes_problem = 40,
-  votes_solution = 31,
+  votes_problem = 23,
+  votes_solution = 30,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-09T09:00:00.000Z',
+  updated_at = '2025-01-09T09:00:00.000Z';
 
 CREATE idea:ai_commercial_open_source_software_aicos_8684 SET
   title = 'AI Commercial Open Source Software (AICOSS)',
@@ -547,13 +547,13 @@ CREATE idea:ai_commercial_open_source_software_aicos_8684 SET
   tags = ['Sp25', 'enterprise', 'opensource'],
   video_url = 'https://youtube.com/watch?v=xkweKRfUb5Y',
   author = user:dalton_caldwell,
-  votes_problem = 44,
-  votes_solution = 32,
+  votes_problem = 31,
+  votes_solution = 13,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-09T09:00:00.000Z',
+  updated_at = '2025-01-09T09:00:00.000Z';
 
 CREATE idea:ai_coding_agents_for_hardwareoptimized_c_3fc5 SET
   title = 'AI Coding Agents for Hardware-Optimized Code',
@@ -562,13 +562,13 @@ CREATE idea:ai_coding_agents_for_hardwareoptimized_c_3fc5 SET
   tags = ['Sp25', 'agents'],
   video_url = 'https://youtube.com/watch?v=W3keOVTy2yE',
   author = user:diana_hu,
-  votes_problem = 51,
-  votes_solution = 16,
+  votes_problem = 33,
+  votes_solution = 13,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-11T09:00:00.000Z',
+  updated_at = '2025-01-11T09:00:00.000Z';
 
 CREATE idea:b2a_software_where_the_customers_will_al_af95 SET
   title = 'B2A: Software Where the Customers Will All Be Agents',
@@ -577,13 +577,13 @@ CREATE idea:b2a_software_where_the_customers_will_al_af95 SET
   tags = ['Sp25', 'agents'],
   video_url = 'https://youtube.com/watch?v=GEcby86ZOVY',
   author = user:dalton_caldwell,
-  votes_problem = 35,
-  votes_solution = 31,
+  votes_problem = 14,
+  votes_solution = 13,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-11T09:00:00.000Z',
+  updated_at = '2025-01-11T09:00:00.000Z';
 
 CREATE idea:vertical_ai_agents_089b SET
   title = 'Vertical AI Agents',
@@ -592,13 +592,13 @@ CREATE idea:vertical_ai_agents_089b SET
   tags = ['Sp25', 'agents', 'llm', 'healthcare'],
   video_url = 'https://youtube.com/watch?v=lvmmk85ArWg',
   author = user:jared_friedman,
-  votes_problem = 30,
-  votes_solution = 20,
+  votes_problem = 47,
+  votes_solution = 22,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-14T09:00:00.000Z',
+  updated_at = '2025-01-14T09:00:00.000Z';
 
 CREATE idea:inference_ai_infrastructure_in_the_world_a4a6 SET
   title = 'Inference AI Infrastructure in the World of Test-Time Compute',
@@ -607,13 +607,13 @@ CREATE idea:inference_ai_infrastructure_in_the_world_a4a6 SET
   tags = ['Sp25', 'infrastructure'],
   video_url = 'https://youtube.com/watch?v=DwgUlVWs5fk',
   author = user:diana_hu,
-  votes_problem = 51,
-  votes_solution = 29,
+  votes_problem = 23,
+  votes_solution = 33,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-15T09:00:00.000Z',
+  updated_at = '2025-01-15T09:00:00.000Z';
 
 CREATE idea:government_software_144e SET
   title = 'Government Software',
@@ -622,13 +622,13 @@ CREATE idea:government_software_144e SET
   tags = ['W25', 'llm'],
   video_url = 'https://youtube.com/watch?v=kwmaCLAkpwQ',
   author = user:harj_taggar,
-  votes_problem = 13,
-  votes_solution = 17,
+  votes_problem = 41,
+  votes_solution = 34,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-02T09:00:00.000Z',
+  updated_at = '2025-01-02T09:00:00.000Z';
 
 CREATE idea:public_safety_technology_30cf SET
   title = 'Public Safety Technology',
@@ -637,13 +637,13 @@ CREATE idea:public_safety_technology_30cf SET
   tags = ['W25', 'video'],
   video_url = 'https://youtube.com/watch?v=tjagGqZ6jjM',
   author = user:garry_tan,
-  votes_problem = 57,
-  votes_solution = 9,
+  votes_problem = 31,
+  votes_solution = 31,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-04T09:00:00.000Z',
+  updated_at = '2025-01-04T09:00:00.000Z';
 
 CREATE idea:manufacture_in_the_usa_93a9 SET
   title = 'Manufacture in the USA',
@@ -653,12 +653,12 @@ CREATE idea:manufacture_in_the_usa_93a9 SET
   video_url = 'https://youtube.com/watch?v=PqV28tLnpQo',
   author = user:jared_friedman,
   votes_problem = 24,
-  votes_solution = 25,
+  votes_solution = 6,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-06T09:00:00.000Z',
+  updated_at = '2025-01-06T09:00:00.000Z';
 
 CREATE idea:stablecoins_20_ec68 SET
   title = 'Stablecoins 2.0',
@@ -667,13 +667,13 @@ CREATE idea:stablecoins_20_ec68 SET
   tags = ['W25', 'devtools', 'fintech'],
   video_url = 'https://youtube.com/watch?v=woAM_PbnCak',
   author = user:brad_flora,
-  votes_problem = 26,
-  votes_solution = 30,
+  votes_problem = 46,
+  votes_solution = 15,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-05T09:00:00.000Z',
+  updated_at = '2025-01-05T09:00:00.000Z';
 
 CREATE idea:llms_for_chip_design_7b27 SET
   title = 'LLMs for Chip Design',
@@ -682,13 +682,13 @@ CREATE idea:llms_for_chip_design_7b27 SET
   tags = ['W25', 'llm'],
   video_url = 'https://youtube.com/watch?v=ZgQPB0qpk2A',
   author = user:garry_tan,
-  votes_problem = 19,
-  votes_solution = 7,
+  votes_problem = 53,
+  votes_solution = 20,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-07T09:00:00.000Z',
+  updated_at = '2025-01-07T09:00:00.000Z';
 
 CREATE idea:fintech_20_b605 SET
   title = 'Fintech 2.0',
@@ -697,13 +697,13 @@ CREATE idea:fintech_20_b605 SET
   tags = ['W25', 'fintech', 'infrastructure'],
   video_url = 'https://youtube.com/watch?v=jJp13H5a-jE',
   author = user:dalton_caldwell,
-  votes_problem = 17,
-  votes_solution = 25,
+  votes_problem = 20,
+  votes_solution = 26,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-09T09:00:00.000Z',
+  updated_at = '2025-01-09T09:00:00.000Z';
 
 CREATE idea:new_space_companies_4d44 SET
   title = 'New Space Companies',
@@ -712,13 +712,13 @@ CREATE idea:new_space_companies_4d44 SET
   tags = ['W25'],
   video_url = 'https://youtube.com/watch?v=WRcE3IPvLww',
   author = user:jared_friedman,
-  votes_problem = 54,
-  votes_solution = 11,
+  votes_problem = 51,
+  votes_solution = 34,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-09T09:00:00.000Z',
+  updated_at = '2025-01-09T09:00:00.000Z';
 
 CREATE idea:aiaided_engineering_tools_1d41 SET
   title = 'AI-Aided Engineering Tools',
@@ -727,13 +727,13 @@ CREATE idea:aiaided_engineering_tools_1d41 SET
   tags = ['W25'],
   video_url = 'https://youtube.com/watch?v=1asr6PkU8HQ',
   author = user:diana_hu,
-  votes_problem = 17,
-  votes_solution = 33,
+  votes_problem = 14,
+  votes_solution = 22,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-11T09:00:00.000Z',
+  updated_at = '2025-01-11T09:00:00.000Z';
 
 CREATE idea:one_million_jobs_20_6641 SET
   title = 'One Million Jobs 2.0',
@@ -742,13 +742,13 @@ CREATE idea:one_million_jobs_20_6641 SET
   tags = ['W25'],
   video_url = 'https://youtube.com/watch?v=BAeBkS2gBpo',
   author = user:dalton_caldwell,
-  votes_problem = 45,
-  votes_solution = 6,
+  votes_problem = 55,
+  votes_solution = 5,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2025-01-12T09:00:00.000Z',
+  updated_at = '2025-01-12T09:00:00.000Z';
 
 CREATE idea:using_machine_learning_to_simulate_the_p_59dc SET
   title = 'Using Machine Learning to Simulate the Physical World',
@@ -757,13 +757,13 @@ CREATE idea:using_machine_learning_to_simulate_the_p_59dc SET
   tags = ['S24'],
   video_url = 'https://youtube.com/watch?v=uzyvVFwLD68',
   author = user:diana_hu,
-  votes_problem = 10,
-  votes_solution = 28,
+  votes_problem = 17,
+  votes_solution = 14,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2024-06-03T09:00:00.000Z',
+  updated_at = '2024-06-03T09:00:00.000Z';
 
 CREATE idea:new_defense_technology_d5b0 SET
   title = 'New Defense Technology',
@@ -772,13 +772,13 @@ CREATE idea:new_defense_technology_d5b0 SET
   tags = ['S24'],
   video_url = 'https://youtube.com/watch?v=e2mmfE1juFs',
   author = user:jared_friedman,
-  votes_problem = 20,
-  votes_solution = 20,
+  votes_problem = 49,
+  votes_solution = 7,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2024-06-05T09:00:00.000Z',
+  updated_at = '2024-06-05T09:00:00.000Z';
 
 CREATE idea:commercial_open_source_companies_8a0f SET
   title = 'Commercial Open Source Companies',
@@ -787,13 +787,13 @@ CREATE idea:commercial_open_source_companies_8a0f SET
   tags = ['S24', 'enterprise', 'devtools', 'opensource'],
   video_url = 'https://youtube.com/watch?v=Q2X2kAJajs4',
   author = user:nicolas_dessaigne,
-  votes_problem = 11,
-  votes_solution = 16,
+  votes_problem = 19,
+  votes_solution = 30,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2024-06-05T09:00:00.000Z',
+  updated_at = '2024-06-05T09:00:00.000Z';
 
 CREATE idea:spatial_computing_e5ac SET
   title = 'Spatial Computing',
@@ -802,13 +802,13 @@ CREATE idea:spatial_computing_e5ac SET
   tags = ['S24', 'enterprise', 'devtools', 'infrastructure'],
   video_url = 'https://youtube.com/watch?v=_rq3utSccQk',
   author = user:diana_hu,
-  votes_problem = 24,
-  votes_solution = 5,
+  votes_problem = 19,
+  votes_solution = 29,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2024-06-07T09:00:00.000Z',
+  updated_at = '2024-06-07T09:00:00.000Z';
 
 CREATE idea:new_enterprise_resource_planning_softwar_2067 SET
   title = 'New Enterprise Resource Planning Software',
@@ -817,13 +817,13 @@ CREATE idea:new_enterprise_resource_planning_softwar_2067 SET
   tags = ['S24', 'enterprise'],
   video_url = 'https://youtube.com/watch?v=z5kGw1Cy0tY',
   author = user:dalton_caldwell,
-  votes_problem = 32,
-  votes_solution = 15,
+  votes_problem = 20,
+  votes_solution = 26,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2024-06-06T09:00:00.000Z',
+  updated_at = '2024-06-06T09:00:00.000Z';
 
 CREATE idea:developer_tools_inspired_by_existing_int_a707 SET
   title = 'Developer Tools Inspired by Existing Internal Tools',
@@ -832,13 +832,13 @@ CREATE idea:developer_tools_inspired_by_existing_int_a707 SET
   tags = ['S24', 'devtools'],
   video_url = 'https://youtube.com/watch?v=0UycVzrZm7E',
   author = user:dalton_caldwell,
-  votes_problem = 14,
-  votes_solution = 15,
+  votes_problem = 24,
+  votes_solution = 24,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2024-06-08T09:00:00.000Z',
+  updated_at = '2024-06-08T09:00:00.000Z';
 
 CREATE idea:llms_for_manual_back_office_processes_in_f54c SET
   title = 'LLMs for Manual Back Office Processes in Legacy Enterprises',
@@ -847,13 +847,13 @@ CREATE idea:llms_for_manual_back_office_processes_in_f54c SET
   tags = ['S24', 'voice', 'llm', 'enterprise'],
   video_url = 'https://youtube.com/watch?v=1CrcTQ2fiEU',
   author = user:tom_blomfield,
-  votes_problem = 45,
-  votes_solution = 23,
+  votes_problem = 14,
+  votes_solution = 24,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2024-06-09T09:00:00.000Z',
+  updated_at = '2024-06-09T09:00:00.000Z';
 
 CREATE idea:ai_to_build_enterprise_software_4431 SET
   title = 'AI to Build Enterprise Software',
@@ -862,13 +862,13 @@ CREATE idea:ai_to_build_enterprise_software_4431 SET
   tags = ['S24', 'enterprise'],
   video_url = 'https://youtube.com/watch?v=fx3mqS_faOQ',
   author = user:harj_taggar,
-  votes_problem = 56,
-  votes_solution = 29,
+  votes_problem = 46,
+  votes_solution = 8,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2024-06-09T09:00:00.000Z',
+  updated_at = '2024-06-09T09:00:00.000Z';
 
 CREATE idea:stablecoin_finance_2b8f SET
   title = 'Stablecoin Finance',
@@ -877,13 +877,13 @@ CREATE idea:stablecoin_finance_2b8f SET
   tags = ['S24', 'fintech'],
   video_url = NONE,
   author = user:brad_flora,
-  votes_problem = 31,
-  votes_solution = 13,
+  votes_problem = 18,
+  votes_solution = 17,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2024-06-12T09:00:00.000Z',
+  updated_at = '2024-06-12T09:00:00.000Z';
 
 CREATE idea:a_way_to_end_cancer_57df SET
   title = 'A Way to End Cancer',
@@ -892,13 +892,13 @@ CREATE idea:a_way_to_end_cancer_57df SET
   tags = ['S24', 'healthcare'],
   video_url = NONE,
   author = user:surbhi_sarna,
-  votes_problem = 30,
-  votes_solution = 9,
+  votes_problem = 45,
+  votes_solution = 31,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2024-06-12T09:00:00.000Z',
+  updated_at = '2024-06-12T09:00:00.000Z';
 
 CREATE idea:foundation_models_for_biological_systems_bb87 SET
   title = 'Foundation Models for Biological Systems',
@@ -907,13 +907,13 @@ CREATE idea:foundation_models_for_biological_systems_bb87 SET
   tags = ['S24', 'healthcare'],
   video_url = NONE,
   author = user:surbhi_sarna,
-  votes_problem = 22,
-  votes_solution = 24,
+  votes_problem = 17,
+  votes_solution = 30,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2024-06-13T09:00:00.000Z',
+  updated_at = '2024-06-13T09:00:00.000Z';
 
 CREATE idea:the_managed_service_organization_model_f_35e2 SET
   title = 'The Managed Service Organization Model for Healthcare',
@@ -922,13 +922,13 @@ CREATE idea:the_managed_service_organization_model_f_35e2 SET
   tags = ['S24', 'healthcare'],
   video_url = NONE,
   author = user:surbhi_sarna,
-  votes_problem = 56,
-  votes_solution = 9,
+  votes_problem = 27,
+  votes_solution = 7,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2024-06-13T09:00:00.000Z',
+  updated_at = '2024-06-13T09:00:00.000Z';
 
 CREATE idea:eliminating_middlemen_in_healthcare_13db SET
   title = 'Eliminating Middlemen in Healthcare',
@@ -937,13 +937,13 @@ CREATE idea:eliminating_middlemen_in_healthcare_13db SET
   tags = ['S24', 'healthcare'],
   video_url = NONE,
   author = user:surbhi_sarna,
-  votes_problem = 26,
-  votes_solution = 20,
+  votes_problem = 29,
+  votes_solution = 26,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2024-06-15T09:00:00.000Z',
+  updated_at = '2024-06-15T09:00:00.000Z';
 
 CREATE idea:small_finetuned_models_as_an_alternative_86c8 SET
   title = 'Small Fine-tuned Models as an Alternative to Giant Generic Ones',
@@ -952,13 +952,13 @@ CREATE idea:small_finetuned_models_as_an_alternative_86c8 SET
   tags = ['S24'],
   video_url = NONE,
   author = user:nicolas_dessaigne,
-  votes_problem = 22,
-  votes_solution = 5,
+  votes_problem = 25,
+  votes_solution = 15,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2024-06-03T09:00:00.000Z',
+  updated_at = '2024-06-03T09:00:00.000Z';
 
 CREATE idea:explainable_ai_223e SET
   title = 'Explainable AI',
@@ -967,13 +967,13 @@ CREATE idea:explainable_ai_223e SET
   tags = ['S24'],
   video_url = NONE,
   author = user:diana_hu,
-  votes_problem = 42,
-  votes_solution = 5,
+  votes_problem = 12,
+  votes_solution = 13,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2024-06-02T09:00:00.000Z',
+  updated_at = '2024-06-02T09:00:00.000Z';
 
 CREATE idea:applying_machine_learning_to_robotics_1eee SET
   title = 'Applying Machine Learning to Robotics',
@@ -982,13 +982,13 @@ CREATE idea:applying_machine_learning_to_robotics_1eee SET
   tags = ['S24', 'robotics'],
   video_url = NONE,
   author = user:diana_hu,
-  votes_problem = 53,
-  votes_solution = 7,
+  votes_problem = 38,
+  votes_solution = 31,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = time::now(),
-  updated_at = time::now();
+  created_at = '2024-06-03T09:00:00.000Z',
+  updated_at = '2024-06-03T09:00:00.000Z';
 
 -- Calculate total votes
 UPDATE idea SET votes_total = votes_problem + votes_solution;
