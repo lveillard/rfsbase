@@ -49,8 +49,8 @@ const parseBatch = (batch: string): number => {
 // Get most recent batch from list
 const getMostRecentBatch = (batches: Array<{ name: string }>): string => {
 	if (batches.length === 0) return 'Unknown'
-	if (batches.length === 1) return batches[0].name
-	return batches.sort((a, b) => parseBatch(b.name) - parseBatch(a.name))[0].name
+	if (batches.length === 1) return batches[0]!.name
+	return batches.sort((a, b) => parseBatch(b.name) - parseBatch(a.name))[0]!.name
 }
 
 // Extract code from various URL/input formats - pure function
