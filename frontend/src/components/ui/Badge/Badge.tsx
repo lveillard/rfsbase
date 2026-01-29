@@ -11,6 +11,7 @@ type BadgeVariant =
 	| 'warning'
 	| 'error'
 	| 'outline'
+	| 'yc'
 type BadgeSize = 'sm' | 'md'
 
 interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
@@ -26,6 +27,7 @@ const VARIANT_STYLES: Record<BadgeVariant, string> = {
 	warning: 'bg-warning-muted text-warning',
 	error: 'bg-error-muted text-error',
 	outline: 'bg-transparent border border-border text-text-secondary',
+	yc: 'bg-accent-muted text-accent',
 } as const
 
 const SIZE_STYLES: Record<BadgeSize, string> = {

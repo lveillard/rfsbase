@@ -4,7 +4,7 @@ import { type ButtonHTMLAttributes, forwardRef, type ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 import { Spinner } from '../Spinner'
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
+type ButtonVariant = 'primary' | 'secondary' | 'accent' | 'outline' | 'ghost' | 'danger'
 type ButtonSize = 'sm' | 'md' | 'lg'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -23,11 +23,12 @@ const BASE_STYLES = cn(
 )
 
 const VARIANT_STYLES: Record<ButtonVariant, string> = {
-	primary: 'bg-primary text-white hover:bg-primary-hover focus-visible:ring-primary',
+	primary: 'bg-primary text-black font-semibold hover:bg-primary-hover focus-visible:ring-primary',
 	secondary: 'bg-secondary text-white hover:bg-secondary-hover focus-visible:ring-secondary',
+	accent: 'bg-accent text-white hover:bg-accent-hover focus-visible:ring-accent',
 	outline:
-		'border border-border bg-transparent text-text hover:bg-surface-alt hover:border-border-hover focus-visible:ring-primary',
-	ghost: 'bg-transparent text-text hover:bg-surface-alt focus-visible:ring-primary',
+		'border border-border bg-transparent text-text hover:bg-surface-alt hover:border-border-hover focus-visible:ring-accent',
+	ghost: 'bg-transparent text-text hover:bg-surface-alt focus-visible:ring-accent',
 	danger: 'bg-error text-white hover:bg-error/90 focus-visible:ring-error',
 } as const
 
