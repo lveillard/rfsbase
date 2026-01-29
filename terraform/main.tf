@@ -67,19 +67,29 @@ resource "aws_iam_role_policy_attachment" "cloudwatch" {
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
-# Bedrock - for Claude Code
+# Bedrock - for Claude Code (cross-region inference profiles)
 resource "aws_iam_role_policy" "bedrock" {
-  name = "bedrock-invoke"
+  name = "bedrock-claude-code"
   role = aws_iam_role.ec2.id
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Effect   = "Allow"
-        Action   = ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"]
-        Resource = "arn:aws:bedrock:*::foundation-model/anthropic.*"
+        Sid    = "BedrockInvoke"
+        Effect = "Allow"
+        Action = [
+          "bedrock:InvokeModel",
+          "bedrock:InvokeModelWithResponseStream",
+          "bedrock:ListInferenceProfiles"
+        ]
+        Resource = [
+          "arn:aws:bedrock:*:*:inference-profile/*",
+          "arn:aws:bedrock:*:*:application-inference-profile/*",
+          "arn:aws:bedrock:*::foundation-model/*"
+        ]
       },
       {
+        Sid      = "BedrockList"
         Effect   = "Allow"
         Action   = ["bedrock:ListFoundationModels", "bedrock:GetFoundationModel"]
         Resource = "*"
