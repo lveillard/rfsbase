@@ -3,11 +3,13 @@
 
 {
     admin off
-    email admin@rfsbase.com
+    # Disable automatic HTTPS since Cloudflare handles SSL termination
+    auto_https off
 }
 
 # Main domain - Next.js handles frontend and API
-rfsbase.com {
+# Using :80 since Cloudflare terminates SSL at edge and connects to origin via HTTP
+:80 {
     # Security headers
     header {
         X-Frame-Options "DENY"
@@ -29,8 +31,4 @@ rfsbase.com {
         format json
     }
 }
-
-# Redirect www to non-www
-www.rfsbase.com {
-    redir https://rfsbase.com{uri} permanent
-}
+# Note: www to non-www redirect handled by Cloudflare Page Rule
