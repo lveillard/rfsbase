@@ -41,8 +41,9 @@ services:
       - no-new-privileges:true
 
   # ===========================================
-  # Frontend (Next.js) - INTERNAL ONLY
+  # Frontend (Next.js) - PUBLIC
   # Includes API Routes, Server Actions, Better Auth
+  # Cloudflare handles SSL termination (Flexible mode)
   # ===========================================
   frontend:
     build:
@@ -69,8 +70,8 @@ services:
       - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
       - NEXT_PUBLIC_POSTHOG_KEY=${NEXT_PUBLIC_POSTHOG_KEY:-}
       - NEXT_PUBLIC_POSTHOG_HOST=${NEXT_PUBLIC_POSTHOG_HOST:-}
-    expose:
-      - "3000"
+    ports:
+      - "80:3000"
     depends_on:
       surrealdb:
         condition: service_healthy
@@ -86,39 +87,9 @@ services:
     security_opt:
       - no-new-privileges:true
 
-  # ===========================================
-  # Caddy Reverse Proxy - ONLY PUBLIC SERVICE
-  # ===========================================
-  caddy:
-    build:
-      context: .
-      dockerfile: docker/caddy.Dockerfile
-    image: rfsbase/caddy:${TAG:-latest}
-    container_name: rfsbase-proxy
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ${CADDYFILE:-./docker/Caddyfile.ec2}:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      - frontend
-    restart: always
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-    networks:
-      - rfsbase-internal
-    security_opt:
-      - no-new-privileges:true
-
 volumes:
   surrealdb_data:
     driver: local
-  caddy_data:
-  caddy_config:
 
 networks:
   rfsbase-internal:
