@@ -65,13 +65,22 @@ export const UserUpdateSchema = Type.Partial(
 
 export type UserUpdate = Static<typeof UserUpdateSchema>
 
+// YC Type enum
+export const YCTypeSchema = Type.Union([
+  Type.Literal('partner'),
+  Type.Literal('alumni'),
+  Type.Null()
+])
+
+export type YCType = Static<typeof YCTypeSchema>
+
 // User summary for embedding in other objects
 export const UserSummarySchema = Type.Object({
   id: Type.String(),
   name: Type.String(),
   avatar: Type.Optional(Type.Union([Type.String({ format: 'uri' }), Type.Null()])),
   verified: Type.Boolean({ default: false }),
-  ycVerified: Type.Boolean({ default: false })
+  ycType: YCTypeSchema
 })
 
 export type UserSummary = Static<typeof UserSummarySchema>

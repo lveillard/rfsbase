@@ -20,14 +20,13 @@ const mapIdea = (row: unknown): Idea => {
 		author: mapAuthor(r),
 		title: String(r.title),
 		problem: String(r.problem),
-		solution: r.solution ? String(r.solution) : undefined,
-		targetAudience: r.target_audience ? String(r.target_audience) : undefined,
 		category: String(r.category),
 		tags: (r.tags as string[] | undefined) ?? [],
 		links: (r.links as string[] | undefined) ?? [],
 		videoUrl: r.video_url ? String(r.video_url) : undefined,
 		votes: mapVotes(r),
 		commentCount: Number(r.comment_count ?? 0),
+		solutionCount: Number(r.solution_count ?? 0),
 		userVote: (r.user_vote as 'problem' | 'solution' | null | undefined) ?? null,
 		createdAt: String(r.created_at),
 		updatedAt: String(r.updated_at ?? r.created_at),
@@ -56,10 +55,10 @@ export async function listIdeas(
 
 	const [result, countResult] = await Promise.all([
 		db.query(
-			`SELECT id, title, problem, solution, target_audience, category, tags, links,
-				votes_problem, votes_solution, votes_total, comment_count,
+			`SELECT id, title, problem, category, tags, links, video_url,
+				votes_problem, votes_solution, votes_total, comment_count, solution_count,
 				author.name as author_name, author.avatar as author_avatar,
-				author.verified_email as author_verified, author.verified_yc as author_yc_verified,
+				author.verified_email as author_verified, author.yc_type as author_yc_type,
 				created_at
 			FROM idea ${whereClause}
 			ORDER BY ${buildOrderBy(sortBy)}
@@ -81,10 +80,10 @@ export async function getIdea(id: string): Promise<Idea | null> {
 	const db = await getSurrealDB()
 
 	const result = await db.query(
-		`SELECT id, title, problem, solution, target_audience, category, tags, links,
-			votes_problem, votes_solution, votes_total, comment_count,
+		`SELECT id, title, problem, category, tags, links, video_url,
+			votes_problem, votes_solution, votes_total, comment_count, solution_count,
 			author, author.name as author_name, author.avatar as author_avatar,
-			author.verified_email as author_verified, author.verified_yc as author_yc_verified,
+			author.verified_email as author_verified, author.yc_type as author_yc_type,
 			created_at, updated_at
 		FROM type::thing('idea', $id)`,
 		{ id },
@@ -103,27 +102,26 @@ export async function createIdea(input: unknown): Promise<Idea> {
 
 		const db = await getSurrealDB()
 
-		const textToEmbed = `${validated.title} ${validated.problem} ${validated.solution ?? ''}`
+		const textToEmbed = `${validated.title} ${validated.problem}`
 		const embedding = await generateEmbedding(textToEmbed)
 
 		const result = await db.query(
 			`CREATE idea SET
 				author = type::thing('user', $userId),
-				title = $title, problem = $problem, solution = $solution,
-				target_audience = $targetAudience, category = $category,
-				tags = $tags, links = $links, embedding = $embedding,
-				votes_problem = 0, votes_solution = 0, votes_total = 0, comment_count = 0,
+				title = $title, problem = $problem, category = $category,
+				tags = $tags, links = $links, video_url = $videoUrl, embedding = $embedding,
+				votes_problem = 0, votes_solution = 0, votes_total = 0,
+				comment_count = 0, solution_count = 0,
 				created_at = time::now(), updated_at = time::now()
 			RETURN *`,
 			{
 				userId,
 				title: validated.title,
 				problem: validated.problem,
-				solution: validated.solution ?? null,
-				targetAudience: validated.targetAudience ?? null,
 				category: validated.category,
 				tags: validated.tags ?? [],
 				links: validated.links ?? [],
+				videoUrl: validated.videoUrl ?? null,
 				embedding,
 			},
 		)

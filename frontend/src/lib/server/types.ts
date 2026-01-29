@@ -1,13 +1,13 @@
 // Domain types - shared across all server actions
 // Re-export from shared package for consistency
-export type { UserSummary } from '@rfsbase/shared'
+export type { UserSummary, YCType } from '@rfsbase/shared'
 
 export interface Author {
 	readonly id: string
 	readonly name: string
 	readonly avatar?: string
 	readonly verified: boolean
-	readonly ycVerified: boolean
+	readonly ycType: 'partner' | 'alumni' | null
 }
 
 export interface VoteCounts {
@@ -23,19 +23,19 @@ export interface AuthorRow {
 	readonly author_name?: string
 	readonly author_avatar?: string
 	readonly author_verified?: boolean
-	readonly author_yc?: unknown
-	readonly author_yc_verified?: unknown
+	readonly author_yc_type?: string | null
 }
 
 // Pure mapper functions (immutable)
 export const mapAuthor = (row: unknown): Author => {
 	const r = row as AuthorRow & Record<string, unknown>
+	const ycType = r.author_yc_type as 'partner' | 'alumni' | null
 	return {
 		id: String(r.author_id ?? r.author ?? ''),
 		name: String(r.author_name ?? 'Unknown'),
 		avatar: r.author_avatar,
 		verified: r.author_verified ?? false,
-		ycVerified: Boolean(r.author_yc_verified ?? r.author_yc),
+		ycType: ycType === 'partner' || ycType === 'alumni' ? ycType : null,
 	}
 }
 

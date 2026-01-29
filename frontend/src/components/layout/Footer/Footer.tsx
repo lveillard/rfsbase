@@ -6,7 +6,6 @@ import { Brand } from '../Brand'
 const footerLinks = {
 	product: [
 		{ href: '/about', label: 'About' },
-		{ href: '/pricing', label: 'Pricing' },
 		{ href: '/blog', label: 'Blog' },
 		{ href: '/changelog', label: 'Changelog' },
 	],
@@ -16,8 +15,8 @@ const footerLinks = {
 		{ href: '/support', label: 'Support' },
 	],
 	legal: [
-		{ href: '/terms', label: 'Terms of Service' },
-		{ href: '/privacy', label: 'Privacy Policy' },
+		{ href: '/legal/conditions', label: 'Terms & Conditions' },
+		{ href: '/legal/policy', label: 'Privacy Policy' },
 	],
 } as const
 

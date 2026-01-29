@@ -7,6 +7,8 @@ import { CheckIcon } from '../Icon'
 
 type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
+type YCType = 'partner' | 'alumni' | null
+
 interface AvatarProps {
 	src?: string | null
 	alt?: string
@@ -14,7 +16,7 @@ interface AvatarProps {
 	size?: AvatarSize
 	className?: string
 	verified?: boolean
-	ycVerified?: boolean
+	ycType?: YCType
 }
 
 const SIZE_CLASSES: Record<AvatarSize, string> = {
@@ -51,8 +53,13 @@ const YC_BADGE_SIZE: Record<AvatarSize, number> = {
 	xl: 20,
 } as const
 
+const YC_BADGE_TITLES: Record<NonNullable<YCType>, string> = {
+	partner: 'YC Partner',
+	alumni: 'YC Alumni',
+}
+
 const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
-	{ src, alt, name = '', size = 'md', className, verified, ycVerified },
+	{ src, alt, name = '', size = 'md', className, verified, ycType },
 	ref,
 ) {
 	const initials = getInitials(name)
@@ -60,8 +67,8 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
 	const ycBadgeSize = YC_BADGE_SIZE[size]
 
 	// YC verification takes precedence over email verification
-	const showYcBadge = ycVerified
-	const showVerifiedBadge = verified && !ycVerified
+	const showYcBadge = !!ycType
+	const showVerifiedBadge = verified && !ycType
 
 	return (
 		<div className="relative inline-block">
@@ -88,18 +95,18 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
 					<span>{initials}</span>
 				)}
 			</div>
-			{showYcBadge && (
+			{showYcBadge && ycType && (
 				<div
 					className={cn(
 						'absolute -bottom-0.5 -right-0.5',
 						'rounded-full overflow-hidden',
 						BADGE_CONTAINER_SIZE[size],
 					)}
-					title="YC Verified"
+					title={YC_BADGE_TITLES[ycType]}
 				>
 					<Image
 						src="/icons/yc-badge.png"
-						alt="YC Verified"
+						alt={YC_BADGE_TITLES[ycType]}
 						width={ycBadgeSize}
 						height={ycBadgeSize}
 						className="object-contain"

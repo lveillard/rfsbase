@@ -2,7 +2,7 @@
 
 import appConfig from '@config/app.config.json'
 import categoriesConfig from '@config/categories.config.json'
-import { Info, Loader2, Sparkles } from 'lucide-react'
+import { Loader2, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Badge, Button, Card, Input, Textarea } from '@/components/ui'
@@ -14,9 +14,8 @@ const steps = [
 	{
 		id: 'problem',
 		title: 'Problem',
-		description: 'What problem are you solving?',
+		description: 'What problem needs solving?',
 	},
-	{ id: 'solution', title: 'Solution', description: 'How would you solve it?' },
 	{
 		id: 'details',
 		title: 'Details',
@@ -34,8 +33,6 @@ export function IdeaForm() {
 	// Form state
 	const [title, setTitle] = useState('')
 	const [problem, setProblem] = useState('')
-	const [solution, setSolution] = useState('')
-	const [targetAudience, setTargetAudience] = useState('')
 	const [category, setCategory] = useState('')
 	const [tags, setTags] = useState<string[]>([])
 	const [tagInput, setTagInput] = useState('')
@@ -47,8 +44,6 @@ export function IdeaForm() {
 			case 0:
 				return problem.length >= appConfig.limits.problemMinLength
 			case 1:
-				return true // Solution is optional
-			case 2:
 				return title.length >= appConfig.limits.titleMinLength && category
 			default:
 				return false
@@ -111,8 +106,6 @@ export function IdeaForm() {
 		createIdea({
 			title,
 			problem,
-			solution: solution || undefined,
-			targetAudience: targetAudience || undefined,
 			category,
 			tags: tags.length > 0 ? tags : undefined,
 			links: links.length > 0 ? links : undefined,
@@ -207,40 +200,8 @@ export function IdeaForm() {
 					</div>
 				)}
 
-				{/* Step 2: Solution */}
+				{/* Step 2: Details */}
 				{currentStep === 1 && (
-					<div className="space-y-4">
-						<div className="flex items-start gap-2 p-3 bg-surface-alt rounded-lg text-sm text-text-secondary">
-							<Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
-							<p>
-								A solution is optional. Sometimes it&apos;s better to just describe the problem and
-								let the community brainstorm solutions.
-							</p>
-						</div>
-
-						<Textarea
-							label="Proposed solution (optional)"
-							placeholder="How would you solve this problem? What would the ideal solution look like?"
-							value={solution}
-							onChange={(e) => setSolution(e.target.value)}
-							maxLength={appConfig.limits.solutionMaxLength}
-							showCount
-							className="min-h-[200px]"
-						/>
-
-						<Textarea
-							label="Target audience (optional)"
-							placeholder="Who would use this solution? Be specific about the target market..."
-							value={targetAudience}
-							onChange={(e) => setTargetAudience(e.target.value)}
-							maxLength={500}
-							className="min-h-[100px]"
-						/>
-					</div>
-				)}
-
-				{/* Step 3: Details */}
-				{currentStep === 2 && (
 					<div className="space-y-6">
 						<Input
 							label="Title"

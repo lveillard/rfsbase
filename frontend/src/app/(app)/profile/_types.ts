@@ -1,16 +1,15 @@
 // Profile types - shared across profile components (colocated)
 // Principle: Keep types close to where they're used, not in a global types folder
 
+export type YCType = 'partner' | 'alumni' | null
+
 export interface ProfileUser {
 	readonly id: string
 	readonly name: string
 	readonly avatar?: string
 	readonly bio?: string
 	readonly verified_email: boolean
-	readonly verified_yc?: {
-		readonly batch?: string
-		readonly company?: string
-	}
+	readonly yc_type: YCType
 	readonly created_at: string
 }
 

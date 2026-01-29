@@ -73,14 +73,14 @@ export function IdeaCard({ idea, onVote }: IdeaCardProps) {
 						name={idea.author.name}
 						size="md"
 						verified={idea.author.verified}
-						ycVerified={idea.author.ycVerified}
+						ycType={idea.author.ycType}
 					/>
 					<div className="flex-1 min-w-0">
 						<div className="flex items-center gap-2">
 							<span className="font-medium text-sm truncate">{idea.author.name}</span>
-							{idea.author.ycVerified && (
+							{idea.author.ycType && (
 								<Badge variant="warning" size="sm">
-									YC
+									{idea.author.ycType === 'partner' ? 'YC Partner' : 'YC'}
 								</Badge>
 							)}
 						</div>

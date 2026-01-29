@@ -19,7 +19,6 @@ interface HeaderProps {
 
 const marketingLinks = [
 	{ href: '/about', label: 'About' },
-	{ href: '/pricing', label: 'Pricing' },
 	{ href: '/blog', label: 'Blog' },
 ] as const
 

@@ -11,6 +11,7 @@ import { all, first, parseId } from '@/lib/server/db'
 // Pure mapper
 const mapUser = (row: unknown): User => {
 	const r = row as Record<string, unknown>
+	const ycType = r.yc_type as string | null
 	return {
 		id: parseId(r.id),
 		name: String(r.name ?? 'Unknown'),
@@ -19,13 +20,11 @@ const mapUser = (row: unknown): User => {
 		bio: r.bio ? String(r.bio) : undefined,
 		verified: {
 			email: Boolean(r.verified_email),
-			yc: r.verified_yc
+			yc: ycType
 				? {
-						companyName: String((r.verified_yc as Record<string, string>)?.company ?? ''),
-						batch: String((r.verified_yc as Record<string, string>)?.batch ?? ''),
-						verifiedAt: String(
-							(r.verified_yc as Record<string, string>)?.verified_at ?? new Date().toISOString(),
-						),
+						companyName: '',
+						batch: ycType === 'partner' ? 'Partner' : 'Alumni',
+						verifiedAt: new Date().toISOString(),
 					}
 				: undefined,
 		},
@@ -44,12 +43,13 @@ const mapUser = (row: unknown): User => {
 
 const mapUserSummary = (row: unknown): UserSummary => {
 	const r = row as Record<string, unknown>
+	const ycType = (r.yc_type as 'partner' | 'alumni' | null) ?? null
 	return {
 		id: parseId(r.id),
 		name: String(r.name ?? 'Unknown'),
 		avatar: r.avatar ? String(r.avatar) : undefined,
 		verified: Boolean(r.verified ?? r.verified_email),
-		ycVerified: Boolean(r.yc_verified ?? r.verified_yc),
+		ycType: ycType === 'partner' || ycType === 'alumni' ? ycType : null,
 	}
 }
 
@@ -68,7 +68,7 @@ export async function getUser(id: string): Promise<User | null> {
 	const db = await getSurrealDB()
 
 	const result = await db.query(
-		`SELECT id, name, email, avatar, bio, verified_email, verified_yc, created_at, updated_at
+		`SELECT id, name, email, avatar, bio, verified_email, yc_type, created_at, updated_at
 		FROM type::thing('user', $id)`,
 		{ id },
 	)
@@ -174,7 +174,7 @@ export async function getFollowers(userId: string): Promise<readonly UserSummary
 
 	const result = await db.query(
 		`SELECT follower.id as id, follower.name as name, follower.avatar as avatar,
-			follower.verified_email as verified, follower.verified_yc as yc_verified
+			follower.verified_email as verified, follower.yc_type as yc_type
 		FROM follows WHERE following = type::thing('user', $userId)`,
 		{ userId },
 	)
@@ -187,7 +187,7 @@ export async function getFollowing(userId: string): Promise<readonly UserSummary
 
 	const result = await db.query(
 		`SELECT following.id as id, following.name as name, following.avatar as avatar,
-			following.verified_email as verified, following.verified_yc as yc_verified
+			following.verified_email as verified, following.yc_type as yc_type
 		FROM follows WHERE follower = type::thing('user', $userId)`,
 		{ userId },
 	)

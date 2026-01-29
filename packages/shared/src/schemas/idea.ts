@@ -16,15 +16,14 @@ export const IdeaSchema = Type.Object({
   id: Type.String(),
   author: UserSummarySchema,
   title: Type.String({ minLength: 10, maxLength: 100 }),
-  problem: Type.String({ minLength: 50, maxLength: 5000 }),
-  solution: Type.Optional(Type.String({ maxLength: 5000 })),
-  targetAudience: Type.Optional(Type.String({ maxLength: 500 })),
+  problem: Type.String({ minLength: 50, maxLength: 10000 }),
   category: Type.String(),
   tags: Type.Array(Type.String(), { maxItems: 5, default: [] }),
   links: Type.Array(Type.String({ format: 'uri' }), { maxItems: 5, default: [] }),
   videoUrl: Type.Optional(Type.String({ format: 'uri' })),
   votes: VoteCountsSchema,
   commentCount: Type.Integer({ minimum: 0, default: 0 }),
+  solutionCount: Type.Integer({ minimum: 0, default: 0 }),
   userVote: Type.Optional(Type.Union([
     Type.Literal('problem'),
     Type.Literal('solution'),
@@ -39,9 +38,7 @@ export type Idea = Static<typeof IdeaSchema>
 // Idea creation
 export const IdeaCreateSchema = Type.Object({
   title: Type.String({ minLength: 10, maxLength: 100 }),
-  problem: Type.String({ minLength: 50, maxLength: 5000 }),
-  solution: Type.Optional(Type.String({ maxLength: 5000 })),
-  targetAudience: Type.Optional(Type.String({ maxLength: 500 })),
+  problem: Type.String({ minLength: 50, maxLength: 10000 }),
   category: Type.String(),
   tags: Type.Optional(Type.Array(Type.String(), { maxItems: 5 })),
   links: Type.Optional(Type.Array(Type.String({ format: 'uri' }), { maxItems: 5 })),
@@ -61,11 +58,11 @@ export const IdeaCardSchema = Type.Object({
   author: UserSummarySchema,
   title: Type.String(),
   problem: Type.String({ description: 'Truncated to ~200 chars for preview' }),
-  solution: Type.Optional(Type.String({ description: 'Truncated solution preview' })),
   category: Type.String(),
   tags: Type.Array(Type.String()),
   votes: VoteCountsSchema,
   commentCount: Type.Integer(),
+  solutionCount: Type.Integer(),
   userVote: Type.Optional(Type.Union([
     Type.Literal('problem'),
     Type.Literal('solution'),
@@ -76,6 +73,27 @@ export const IdeaCardSchema = Type.Object({
 })
 
 export type IdeaCard = Static<typeof IdeaCardSchema>
+
+// Proposed Solution Schema
+export const ProposedSolutionSchema = Type.Object({
+  id: Type.String(),
+  ideaId: Type.String(),
+  author: UserSummarySchema,
+  content: Type.String({ minLength: 50, maxLength: 10000 }),
+  upvotes: Type.Integer({ minimum: 0, default: 0 }),
+  userUpvoted: Type.Optional(Type.Boolean()),
+  createdAt: Type.String({ format: 'date-time' }),
+  updatedAt: Type.String({ format: 'date-time' })
+})
+
+export type ProposedSolution = Static<typeof ProposedSolutionSchema>
+
+// Proposed Solution creation
+export const ProposedSolutionCreateSchema = Type.Object({
+  content: Type.String({ minLength: 50, maxLength: 10000 })
+})
+
+export type ProposedSolutionCreate = Static<typeof ProposedSolutionCreateSchema>
 
 // Vote types
 export const VoteTypeSchema = Type.Union([

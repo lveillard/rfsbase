@@ -208,11 +208,11 @@ export function SignupForm() {
 					</div>
 					<p className="text-center text-xs text-text-muted mt-4">
 						By signing up, you agree to our{' '}
-						<Link href="/terms" className="underline hover:text-text">
-							Terms of Service
+						<Link href="/legal/conditions" className="underline hover:text-text">
+							Terms & Conditions
 						</Link>{' '}
 						and{' '}
-						<Link href="/privacy" className="underline hover:text-text">
+						<Link href="/legal/policy" className="underline hover:text-text">
 							Privacy Policy
 						</Link>
 					</p>

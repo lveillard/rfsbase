@@ -50,7 +50,7 @@ export function ProfileHeader({
 					name={user.name}
 					size="xl"
 					verified={user.verified_email}
-					ycVerified={!!user.verified_yc}
+					ycType={user.yc_type}
 					className="shrink-0"
 				/>
 
@@ -59,21 +59,19 @@ export function ProfileHeader({
 						<div>
 							<div className="flex items-center gap-2 mb-1">
 								<h1 className="text-2xl font-bold truncate">{user.name}</h1>
-								{user.verified_yc && (
+								{user.yc_type && (
 									<Badge variant="warning" size="md">
-										<Check className="h-3 w-3 mr-1" /> YC {user.verified_yc.batch}
+										<Check className="h-3 w-3 mr-1" />
+										{user.yc_type === 'partner' ? 'YC Partner' : 'YC Alumni'}
 									</Badge>
 								)}
-								{user.verified_email && !user.verified_yc && (
+								{user.verified_email && !user.yc_type && (
 									<Badge variant="success" size="sm">
 										<Check className="h-3 w-3 mr-1" /> Verified
 									</Badge>
 								)}
 							</div>
 
-							{user.verified_yc?.company && (
-								<p className="text-text-secondary mb-2">{user.verified_yc.company}</p>
-							)}
 							{user.bio && <p className="text-text-secondary mt-2 max-w-xl">{user.bio}</p>}
 
 							<div className="flex items-center gap-4 mt-3 text-sm text-text-muted">

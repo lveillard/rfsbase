@@ -37,14 +37,14 @@ function CommentItem({ comment, onReply, onUpvote, depth = 0 }: CommentItemProps
 					name={comment.author.name}
 					size="sm"
 					verified={comment.author.verified}
-					ycVerified={comment.author.ycVerified}
+					ycType={comment.author.ycType}
 				/>
 				<div className="flex-1 min-w-0">
 					<div className="flex items-center gap-2">
 						<span className="font-medium text-sm">{comment.author.name}</span>
-						{comment.author.ycVerified && (
+						{comment.author.ycType && (
 							<Badge variant="warning" size="sm">
-								YC
+								{comment.author.ycType === 'partner' ? 'YC Partner' : 'YC'}
 							</Badge>
 						)}
 						<span className="text-xs text-text-muted">{formatRelativeTime(comment.createdAt)}</span>

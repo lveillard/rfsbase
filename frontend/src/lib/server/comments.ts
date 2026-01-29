@@ -39,7 +39,7 @@ export async function getCommentsForIdea(ideaId: string): Promise<readonly Comme
 			author.name as author_name,
 			author.avatar as author_avatar,
 			author.verified_email as author_verified,
-			author.verified_yc as author_yc
+			author.yc_type as author_yc_type
 		FROM comment
 		WHERE idea = type::thing('idea', $ideaId)
 		ORDER BY created_at ASC`,

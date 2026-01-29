@@ -151,7 +151,7 @@ export default function IdeaPage() {
 								name={idea.author.name}
 								size="lg"
 								verified={idea.author.verified}
-								ycVerified={idea.author.ycVerified}
+								ycType={idea.author.ycType}
 							/>
 							<div>
 								<div className="flex items-center gap-2">
@@ -161,7 +161,11 @@ export default function IdeaPage() {
 									>
 										{idea.author.name}
 									</Link>
-									{idea.author.ycVerified && <Badge variant="warning">YC Founder</Badge>}
+									{idea.author.ycType && (
+										<Badge variant="warning">
+											{idea.author.ycType === 'partner' ? 'YC Partner' : 'YC Alumni'}
+										</Badge>
+									)}
 								</div>
 								<div className="flex items-center gap-2 text-sm text-text-muted">
 									<Clock className="h-3.5 w-3.5" />
@@ -206,13 +210,6 @@ export default function IdeaPage() {
 					</Card>
 
 					<ContentSection title="The Problem" content={idea.problem} />
-					{idea.solution && <ContentSection title="Proposed Solution" content={idea.solution} />}
-					{idea.targetAudience && (
-						<Card padding="lg">
-							<h2 className="text-lg font-semibold mb-3">Target Audience</h2>
-							<p className="text-text-secondary">{idea.targetAudience}</p>
-						</Card>
-					)}
 					<LinksSection links={idea.links} />
 
 					{isAuthenticated ? (
