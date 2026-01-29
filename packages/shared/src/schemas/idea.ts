@@ -22,6 +22,7 @@ export const IdeaSchema = Type.Object({
   category: Type.String(),
   tags: Type.Array(Type.String(), { maxItems: 5, default: [] }),
   links: Type.Array(Type.String({ format: 'uri' }), { maxItems: 5, default: [] }),
+  videoUrl: Type.Optional(Type.String({ format: 'uri' })),
   votes: VoteCountsSchema,
   commentCount: Type.Integer({ minimum: 0, default: 0 }),
   userVote: Type.Optional(Type.Union([
@@ -43,7 +44,8 @@ export const IdeaCreateSchema = Type.Object({
   targetAudience: Type.Optional(Type.String({ maxLength: 500 })),
   category: Type.String(),
   tags: Type.Optional(Type.Array(Type.String(), { maxItems: 5 })),
-  links: Type.Optional(Type.Array(Type.String({ format: 'uri' }), { maxItems: 5 }))
+  links: Type.Optional(Type.Array(Type.String({ format: 'uri' }), { maxItems: 5 })),
+  videoUrl: Type.Optional(Type.String({ format: 'uri' }))
 })
 
 export type IdeaCreate = Static<typeof IdeaCreateSchema>

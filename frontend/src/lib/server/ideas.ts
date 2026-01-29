@@ -25,6 +25,7 @@ const mapIdea = (row: unknown): Idea => {
 		category: String(r.category),
 		tags: (r.tags as string[] | undefined) ?? [],
 		links: (r.links as string[] | undefined) ?? [],
+		videoUrl: r.video_url ? String(r.video_url) : undefined,
 		votes: mapVotes(r),
 		commentCount: Number(r.comment_count ?? 0),
 		userVote: (r.user_vote as 'problem' | 'solution' | null | undefined) ?? null,
