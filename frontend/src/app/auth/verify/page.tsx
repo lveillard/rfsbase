@@ -47,7 +47,7 @@ function VerifyContent() {
 				}
 
 				setStatus('applying_yc')
-				await applyYcBadge(ycPending.email, ycPending.batch)
+				await applyYcBadge(ycPending.email)
 				sessionStorage.removeItem('yc_pending')
 				setStatus('success_yc')
 				return true
