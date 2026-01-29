@@ -11,7 +11,7 @@ interface MobileHeaderProps {
 export function MobileHeader({ isOpen, onToggle }: MobileHeaderProps) {
 	return (
 		<header className="sticky top-0 z-50 lg:hidden flex items-center justify-between h-14 px-4 border-b border-border bg-surface">
-			<Brand href="/ideas" />
+			<Brand href="/" />
 			<button
 				type="button"
 				onClick={onToggle}

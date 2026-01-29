@@ -24,6 +24,9 @@ export function ProfileHeader({
 	const [following, setFollowing] = useState(isFollowing)
 	const [isLoading, setIsLoading] = useState(false)
 
+	const ycType =
+		user.verified.yc?.batch === 'Partner' ? 'partner' : user.verified.yc ? 'alumni' : null
+
 	const handleFollowToggle = async () => {
 		if (isOwnProfile) return
 		setIsLoading(true)
@@ -49,8 +52,8 @@ export function ProfileHeader({
 					src={user.avatar}
 					name={user.name}
 					size="xl"
-					verified={user.verified_email}
-					ycType={user.yc_type}
+					verified={user.verified.email}
+					ycType={ycType}
 					className="shrink-0"
 				/>
 
@@ -59,13 +62,13 @@ export function ProfileHeader({
 						<div>
 							<div className="flex items-center gap-2 mb-1">
 								<h1 className="text-2xl font-bold truncate">{user.name}</h1>
-								{user.yc_type && (
+								{ycType && (
 									<Badge variant="warning" size="md">
 										<Check className="h-3 w-3 mr-1" />
-										{user.yc_type === 'partner' ? 'YC Partner' : 'YC Alumni'}
+										{ycType === 'partner' ? 'YC Partner' : 'YC Alumni'}
 									</Badge>
 								)}
-								{user.verified_email && !user.yc_type && (
+								{user.verified.email && !ycType && (
 									<Badge variant="success" size="sm">
 										<Check className="h-3 w-3 mr-1" /> Verified
 									</Badge>
@@ -76,7 +79,7 @@ export function ProfileHeader({
 
 							<div className="flex items-center gap-4 mt-3 text-sm text-text-muted">
 								<span className="flex items-center gap-1.5">
-									<Calendar className="h-4 w-4" /> Joined {formatDate(user.created_at)}
+									<Calendar className="h-4 w-4" /> Joined {formatDate(user.createdAt)}
 								</span>
 							</div>
 						</div>

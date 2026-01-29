@@ -55,7 +55,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 				)}
 			>
 				<div className="hidden lg:flex items-center gap-2 h-14 px-4 border-b border-border">
-					<Brand href="/ideas" />
+					<Brand href="/" />
 				</div>
 
 				<div className="p-4 lg:pt-4">
