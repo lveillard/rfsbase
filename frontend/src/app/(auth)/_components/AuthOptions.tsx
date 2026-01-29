@@ -8,6 +8,7 @@ import { authClient } from '@/lib/auth-client'
 interface YcData {
 	batch: string
 	company: string
+	linkedin?: string
 }
 
 interface AuthOptionsProps {
