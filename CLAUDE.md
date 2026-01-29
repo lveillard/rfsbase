@@ -228,3 +228,7 @@ GITHUB_CLIENT_SECRET=
 # AI
 OPENAI_API_KEY=
 ```
+
+## Infrastructure Notes
+
+**Terraform + EC2**: Changing `user_data` in terraform (e.g., toggling `use_secrets_manager`) will DESTROY and recreate the EC2 instance - update Cloudflare DNS if IP changes.

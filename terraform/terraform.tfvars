@@ -6,7 +6,7 @@ volume_iops         = 6000
 volume_throughput   = 400
 use_elastic_ip      = true
 domain              = "rfsbase.com"
-use_secrets_manager = true
+use_secrets_manager = false
 
 # Pass sensitive values via TF_VAR_* environment variables:
 # export TF_VAR_ssh_public_key="ssh-ed25519 ..."
