@@ -3,13 +3,22 @@
 import { ArrowRight, BadgeCheck, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
-import { Button, Card, Input } from '@/components/ui'
+import { Button, Card } from '@/components/ui'
 import { verifyYcFounder, type YCVerification } from '@/lib/server/yc-verify'
 import { AuthOptions } from '../../_components/AuthOptions'
 
 type YcStatus = 'idle' | 'verified' | 'not_yc'
 
 const YC_PREFIX = 'ycombinator.com/verify/'
+
+function YCLogo({ className }: { className?: string }) {
+	return (
+		<svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<rect width="24" height="24" rx="4" fill="#FF6600" />
+			<path d="M12 14.5V18M8 6L12 12M16 6L12 12" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+		</svg>
+	)
+}
 
 export function SignupForm() {
 	const [ycStatus, setYcStatus] = useState<YcStatus>('idle')
@@ -54,9 +63,9 @@ export function SignupForm() {
 			<p className="text-text-secondary mb-6">Share ideas. Get feedback. Build.</p>
 
 			{/* YC Verification */}
-			<div className="bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 border border-orange-200 dark:border-orange-800 rounded-xl p-4 mb-6">
+			<div className="bg-surface-alt border border-border rounded-xl p-4 mb-6">
 				<div className="flex items-center gap-2 mb-3">
-					<BadgeCheck className="h-5 w-5 text-orange-500" />
+					<YCLogo className="h-6 w-6" />
 					<span className="font-medium">YC Founder?</span>
 				</div>
 
@@ -95,36 +104,35 @@ export function SignupForm() {
 							<Link
 								href="https://www.ycombinator.com/verify"
 								target="_blank"
-								className="text-primary hover:underline"
+								className="text-accent hover:underline"
 							>
 								ycombinator.com/verify
 							</Link>
 						</p>
 
-						<div className="flex gap-2">
-							<div className="flex-1 relative">
-								<span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-text-muted pointer-events-none">
-									{YC_PREFIX}
-								</span>
-								<Input
-									type="text"
-									placeholder="your-code"
-									value={ycInput}
-									onChange={(e) => {
-										setYcInput(e.target.value)
-										setYcError('')
-									}}
-									onKeyDown={handleKeyDown}
-									disabled={isVerifying}
-									className="pl-[135px]"
-								/>
-							</div>
-							<Button
+						<div className="flex rounded-lg overflow-hidden border border-border focus-within:ring-2 focus-within:ring-accent/50">
+							<span className="flex items-center px-3 text-xs text-text-muted bg-surface-alt select-none border-r border-border">
+								{YC_PREFIX}
+							</span>
+							<input
+								type="text"
+								placeholder="your-code"
+								value={ycInput}
+								onChange={(e) => {
+									const value = e.target.value
+									const match = value.match(/verify\/([a-zA-Z0-9]+)/)
+									setYcInput(match ? match[1] : value.replace('.json', ''))
+									setYcError('')
+								}}
+								onKeyDown={handleKeyDown}
+								disabled={isVerifying}
+								className="flex-1 min-w-0 px-3 py-2.5 text-sm bg-surface text-text placeholder:text-text-muted outline-none disabled:opacity-50"
+							/>
+							<button
 								type="button"
-								variant="primary"
 								onClick={handleVerify}
 								disabled={isVerifying || !ycInput.trim()}
-								className="px-3 shrink-0"
+								className="flex items-center px-4 bg-accent text-white hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
 								aria-label="Verify"
 							>
 								{isVerifying ? (
@@ -132,7 +140,7 @@ export function SignupForm() {
 								) : (
 									<ArrowRight className="h-4 w-4" />
 								)}
-							</Button>
+							</button>
 						</div>
 
 						{ycError && <p className="text-xs text-error">{ycError}</p>}
@@ -140,18 +148,16 @@ export function SignupForm() {
 				)}
 
 				{ycStatus === 'verified' && ycData && (
-					<div className="bg-green-100 dark:bg-green-900/30 border border-green-300 dark:border-green-700 rounded-lg p-3">
-						<div className="flex items-center gap-2 mb-1">
-							<BadgeCheck className="h-4 w-4 text-green-600 dark:text-green-400" />
-							<span className="text-sm font-medium text-green-800 dark:text-green-300">
-								Hola, {ycData.name}!
-							</span>
+					<div className="space-y-1">
+						<div className="flex items-center gap-2">
+							<BadgeCheck className="h-4 w-4 text-accent" />
+							<span className="text-sm font-medium">Hey {ycData.name}!</span>
 						</div>
-						<p className="text-xs text-green-700 dark:text-green-400">
-							{ycData.company} · {ycData.batch}
+						<p className="text-sm text-text-secondary">
+							{ycData.title && `${ycData.title} @ `}{ycData.company} · {ycData.batch}
 						</p>
-						<p className="text-xs text-green-600 dark:text-green-500 mt-2">
-							Continue with <strong>{ycData.email}</strong> to get your YC badge
+						<p className="text-sm text-text-secondary mt-2">
+							Continue with <strong className="text-accent">{ycData.email}</strong> to get your YC badge
 						</p>
 					</div>
 				)}
@@ -161,7 +167,7 @@ export function SignupForm() {
 				<>
 					<AuthOptions
 						requiredEmail={ycData?.email}
-						ycData={ycData ? { batch: ycData.batch, company: ycData.company } : undefined}
+						ycData={ycData ? { batch: ycData.batch, company: ycData.company, linkedin: ycData.linkedin } : undefined}
 					/>
 
 					<p className="text-center text-xs text-text-muted mt-6">
@@ -183,7 +189,7 @@ export function SignupForm() {
 
 			<p className="text-center text-sm text-text-secondary mt-6">
 				Already have an account?{' '}
-				<Link href="/login" className="text-primary hover:underline">
+				<Link href="/login" className="text-accent hover:underline">
 					Log in
 				</Link>
 			</p>

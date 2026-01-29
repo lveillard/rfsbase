@@ -82,7 +82,7 @@ function VerifyContent() {
 	if (status === 'applying_yc') {
 		return (
 			<>
-				<div className="animate-spin h-8 w-8 border-2 border-orange-500 border-t-transparent rounded-full mx-auto mb-4" />
+				<div className="animate-spin h-8 w-8 border-2 border-accent border-t-transparent rounded-full mx-auto mb-4" />
 				<h1 className="text-xl font-bold">Applying YC badge...</h1>
 				<p className="text-text-secondary">Setting up your founder profile</p>
 			</>
@@ -104,12 +104,10 @@ function VerifyContent() {
 	if (status === 'success_yc') {
 		return (
 			<>
-				<div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-					<BadgeCheck className="h-6 w-6 text-orange-500" />
+				<div className="w-12 h-12 bg-accent-muted rounded-full flex items-center justify-center mx-auto mb-4">
+					<BadgeCheck className="h-6 w-6 text-accent" />
 				</div>
-				<h1 className="text-xl font-bold text-orange-600 dark:text-orange-400 mb-2">
-					Welcome, YC Founder!
-				</h1>
+				<h1 className="text-xl font-bold text-accent mb-2">Welcome, YC Founder!</h1>
 				<p className="text-text-secondary">Your YC badge has been applied. Redirecting...</p>
 			</>
 		)

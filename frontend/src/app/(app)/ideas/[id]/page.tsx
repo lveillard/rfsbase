@@ -165,7 +165,7 @@ export default function IdeaPage() {
 										{idea.author.name}
 									</Link>
 									{idea.author.ycType && (
-										<Badge variant="warning">
+										<Badge variant="yc">
 											{idea.author.ycType === 'partner' ? 'YC Partner' : 'YC Alumni'}
 										</Badge>
 									)}

@@ -74,9 +74,7 @@ export function AuthOptions({ requiredEmail, ycData }: AuthOptionsProps) {
 						We sent a link to <strong>{requiredEmail ?? email}</strong>
 					</p>
 					{ycData && (
-						<p className="text-sm text-orange-600 dark:text-orange-400 mt-2">
-							Your YC badge will be applied after login
-						</p>
+						<p className="text-sm text-accent mt-2">Your YC badge will be applied after login</p>
 					)}
 					<p className="text-sm text-text-muted mt-4">Expires in 10 minutes</p>
 					<button
@@ -101,10 +99,10 @@ export function AuthOptions({ requiredEmail, ycData }: AuthOptionsProps) {
 			)}
 
 			{requiredEmail && (
-				<div className="flex items-center gap-2 text-sm text-amber-700 dark:text-amber-400 mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-					<Lock className="h-4 w-4 shrink-0" />
+				<div className="flex items-center gap-2 text-sm text-text-secondary mb-4 p-3 bg-surface-alt rounded-lg border border-border">
+					<Lock className="h-4 w-4 shrink-0 text-accent" />
 					<span>
-						Use <strong>{requiredEmail}</strong> to get your YC badge
+						Use <strong className="text-accent">{requiredEmail}</strong> to get your YC badge
 					</span>
 				</div>
 			)}

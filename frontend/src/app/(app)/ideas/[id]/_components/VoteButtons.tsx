@@ -17,7 +17,7 @@ interface VoteOptionProps {
 	count: number
 	label: string
 	subLabel: string
-	variant: 'primary' | 'success'
+	variant: 'accent' | 'success'
 	onClick: () => void
 	disabled: boolean
 }
@@ -31,9 +31,9 @@ function VoteOption({
 	onClick,
 	disabled,
 }: VoteOptionProps) {
-	const borderColor = variant === 'primary' ? 'border-primary' : 'border-success'
-	const bgColor = variant === 'primary' ? 'bg-primary-muted' : 'bg-success-muted'
-	const iconBgActive = variant === 'primary' ? 'bg-primary' : 'bg-success'
+	const borderColor = variant === 'accent' ? 'border-accent' : 'border-success'
+	const bgColor = variant === 'accent' ? 'bg-accent-muted' : 'bg-success-muted'
+	const iconBgActive = variant === 'accent' ? 'bg-accent' : 'bg-success'
 
 	return (
 		<button
@@ -81,7 +81,7 @@ export function VoteButtons({ ideaId, votes, userVote }: VoteButtonsProps) {
 					count={votes.problem}
 					label="I have this problem"
 					subLabel="people agree"
-					variant="primary"
+					variant="accent"
 					onClick={() => handleVote('problem')}
 					disabled={isPending}
 				/>
@@ -96,7 +96,7 @@ export function VoteButtons({ ideaId, votes, userVote }: VoteButtonsProps) {
 				/>
 			</div>
 			<div className="mt-4 pt-4 border-t border-border text-center">
-				<p className="text-2xl font-bold text-primary">{formatNumber(votes.total)}</p>
+				<p className="text-2xl font-bold text-accent">{formatNumber(votes.total)}</p>
 				<p className="text-sm text-text-muted">total votes</p>
 			</div>
 		</Card>

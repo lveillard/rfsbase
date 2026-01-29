@@ -43,8 +43,8 @@ function CommentItem({ comment, onReply, onUpvote, depth = 0 }: CommentItemProps
 					<div className="flex items-center gap-2">
 						<span className="font-medium text-sm">{comment.author.name}</span>
 						{comment.author.ycType && (
-							<Badge variant="warning" size="sm">
-								{comment.author.ycType === 'partner' ? 'YC Partner' : 'YC'}
+							<Badge variant="yc" size="sm">
+								{comment.author.ycType === 'partner' ? 'YC Partner' : 'YC Alumni'}
 							</Badge>
 						)}
 						<span className="text-xs text-text-muted">{formatRelativeTime(comment.createdAt)}</span>

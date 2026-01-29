@@ -40,7 +40,7 @@ const features = [
 	{
 		icon: Shield,
 		title: 'YC Verification',
-		description: "Verified badges for YC founders. Know who's been through the crucible.",
+		description: 'Verified badges for YC founders and partners. Trust the source of each idea.',
 	},
 	{
 		icon: Globe,
@@ -65,13 +65,13 @@ export default function HomePage() {
 
 				<div className="container-wide py-20 md:py-32">
 					<div className="max-w-3xl mx-auto text-center">
-						<Badge variant="primary" className="mb-4">
+						<Badge variant="default" className="mb-4">
 							<Sparkles className="h-3 w-3 mr-1" />
 							Now in Public Beta
 						</Badge>
 
 						<h1 className="text-4xl md:text-6xl font-bold tracking-tight text-balance mb-6">
-							Where Startup Ideas <span className="text-primary">Come to Life</span>
+							Where Startup Ideas <span className="text-accent">Come to Life</span>
 						</h1>
 
 						<p className="text-lg md:text-xl text-text-secondary mb-8 text-balance">
@@ -117,7 +117,7 @@ export default function HomePage() {
 
 					<div className="grid md:grid-cols-3 gap-8">
 						<div className="text-center">
-							<div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary text-white text-xl font-bold mb-4">
+							<div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-accent text-white text-xl font-bold mb-4">
 								1
 							</div>
 							<h3 className="text-lg font-semibold mb-2">Share a Problem</h3>
@@ -128,7 +128,7 @@ export default function HomePage() {
 						</div>
 
 						<div className="text-center">
-							<div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary text-white text-xl font-bold mb-4">
+							<div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-accent text-white text-xl font-bold mb-4">
 								2
 							</div>
 							<h3 className="text-lg font-semibold mb-2">Community Validates</h3>
@@ -139,7 +139,7 @@ export default function HomePage() {
 						</div>
 
 						<div className="text-center">
-							<div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary text-white text-xl font-bold mb-4">
+							<div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-accent text-white text-xl font-bold mb-4">
 								3
 							</div>
 							<h3 className="text-lg font-semibold mb-2">Build What Matters</h3>
@@ -167,7 +167,7 @@ export default function HomePage() {
 						{features.map((feature) => (
 							<Card key={feature.title} padding="lg" hoverable>
 								<div className="flex items-center gap-3 mb-3">
-									<div className="flex items-center justify-center h-10 w-10 rounded-lg bg-primary-muted text-primary">
+									<div className="flex items-center justify-center h-10 w-10 rounded-lg bg-accent-muted text-accent">
 										<feature.icon className="h-5 w-5" />
 									</div>
 									<h3 className="font-semibold">{feature.title}</h3>
@@ -213,10 +213,10 @@ export default function HomePage() {
 					<Card
 						variant="elevated"
 						padding="lg"
-						className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20"
+						className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20"
 					>
 						<div className="text-center max-w-2xl mx-auto">
-							<div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary text-white mb-4">
+							<div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-accent text-white mb-4">
 								<Zap className="h-6 w-6" />
 							</div>
 							<h2 className="text-2xl md:text-3xl font-bold mb-4">

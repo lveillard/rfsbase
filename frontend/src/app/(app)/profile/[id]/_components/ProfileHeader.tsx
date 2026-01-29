@@ -63,7 +63,7 @@ export function ProfileHeader({
 							<div className="flex items-center gap-2 mb-1">
 								<h1 className="text-2xl font-bold truncate">{user.name}</h1>
 								{ycType && (
-									<Badge variant="warning" size="md">
+									<Badge variant="yc" size="md">
 										<Check className="h-3 w-3 mr-1" />
 										{ycType === 'partner' ? 'YC Partner' : 'YC Alumni'}
 									</Badge>

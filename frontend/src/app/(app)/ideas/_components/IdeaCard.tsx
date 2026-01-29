@@ -79,8 +79,8 @@ export function IdeaCard({ idea, onVote }: IdeaCardProps) {
 						<div className="flex items-center gap-2">
 							<span className="font-medium text-sm truncate">{idea.author.name}</span>
 							{idea.author.ycType && (
-								<Badge variant="warning" size="sm">
-									{idea.author.ycType === 'partner' ? 'YC Partner' : 'YC'}
+								<Badge variant="yc" size="sm">
+									{idea.author.ycType === 'partner' ? 'YC Partner' : 'YC Alumni'}
 								</Badge>
 							)}
 						</div>
@@ -92,7 +92,7 @@ export function IdeaCard({ idea, onVote }: IdeaCardProps) {
 					</div>
 				</header>
 
-				<h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors">
+				<h3 className="font-semibold text-lg mb-2 group-hover:text-accent transition-colors">
 					{idea.title}
 				</h3>
 				<p className="text-text-secondary text-sm mb-3 line-clamp-2">
@@ -104,7 +104,7 @@ export function IdeaCard({ idea, onVote }: IdeaCardProps) {
 			<footer className="flex items-center justify-between px-4 sm:px-6 py-3 border-t border-border bg-surface-alt/50">
 				<div className="flex items-center gap-2">
 					<Button
-						variant={isVoted ? 'primary' : 'ghost'}
+						variant={isVoted ? 'accent' : 'ghost'}
 						size="sm"
 						onClick={handleVote}
 						leftIcon={<ArrowBigUp className={cn('h-4 w-4', isVoted && 'fill-current')} />}

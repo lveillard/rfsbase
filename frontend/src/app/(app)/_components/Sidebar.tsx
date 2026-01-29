@@ -64,7 +64,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 						<input
 							type="text"
 							placeholder="Search ideas..."
-							className="w-full h-9 pl-9 pr-3 rounded-lg bg-surface-alt border border-border text-sm placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary"
+							className="w-full h-9 pl-9 pr-3 rounded-lg bg-surface-alt border border-border text-sm placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent"
 						/>
 					</div>
 				</div>
@@ -81,7 +81,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 									'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium',
 									'transition-colors',
 									isActive
-										? 'bg-primary-muted text-primary'
+										? 'bg-accent-muted text-accent'
 										: 'text-text-secondary hover:text-text hover:bg-surface-alt',
 								)}
 							>

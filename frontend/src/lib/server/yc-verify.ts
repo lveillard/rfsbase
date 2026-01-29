@@ -9,10 +9,21 @@ const YC_VERIFY_BASE = 'https://www.ycombinator.com/verify/'
 
 // Schema for YC verification JSON response
 const YCVerifyResponseSchema = Type.Object({
+	verified: Type.Boolean(),
 	name: Type.String(),
-	email: Type.String({ format: 'email' }),
+	email: Type.String(),
 	batches: Type.Array(Type.Object({ name: Type.String() })),
-	companies: Type.Array(Type.Object({ name: Type.String(), batch: Type.String() })),
+	companies: Type.Array(
+		Type.Object({
+			name: Type.String(),
+			batch: Type.String(),
+			url: Type.Optional(Type.String()),
+			directory_url: Type.Optional(Type.String()),
+			title: Type.Optional(Type.String()),
+		}),
+	),
+	linkedin: Type.Optional(Type.String()),
+	message: Type.Optional(Type.String()),
 })
 
 export interface YCVerification {
@@ -21,6 +32,25 @@ export interface YCVerification {
 	email: string
 	batch: string
 	company: string
+	companyUrl?: string
+	linkedin?: string
+	title?: string
+}
+
+// Parse YC batch to sortable number (e.g., S22 -> 2022.5, W23 -> 2023.0)
+const parseBatch = (batch: string): number => {
+	const match = batch.match(/^([SW])(\d{2})$/)
+	if (!match) return 0
+	const year = 2000 + Number.parseInt(match[2], 10)
+	const season = match[1] === 'W' ? 0 : 0.5 // Winter is start of year, Summer is mid-year
+	return year + season
+}
+
+// Get most recent batch from list
+const getMostRecentBatch = (batches: Array<{ name: string }>): string => {
+	if (batches.length === 0) return 'Unknown'
+	if (batches.length === 1) return batches[0].name
+	return batches.sort((a, b) => parseBatch(b.name) - parseBatch(a.name))[0].name
 }
 
 // Extract code from various URL/input formats - pure function
@@ -49,14 +79,29 @@ export async function verifyYcFounder(input: string): Promise<YCVerification> {
 		throw new Error(response.status === 404 ? 'Verification not found' : 'Failed to verify')
 	}
 
-	const parsed = Value.Parse(YCVerifyResponseSchema, await response.json())
+	const data = await response.json()
+	const parsed = Value.Parse(YCVerifyResponseSchema, data)
+
+	if (!parsed.verified) {
+		throw new Error('Verification failed')
+	}
+
+	const company = parsed.companies[0]
+
+	// Find most recent batch (user might have multiple YC companies)
+	const mostRecentBatch = getMostRecentBatch(parsed.batches)
+	// Find company matching most recent batch, or fallback to first
+	const mostRecentCompany = parsed.companies.find((c) => c.batch === mostRecentBatch) ?? company
 
 	return {
 		verified: true,
 		name: parsed.name,
 		email: parsed.email,
-		batch: parsed.batches[0]?.name ?? 'Unknown',
-		company: parsed.companies[0]?.name ?? 'Unknown',
+		batch: mostRecentBatch,
+		company: mostRecentCompany?.name ?? 'Unknown',
+		companyUrl: mostRecentCompany?.url,
+		linkedin: parsed.linkedin,
+		title: mostRecentCompany?.title,
 	}
 }
 
