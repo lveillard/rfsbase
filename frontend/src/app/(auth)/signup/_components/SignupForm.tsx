@@ -121,7 +121,7 @@ export function SignupForm() {
 								onChange={(e) => {
 									const value = e.target.value
 									const match = value.match(/verify\/([a-zA-Z0-9]+)/)
-									setYcInput(match ? match[1] : value.replace('.json', ''))
+									setYcInput(match?.[1] ?? value.replace('.json', ''))
 									setYcError('')
 								}}
 								onKeyDown={handleKeyDown}
