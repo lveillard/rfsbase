@@ -1,5 +1,4 @@
 import appConfig from '@config/app.config.json'
-import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 
@@ -21,7 +20,8 @@ export function Brand({ href = '/', size = 'md', showName = true, className }: B
 
 	const content = (
 		<div className={cn('flex items-center gap-2', className)}>
-			<Image
+			{/* eslint-disable-next-line @next/next/no-img-element */}
+			<img
 				src="/logo.svg"
 				alt={appConfig.name}
 				width={logo}
