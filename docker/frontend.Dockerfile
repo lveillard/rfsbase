@@ -45,7 +45,8 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Copy built files - monorepo structure puts server.js in subfolder
-COPY --from=builder /app/frontend/public ./public
+# Public folder must be relative to frontend/server.js location
+COPY --from=builder /app/frontend/public ./frontend/public
 COPY --from=builder /app/frontend/.next/standalone ./
 COPY --from=builder /app/frontend/.next/static ./frontend/.next/static
 
