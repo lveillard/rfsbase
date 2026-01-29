@@ -1,17 +1,11 @@
-// Profile types - shared across profile components (colocated)
-// Principle: Keep types close to where they're used, not in a global types folder
+// Profile types - colocated with profile feature
 
-export type YCType = 'partner' | 'alumni' | null
+import type { User } from '@rfsbase/shared'
 
-export interface ProfileUser {
-	readonly id: string
-	readonly name: string
-	readonly avatar?: string
-	readonly bio?: string
-	readonly verified_email: boolean
-	readonly yc_type: YCType
-	readonly created_at: string
-}
+export type ProfileUser = Pick<
+	User,
+	'id' | 'name' | 'avatar' | 'bio' | 'verified' | 'createdAt' | 'updatedAt'
+>
 
 export interface ProfileStats {
 	readonly ideasCount: number

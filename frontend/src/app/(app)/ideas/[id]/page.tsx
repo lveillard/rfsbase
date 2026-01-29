@@ -13,19 +13,40 @@ import { useIdea } from '../_hooks'
 import { CommentSection } from './_components/CommentSection'
 import { VoteButtons } from './_components/VoteButtons'
 
-function ContentSection({ title, content }: { readonly title: string; readonly content: string }) {
+const YOUTUBE_PATTERNS = [
+	/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s?]+)/,
+	/youtube\.com\/shorts\/([^&\s?]+)/,
+] as const
+
+const extractYouTubeId = (url: string): string | null =>
+	YOUTUBE_PATTERNS.map((p) => url.match(p)?.[1]).find(Boolean) ?? null
+
+const BackLink = () => (
+	<Link
+		href="/ideas"
+		className="inline-flex items-center gap-2 text-sm text-text-secondary hover:text-text mb-6"
+	>
+		<ArrowLeft className="h-4 w-4" />
+		Back to Ideas
+	</Link>
+)
+
+function VideoEmbed({ url, className }: { readonly url: string; readonly className?: string }) {
+	const videoId = extractYouTubeId(url)
+	if (!videoId) return null
+
 	return (
-		<Card padding="lg">
-			<h2 className="text-lg font-semibold mb-3">{title}</h2>
-			<div className="prose prose-sm max-w-none">
-				{content.split('\n\n').map((paragraph, i) => (
-					// biome-ignore lint/suspicious/noArrayIndexKey: paragraph order is static
-					<p key={`para-${i}`} className="text-text-secondary whitespace-pre-wrap">
-						{paragraph}
-					</p>
-				))}
+		<div className={className}>
+			<div className="mx-auto h-[400px] w-full max-w-[300px] sm:h-[500px] sm:w-[350px] sm:max-w-none">
+				<iframe
+					src={`https://www.youtube-nocookie.com/embed/${videoId}?loop=1&rel=0&modestbranding=1`}
+					title="Video"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					allowFullScreen
+					className="h-full w-full rounded-xl shadow-md"
+				/>
 			</div>
-		</Card>
+		</div>
 	)
 }
 
@@ -54,11 +75,12 @@ function LinksSection({ links }: { links?: readonly string[] }) {
 
 export default function IdeaPage() {
 	const params = useParams()
-	// const router = useRouter() // TODO: use for navigation if needed
 	const id = params.id as string
 	const { idea, isLoading, error, refetch } = useIdea(id)
 	const { data: session } = useSession()
 	const isAuthenticated = !!session?.user
+	const isAuthor =
+		session?.user?.id && idea?.author?.id && parseId(session.user.id) === parseId(idea.author.id)
 	const [comments, setComments] = useState<readonly Comment[]>([])
 
 	useEffect(() => {
@@ -97,13 +119,7 @@ export default function IdeaPage() {
 	if (isLoading) {
 		return (
 			<div className="max-w-4xl mx-auto">
-				<Link
-					href="/ideas"
-					className="inline-flex items-center gap-2 text-sm text-text-secondary hover:text-text mb-6"
-				>
-					<ArrowLeft className="h-4 w-4" />
-					Back to Ideas
-				</Link>
+				<BackLink />
 				<div className="space-y-6">
 					<SkeletonCard />
 					<SkeletonCard />
@@ -115,15 +131,9 @@ export default function IdeaPage() {
 	if (error || !idea) {
 		return (
 			<div className="max-w-4xl mx-auto">
-				<Link
-					href="/ideas"
-					className="inline-flex items-center gap-2 text-sm text-text-secondary hover:text-text mb-6"
-				>
-					<ArrowLeft className="h-4 w-4" />
-					Back to Ideas
-				</Link>
+				<BackLink />
 				<Card padding="lg" className="text-center">
-					<p className="text-error mb-4">{error?.message || 'Idea not found'}</p>
+					<p className="text-error mb-4">{error?.message ?? 'Idea not found'}</p>
 					<Button onClick={refetch}>Try Again</Button>
 				</Card>
 			</div>
@@ -133,16 +143,9 @@ export default function IdeaPage() {
 	const category = getCategoryById(idea.category)
 
 	return (
-		<div className="max-w-4xl mx-auto">
-			<Link
-				href="/ideas"
-				className="inline-flex items-center gap-2 text-sm text-text-secondary hover:text-text mb-6"
-			>
-				<ArrowLeft className="h-4 w-4" />
-				Back to Ideas
-			</Link>
-
-			<div className="grid lg:grid-cols-[1fr,280px] gap-6">
+		<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+			<BackLink />
+			<div className="grid lg:grid-cols-[1fr,240px] gap-8">
 				<div className="space-y-6">
 					<Card padding="lg">
 						<div className="flex items-center gap-3 mb-4">
@@ -188,7 +191,7 @@ export default function IdeaPage() {
 
 						<h1 className="text-2xl font-bold mb-4">{idea.title}</h1>
 
-						<div className="flex flex-wrap gap-2 mb-4">
+						<div className="flex flex-wrap gap-2 mb-6">
 							{idea.tags.map((tag) => (
 								<Badge key={tag} variant="secondary">
 									{tag}
@@ -196,20 +199,47 @@ export default function IdeaPage() {
 							))}
 						</div>
 
-						<div className="flex items-center gap-2">
+						{idea.videoUrl && <VideoEmbed url={idea.videoUrl} className="lg:hidden mb-6" />}
+
+						<div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+							<div className="prose prose-sm max-w-none lg:col-span-7">
+								{idea.problem.split('\n\n').map((paragraph, i) => (
+									// biome-ignore lint/suspicious/noArrayIndexKey: static content
+									<p key={i} className="text-text-secondary leading-relaxed mb-4 last:mb-0">
+										{paragraph.split('\n').map((line, j) => (
+											// biome-ignore lint/suspicious/noArrayIndexKey: static content
+											<span key={j}>
+												{j > 0 && <br />}
+												{line}
+											</span>
+										))}
+									</p>
+								))}
+							</div>
+
+							{idea.videoUrl && (
+								<div className="hidden lg:block lg:col-span-5 lg:sticky lg:top-24 lg:self-start">
+									<VideoEmbed url={idea.videoUrl} />
+								</div>
+							)}
+						</div>
+
+						<div className="flex items-center gap-2 pt-4 mt-6 border-t border-border">
 							<Button variant="ghost" size="sm" onClick={handleShare}>
 								<Share2 className="h-4 w-4 mr-1" /> Share
 							</Button>
-							<Button variant="ghost" size="sm">
-								<Flag className="h-4 w-4 mr-1" /> Report
-							</Button>
-							<Button variant="ghost" size="sm">
-								<Edit className="h-4 w-4 mr-1" /> Edit
-							</Button>
+							{isAuthenticated && (
+								<Button variant="ghost" size="sm">
+									<Flag className="h-4 w-4 mr-1" /> Report
+								</Button>
+							)}
+							{isAuthor && (
+								<Button variant="ghost" size="sm">
+									<Edit className="h-4 w-4 mr-1" /> Edit
+								</Button>
+							)}
 						</div>
 					</Card>
-
-					<ContentSection title="The Problem" content={idea.problem} />
 					<LinksSection links={idea.links} />
 
 					{isAuthenticated ? (
