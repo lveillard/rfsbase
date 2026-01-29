@@ -18,8 +18,8 @@
       "secondaryMuted": "#fff8e6",
       "success": "#36B37E",
       "successMuted": "#E6F7EF",
-      "warning": "#FFAB00",
-      "warningMuted": "#FFF8E6",
+      "warning": "#f83b61",
+      "warningMuted": "#fee2e8",
       "error": "#FF5630",
       "errorMuted": "#FFEBE6"
     },
@@ -40,8 +40,8 @@
       "secondaryMuted": "#2e2510",
       "success": "#36B37E",
       "successMuted": "#1A2E23",
-      "warning": "#FFAB00",
-      "warningMuted": "#2E2510",
+      "warning": "#f83b61",
+      "warningMuted": "#2e1a1d",
       "error": "#FF5630",
       "errorMuted": "#2E1A17"
     }

@@ -28,8 +28,8 @@
   --color-secondary-muted: #fff8e6;
   --color-success: #36B37E;
   --color-success-muted: #E6F7EF;
-  --color-warning: #FFAB00;
-  --color-warning-muted: #FFF8E6;
+  --color-warning: #f83b61;
+  --color-warning-muted: #fee2e8;
   --color-error: #FF5630;
   --color-error-muted: #FFEBE6;
 
@@ -62,7 +62,7 @@
   --color-secondary-hover: #ffe08a;
   --color-secondary-muted: #2e2510;
   --color-success-muted: #1A2E23;
-  --color-warning-muted: #2E2510;
+  --color-warning-muted: #2e1a1d;
   --color-error-muted: #2E1A17;
 }
 
