@@ -41,8 +41,8 @@ export interface YCVerification {
 const parseBatch = (batch: string): number => {
 	const match = batch.match(/^([SW])(\d{2})$/)
 	if (!match) return 0
-	const year = 2000 + Number.parseInt(match[2], 10)
-	const season = match[1] === 'W' ? 0 : 0.5 // Winter is start of year, Summer is mid-year
+	const year = 2000 + Number.parseInt(match[2]!, 10)
+	const season = match[1]! === 'W' ? 0 : 0.5 // Winter is start of year, Summer is mid-year
 	return year + season
 }
 
