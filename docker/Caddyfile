@@ -1,11 +1,12 @@
 # Production Caddyfile for RFSbase
 # Automatically provisions SSL certificates via Let's Encrypt
+# Now with consolidated architecture - Next.js handles everything
 
 {
     email {$ADMIN_EMAIL:admin@rfsbase.com}
 }
 
-# Main domain - serves the frontend
+# Main domain - serves the Next.js app (includes API routes and Server Actions)
 {$DOMAIN:rfsbase.com} {
     reverse_proxy frontend:3000
 
@@ -29,31 +30,4 @@
     }
 }
 
-# API subdomain - serves the backend
-api.{$DOMAIN:rfsbase.com} {
-    reverse_proxy backend:3001
-
-    # CORS headers for API
-    header {
-        Access-Control-Allow-Origin "{$CORS_ORIGIN:https://rfsbase.com}"
-        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-        Access-Control-Allow-Headers "Content-Type, Authorization"
-        Access-Control-Max-Age "86400"
-    }
-
-    # Security headers
-    header {
-        X-Content-Type-Options "nosniff"
-        X-XSS-Protection "1; mode=block"
-        Strict-Transport-Security "max-age=31536000; includeSubDomains"
-    }
-
-    # Gzip compression
-    encode gzip
-
-    # Logging
-    log {
-        output file /data/api-access.log
-        format json
-    }
-}
+# (Backend API removed - now handled by Next.js Server Actions)

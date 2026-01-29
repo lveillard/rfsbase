@@ -1,7 +1,6 @@
 'use client'
 
 import { Check, ThumbsUp } from 'lucide-react'
-import { useState } from 'react'
 import { Card } from '@/components/ui'
 import { cn, formatNumber } from '@/lib/utils'
 import type { VoteCounts, VoteType } from '@/types'
@@ -65,78 +64,39 @@ function VoteOption({
 }
 
 export function VoteButtons({ ideaId, votes, userVote }: VoteButtonsProps) {
-	const [localVotes, setLocalVotes] = useState(votes)
-	const [localUserVote, setLocalUserVote] = useState(userVote)
+	// useVote handles optimistic updates via React Query's onMutate/onError
+	const { vote, isPending } = useVote(ideaId)
 
-	const { vote, removeVote, isVoting } = useVote(ideaId, setLocalVotes)
-
-	const handleVote = async (type: VoteType) => {
-		if (isVoting) return
-
-		const wasVoted = localUserVote === type
-		const previousVote = localUserVote
-
-		// Optimistic update
-		setLocalUserVote(wasVoted ? null : type)
-		setLocalVotes((prev) => {
-			const newVotes = { ...prev }
-
-			if (wasVoted) {
-				newVotes[type] = prev[type] - 1
-				newVotes.total = prev.total - 1
-			} else {
-				newVotes[type] = prev[type] + 1
-				newVotes.total = previousVote ? prev.total : prev.total + 1
-
-				if (previousVote && previousVote !== type) {
-					newVotes[previousVote] = prev[previousVote] - 1
-				}
-			}
-
-			return newVotes
-		})
-
-		try {
-			if (wasVoted) {
-				await removeVote()
-			} else {
-				await vote(type)
-			}
-		} catch {
-			// Rollback on error
-			setLocalUserVote(userVote)
-			setLocalVotes(votes)
-		}
+	const handleVote = (type: VoteType) => {
+		if (isPending || userVote === type) return
+		vote(type)
 	}
 
 	return (
 		<Card padding="md">
 			<h3 className="font-semibold mb-4">Cast Your Vote</h3>
-
 			<div className="space-y-3">
 				<VoteOption
-					isSelected={localUserVote === 'problem'}
-					count={localVotes.problem}
+					isSelected={userVote === 'problem'}
+					count={votes.problem}
 					label="I have this problem"
 					subLabel="people agree"
 					variant="primary"
 					onClick={() => handleVote('problem')}
-					disabled={isVoting}
+					disabled={isPending}
 				/>
-
 				<VoteOption
-					isSelected={localUserVote === 'solution'}
-					count={localVotes.solution}
+					isSelected={userVote === 'solution'}
+					count={votes.solution}
 					label="I'd use this solution"
 					subLabel="would use it"
 					variant="success"
 					onClick={() => handleVote('solution')}
-					disabled={isVoting}
+					disabled={isPending}
 				/>
 			</div>
-
 			<div className="mt-4 pt-4 border-t border-border text-center">
-				<p className="text-2xl font-bold text-primary">{formatNumber(localVotes.total)}</p>
+				<p className="text-2xl font-bold text-primary">{formatNumber(votes.total)}</p>
 				<p className="text-sm text-text-muted">total votes</p>
 			</div>
 		</Card>

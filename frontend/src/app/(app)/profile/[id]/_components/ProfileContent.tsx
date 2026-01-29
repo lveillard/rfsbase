@@ -1,40 +1,22 @@
 'use client'
 
-import { useAuthStore } from '@/lib/auth'
+import { useSession } from '@/lib/auth-client'
+import type { ProfileStats as ProfileStatsType, ProfileUser } from '../../_types'
 import { ProfileHeader } from './ProfileHeader'
 import { ProfileStats } from './ProfileStats'
 import { UserIdeas } from './UserIdeas'
 
-interface ProfileUser {
-	readonly id: string
-	readonly name: string
-	readonly avatar?: string
-	readonly bio?: string
-	readonly verified_email: boolean
-	readonly verified_yc?: {
-		readonly batch?: string
-		readonly company?: string
-	}
-	readonly created_at: string
-}
-
-interface ProfileStatsData {
-	ideasCount: number
-	votesReceived: number
-	commentsCount: number
-	followersCount: number
-	followingCount: number
-}
-
 interface ProfileContentProps {
-	profileUserId: string
-	user: ProfileUser
-	stats: ProfileStatsData
+	readonly profileUserId: string
+	readonly user: ProfileUser
+	readonly stats: ProfileStatsType
 }
 
 export function ProfileContent({ profileUserId, user, stats }: ProfileContentProps) {
-	const { user: currentUser } = useAuthStore()
-	const isOwnProfile = currentUser?.id === profileUserId
+	// Better Auth native session hook
+	const { data: session } = useSession()
+	const currentUserId = session?.user?.id
+	const isOwnProfile = currentUserId === profileUserId
 
 	return (
 		<div className="max-w-4xl mx-auto space-y-6">

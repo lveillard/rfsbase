@@ -3,7 +3,14 @@
 import { ArrowBigUp, Clock, MessageSquare } from 'lucide-react'
 import Link from 'next/link'
 import { Avatar, Badge, Button, Card } from '@/components/ui'
-import { cn, formatNumber, formatRelativeTime, getCategoryById, truncate } from '@/lib/utils'
+import {
+	cn,
+	formatNumber,
+	formatRelativeTime,
+	getCategoryById,
+	parseId,
+	truncate,
+} from '@/lib/utils'
 import type { IdeaCard as IdeaCardType } from '@/types'
 
 interface IdeaCardProps {
@@ -49,7 +56,7 @@ function TagList({ tags }: { readonly tags: readonly string[] }) {
 }
 
 export function IdeaCard({ idea, onVote }: IdeaCardProps) {
-	const ideaUrl = `/ideas/${idea.id}`
+	const ideaUrl = `/ideas/${parseId(idea.id)}`
 	const isVerified = idea.author.verified || idea.author.ycVerified
 	const isVoted = idea.userVote === 'problem'
 

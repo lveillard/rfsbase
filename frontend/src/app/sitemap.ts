@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { parseId } from '@/lib/utils'
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://rfsbase.com'
 
@@ -44,7 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			const data = await response.json()
 			if (data.success && data.data) {
 				ideaPages = data.data.map((idea: { id: string; updatedAt: string }) => ({
-					url: `${BASE_URL}/ideas/${idea.id}`,
+					url: `${BASE_URL}/ideas/${parseId(idea.id)}`,
 					lastModified: new Date(idea.updatedAt),
 					changeFrequency: 'daily' as const,
 					priority: 0.6,

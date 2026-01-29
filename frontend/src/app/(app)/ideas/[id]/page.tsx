@@ -1,26 +1,26 @@
 'use client'
 
-import { ArrowLeft, Clock, Edit, ExternalLink, Flag, Share2 } from 'lucide-react'
+import { ArrowLeft, Clock, Edit, ExternalLink, Flag, MessageSquare, Share2 } from 'lucide-react'
 import Link from 'next/link'
-import { use } from 'react'
+import { useParams } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
 import { Avatar, Badge, Button, Card, SkeletonCard } from '@/components/ui'
-import { commentsApi } from '@/lib/api'
-import { formatRelativeTime, getCategoryById } from '@/lib/utils'
+import { createComment, getCommentsForIdea, upvoteComment } from '@/lib/actions'
+import { useSession } from '@/lib/auth-client'
+import { formatRelativeTime, getCategoryById, parseId } from '@/lib/utils'
+import type { Comment } from '@/types'
 import { useIdea } from '../_hooks'
 import { CommentSection } from './_components/CommentSection'
 import { VoteButtons } from './_components/VoteButtons'
 
-interface IdeaPageProps {
-	params: Promise<{ id: string }>
-}
-
-function ContentSection({ title, content }: { title: string; content: string }) {
+function ContentSection({ title, content }: { readonly title: string; readonly content: string }) {
 	return (
 		<Card padding="lg">
 			<h2 className="text-lg font-semibold mb-3">{title}</h2>
 			<div className="prose prose-sm max-w-none">
 				{content.split('\n\n').map((paragraph, i) => (
-					<p key={i} className="text-text-secondary whitespace-pre-wrap">
+					// biome-ignore lint/suspicious/noArrayIndexKey: paragraph order is static
+					<p key={`para-${i}`} className="text-text-secondary whitespace-pre-wrap">
 						{paragraph}
 					</p>
 				))}
@@ -29,9 +29,8 @@ function ContentSection({ title, content }: { title: string; content: string }) 
 	)
 }
 
-function LinksSection({ links }: { links: readonly string[] }) {
-	if (links.length === 0) return null
-
+function LinksSection({ links }: { links?: readonly string[] }) {
+	if (!links?.length) return null
 	return (
 		<Card padding="lg">
 			<h2 className="text-lg font-semibold mb-3">Related Links</h2>
@@ -53,23 +52,34 @@ function LinksSection({ links }: { links: readonly string[] }) {
 	)
 }
 
-export default function IdeaPage({ params }: IdeaPageProps) {
-	const { id } = use(params)
+export default function IdeaPage() {
+	const params = useParams()
+	// const router = useRouter() // TODO: use for navigation if needed
+	const id = params.id as string
 	const { idea, isLoading, error, refetch } = useIdea(id)
+	const { data: session } = useSession()
+	const isAuthenticated = !!session?.user
+	const [comments, setComments] = useState<readonly Comment[]>([])
 
-	const handleAddComment = async (content: string, parentId?: string) => {
-		const response = await commentsApi.create(id, { content, parentId })
-		if (!response.success) {
-			throw new Error(response.error.message)
+	useEffect(() => {
+		if (id) {
+			getCommentsForIdea(id)
+				.then(setComments)
+				.catch(() => setComments([]))
 		}
-	}
+	}, [id])
 
-	const handleUpvoteComment = async (commentId: string) => {
-		const response = await commentsApi.upvote(commentId)
-		if (!response.success) {
-			throw new Error(response.error.message)
-		}
-	}
+	const handleAddComment = useCallback(
+		async (content: string, parentId?: string) => {
+			const newComment = await createComment(id, { content, parentId })
+			setComments((prev) => [...prev, newComment])
+		},
+		[id],
+	)
+
+	const handleUpvoteComment = useCallback(async (commentId: string) => {
+		await upvoteComment(commentId)
+	}, [])
 
 	const handleShare = async () => {
 		if (!idea) return
@@ -113,7 +123,7 @@ export default function IdeaPage({ params }: IdeaPageProps) {
 					Back to Ideas
 				</Link>
 				<Card padding="lg" className="text-center">
-					<p className="text-error mb-4">{error || 'Idea not found'}</p>
+					<p className="text-error mb-4">{error?.message || 'Idea not found'}</p>
 					<Button onClick={refetch}>Try Again</Button>
 				</Card>
 			</div>
@@ -146,7 +156,7 @@ export default function IdeaPage({ params }: IdeaPageProps) {
 							<div>
 								<div className="flex items-center gap-2">
 									<Link
-										href={`/profile/${idea.author.id}`}
+										href={`/profile/${parseId(idea.author.id)}`}
 										className="font-medium hover:text-primary"
 									>
 										{idea.author.name}
@@ -184,44 +194,61 @@ export default function IdeaPage({ params }: IdeaPageProps) {
 
 						<div className="flex items-center gap-2">
 							<Button variant="ghost" size="sm" onClick={handleShare}>
-								<Share2 className="h-4 w-4 mr-1" />
-								Share
+								<Share2 className="h-4 w-4 mr-1" /> Share
 							</Button>
 							<Button variant="ghost" size="sm">
-								<Flag className="h-4 w-4 mr-1" />
-								Report
+								<Flag className="h-4 w-4 mr-1" /> Report
 							</Button>
 							<Button variant="ghost" size="sm">
-								<Edit className="h-4 w-4 mr-1" />
-								Edit
+								<Edit className="h-4 w-4 mr-1" /> Edit
 							</Button>
 						</div>
 					</Card>
 
 					<ContentSection title="The Problem" content={idea.problem} />
-
 					{idea.solution && <ContentSection title="Proposed Solution" content={idea.solution} />}
-
 					{idea.targetAudience && (
 						<Card padding="lg">
 							<h2 className="text-lg font-semibold mb-3">Target Audience</h2>
 							<p className="text-text-secondary">{idea.targetAudience}</p>
 						</Card>
 					)}
-
 					<LinksSection links={idea.links} />
 
-					<Card padding="lg">
-						<CommentSection
-							ideaId={idea.id}
-							onAddComment={handleAddComment}
-							onUpvote={handleUpvoteComment}
-						/>
-					</Card>
+					{isAuthenticated ? (
+						<Card padding="lg">
+							<CommentSection
+								comments={comments}
+								onAddComment={handleAddComment}
+								onUpvote={handleUpvoteComment}
+							/>
+						</Card>
+					) : (
+						<Card padding="lg" className="text-center">
+							<MessageSquare className="h-8 w-8 mx-auto mb-2 text-text-muted" />
+							<p className="text-text-secondary">
+								<Link href="/login" className="text-primary hover:underline">
+									Log in
+								</Link>{' '}
+								to comment
+							</p>
+						</Card>
+					)}
 				</div>
 
 				<div className="space-y-6 lg:sticky lg:top-20 lg:self-start">
-					<VoteButtons ideaId={idea.id} votes={idea.votes} userVote={idea.userVote} />
+					{isAuthenticated ? (
+						<VoteButtons ideaId={idea.id} votes={idea.votes} userVote={idea.userVote} />
+					) : (
+						<Card padding="md" className="text-center">
+							<p className="text-text-secondary text-sm">
+								<Link href="/login" className="text-primary hover:underline">
+									Log in
+								</Link>{' '}
+								to vote
+							</p>
+						</Card>
+					)}
 
 					<Card padding="md">
 						<h3 className="font-semibold mb-3">Stats</h3>

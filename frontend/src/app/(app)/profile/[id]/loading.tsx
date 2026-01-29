@@ -19,7 +19,8 @@ export default function ProfileLoading() {
 			<Card padding="none">
 				<div className="grid grid-cols-2 sm:grid-cols-5 divide-x divide-border">
 					{[...Array(5)].map((_, i) => (
-						<div key={i} className="flex flex-col items-center gap-2 p-4">
+						// biome-ignore lint/suspicious/noArrayIndexKey: skeleton order is static
+						<div key={`stat-${i}`} className="flex flex-col items-center gap-2 p-4">
 							<Skeleton className="h-8 w-16" />
 							<Skeleton className="h-4 w-20" />
 						</div>
@@ -34,7 +35,8 @@ export default function ProfileLoading() {
 				</div>
 				<div className="divide-y divide-border">
 					{[...Array(3)].map((_, i) => (
-						<div key={i} className="p-4">
+						// biome-ignore lint/suspicious/noArrayIndexKey: skeleton order is static
+						<div key={`idea-${i}`} className="p-4">
 							<Skeleton className="h-5 w-3/4 mb-2" />
 							<Skeleton className="h-4 w-full mb-1" />
 							<Skeleton className="h-4 w-2/3 mb-3" />

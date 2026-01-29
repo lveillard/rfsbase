@@ -1,12 +1,12 @@
 # RFSbase Production Caddyfile
-# Only frontend exposed - API is internal only
+# Consolidated architecture - Next.js handles everything
 
 {
     admin off
     email admin@rfsbase.com
 }
 
-# Main domain - Frontend + API proxy
+# Main domain - Next.js handles frontend and API
 rfsbase.com {
     # Security headers
     header {
@@ -19,15 +19,8 @@ rfsbase.com {
         -Server
     }
 
-    # API routes - proxy to internal backend (NOT public)
-    handle /api/* {
-        reverse_proxy backend:3001
-    }
-
-    # Everything else goes to frontend
-    handle {
-        reverse_proxy frontend:3000
-    }
+    # Everything goes to Next.js (frontend + API routes + Server Actions)
+    reverse_proxy frontend:3000
 
     encode gzip zstd
 

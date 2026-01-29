@@ -1,5 +1,5 @@
 // Export all schemas
-export * from './schemas/index.js'
+export * from './schemas/index'
 
 // Export validators
-export * from './validators.js'
+export * from './validators'

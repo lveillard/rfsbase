@@ -1,17 +1,17 @@
 // User schemas
-export * from './user.js'
+export * from './user'
 
 // Idea schemas
-export * from './idea.js'
+export * from './idea'
 
 // Comment schemas
-export * from './comment.js'
+export * from './comment'
 
 // Notification schemas
-export * from './notification.js'
+export * from './notification'
 
 // Auth schemas
-export * from './auth.js'
+export * from './auth'
 
 // API schemas
-export * from './api.js'
+export * from './api'

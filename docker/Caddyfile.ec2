@@ -1,5 +1,6 @@
 # RFSbase EC2 Caddyfile - IP-based access (no domain/SSL)
 # Security hardened configuration
+# Consolidated architecture - Next.js handles API and UI
 #
 # When you get your domain, use Caddyfile instead
 
@@ -43,46 +44,12 @@
         Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' ws: wss:;"
     }
 
-    # API routes - proxy to backend
-    handle /api/* {
-        # Strip /api prefix when forwarding
-        uri strip_prefix /api
-
-        # Additional API security headers
-        header {
-            Access-Control-Allow-Origin "{header.Origin}"
-            Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-            Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
-            Access-Control-Allow-Credentials "true"
-            Access-Control-Max-Age "86400"
-        }
-
-        # Handle CORS preflight
-        @options method OPTIONS
-        handle @options {
-            respond 204
-        }
-
-        reverse_proxy backend:3001 {
-            # Health checks
-            health_uri /api/health
-            health_interval 30s
-            health_timeout 5s
-
-            # Timeouts
-            transport http {
-                read_timeout 30s
-                write_timeout 30s
-            }
-        }
-    }
-
     # Health check endpoint
     handle /health {
         respond "OK" 200
     }
 
-    # Frontend - everything else
+    # Frontend and API - everything goes to Next.js
     handle {
         reverse_proxy frontend:3000 {
             # Health checks

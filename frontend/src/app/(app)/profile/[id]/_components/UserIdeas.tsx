@@ -4,22 +4,12 @@ import { ArrowBigUp, Clock, Lightbulb, MessageSquare } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Card, Skeleton } from '@/components/ui'
-import { usersApi } from '@/lib/api'
-import { formatNumber, formatRelativeTime, getCategoryById } from '@/lib/utils'
-
-interface IdeaSummary {
-	readonly id: string
-	readonly title: string
-	readonly problem: string
-	readonly category: string
-	readonly tags: readonly string[]
-	readonly votes_total: number
-	readonly comment_count: number
-	readonly created_at: string
-}
+import { getUserIdeas } from '@/lib/actions'
+import { formatNumber, formatRelativeTime, getCategoryById, parseId } from '@/lib/utils'
+import type { IdeaSummary } from '../../_types'
 
 interface UserIdeasProps {
-	userId: string
+	readonly userId: string
 }
 
 function IdeaListItem({ idea }: { idea: IdeaSummary }) {
@@ -27,7 +17,7 @@ function IdeaListItem({ idea }: { idea: IdeaSummary }) {
 
 	return (
 		<Link
-			href={`/ideas/${idea.id}`}
+			href={`/ideas/${parseId(idea.id)}`}
 			className="block p-4 hover:bg-surface-alt/50 transition-colors"
 		>
 			<div className="flex items-start justify-between gap-4">
@@ -38,8 +28,7 @@ function IdeaListItem({ idea }: { idea: IdeaSummary }) {
 					<p className="text-sm text-text-secondary line-clamp-2 mb-2">{idea.problem}</p>
 					<div className="flex items-center gap-3 text-xs text-text-muted">
 						<span className="flex items-center gap-1">
-							<Clock className="h-3 w-3" />
-							{formatRelativeTime(idea.created_at)}
+							<Clock className="h-3 w-3" /> {formatRelativeTime(idea.createdAt)}
 						</span>
 						{category && (
 							<span className="flex items-center gap-1" style={{ color: category.color }}>
@@ -56,12 +45,10 @@ function IdeaListItem({ idea }: { idea: IdeaSummary }) {
 				<div className="flex flex-col items-end gap-2 shrink-0">
 					<div className="flex items-center gap-3 text-sm text-text-secondary">
 						<span className="flex items-center gap-1">
-							<ArrowBigUp className="h-4 w-4" />
-							{formatNumber(idea.votes_total)}
+							<ArrowBigUp className="h-4 w-4" /> {formatNumber(idea.votesTotal)}
 						</span>
 						<span className="flex items-center gap-1">
-							<MessageSquare className="h-4 w-4" />
-							{formatNumber(idea.comment_count)}
+							<MessageSquare className="h-4 w-4" /> {formatNumber(idea.commentCount)}
 						</span>
 					</div>
 				</div>
@@ -92,23 +79,8 @@ export function UserIdeas({ userId }: UserIdeasProps) {
 	useEffect(() => {
 		const fetchIdeas = async () => {
 			try {
-				const response = await usersApi.ideas(userId)
-				if (response.success) {
-					// Map API response to our interface
-					const ideas = response.data.map((idea) => ({
-						id: idea.id,
-						title: idea.title,
-						problem: idea.problem,
-						category: idea.category,
-						tags: idea.tags,
-						votes_total: idea.votes?.total ?? 0,
-						comment_count: idea.commentCount ?? 0,
-						created_at: idea.createdAt,
-					})) as IdeaSummary[]
-					setIdeas(ideas)
-				} else {
-					setError(response.error.message)
-				}
+				const userIdeas = await getUserIdeas(userId)
+				setIdeas(userIdeas as IdeaSummary[])
 			} catch (err) {
 				setError('Failed to load ideas')
 				console.error('Failed to fetch user ideas:', err)
@@ -116,7 +88,6 @@ export function UserIdeas({ userId }: UserIdeasProps) {
 				setIsLoading(false)
 			}
 		}
-
 		fetchIdeas()
 	}, [userId])
 
@@ -124,8 +95,7 @@ export function UserIdeas({ userId }: UserIdeasProps) {
 		<Card padding="none">
 			<div className="px-4 py-3 border-b border-border">
 				<h2 className="font-semibold flex items-center gap-2">
-					<Lightbulb className="h-5 w-5 text-primary" />
-					Ideas
+					<Lightbulb className="h-5 w-5 text-primary" /> Ideas
 				</h2>
 			</div>
 

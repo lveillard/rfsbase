@@ -68,9 +68,10 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
 						fill
 						className="object-cover"
 						sizes={`${pixelSize}px`}
+						unoptimized={src.endsWith('.svg')}
 					/>
 				) : (
-					<span aria-label={name || 'Avatar'}>{initials}</span>
+					<span>{initials}</span>
 				)}
 			</div>
 			{verified && (
@@ -81,7 +82,6 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
 						'flex items-center justify-center',
 						BADGE_CONTAINER_SIZE[size],
 					)}
-					aria-label="Verified"
 				>
 					<CheckIcon size={isSmallSize(size) ? 'xs' : 'sm'} />
 				</div>

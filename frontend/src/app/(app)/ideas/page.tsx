@@ -4,8 +4,8 @@ import { Plus } from 'lucide-react'
 import Link from 'next/link'
 import { useCallback, useMemo, useState } from 'react'
 import { Button, SkeletonCard } from '@/components/ui'
-import { ideasApi } from '@/lib/api'
-import type { IdeaCard as IdeaCardType, VoteType } from '@/types'
+import { voteIdea } from '@/lib/actions'
+import type { VoteType } from '@/types'
 import { IdeaCard, IdeaFilters } from './_components'
 import { useIdeas } from './_hooks'
 
@@ -18,8 +18,6 @@ export default function IdeasPage() {
 	const [selectedCategory, setSelectedCategory] = useState<string>()
 	const [selectedTags, setSelectedTags] = useState<string[]>([])
 
-	// Build API params from filter state
-	// Note: timeRange is managed for UI state but not yet used by API
 	const apiParams = useMemo(
 		() => ({
 			sortBy,
@@ -33,9 +31,11 @@ export default function IdeasPage() {
 
 	const handleVote = useCallback(
 		async (ideaId: string, type: VoteType) => {
-			const response = await ideasApi.vote(ideaId, type)
-			if (response.success) {
+			try {
+				await voteIdea(ideaId, type)
 				await refetch()
+			} catch {
+				// Error handled by action
 			}
 		},
 		[refetch],
@@ -70,10 +70,11 @@ export default function IdeasPage() {
 
 			<div className="space-y-4">
 				{isLoading && ideas.length === 0 ? (
-					Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={i} />)
+					// biome-ignore lint/suspicious/noArrayIndexKey: skeleton order is static
+					Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={`skeleton-${i}`} />)
 				) : error ? (
 					<div className="text-center py-12">
-						<p className="text-error mb-4">{error}</p>
+						<p className="text-error mb-4">{error.message}</p>
 						<Button onClick={refetch}>Try Again</Button>
 					</div>
 				) : !hasIdeas ? (
@@ -84,9 +85,7 @@ export default function IdeasPage() {
 						</Link>
 					</div>
 				) : (
-					ideas.map((idea) => (
-						<IdeaCard key={idea.id} idea={idea as unknown as IdeaCardType} onVote={handleVote} />
-					))
+					ideas.map((idea) => <IdeaCard key={idea.id} idea={idea} onVote={handleVote} />)
 				)}
 			</div>
 

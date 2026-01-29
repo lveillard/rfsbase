@@ -12,9 +12,9 @@ A living platform where founders and entrepreneurs share problems they're facing
 |-------|------------|
 | **Frontend** | Next.js 16 (App Router, Server Components, Server Actions) |
 | **UI** | React 19, Tailwind CSS 4 |
-| **Backend** | Rust / Axum (async web framework) |
+| **Backend** | Next.js Server Actions + API Routes (consolidated) |
 | **Database** | SurrealDB 2.x (multi-model with vector search) |
-| **Auth** | Better Auth + SurrealDB native auth |
+| **Auth** | Better Auth + SurrealDB Adapter |
 | **AI** | Vercel AI SDK, OpenAI |
 | **Testing** | Vitest, Playwright, MSW |
 | **Build System** | Turborepo, pnpm workspaces |
@@ -53,7 +53,6 @@ Before you begin, ensure you have the following installed:
 
 - **Node.js** 20.0.0 or higher
 - **pnpm** 10.x or higher
-- **Rust** 1.75 or higher (for backend development)
 - **Docker** and Docker Compose (for database and deployment)
 
 ---
@@ -91,13 +90,13 @@ docker compose up -d surrealdb
 
 This starts SurrealDB on port 8000. The database will persist data in a Docker volume.
 
-### 5. Start Development Servers
+### 5. Start Development Server
 
 ```bash
 pnpm dev
 ```
 
-This starts both the frontend (port 3000) and backend (port 3001) in development mode using Turborepo.
+This starts the Next.js development server (port 3000) with Turbopack. Server Actions handle all backend logic.
 
 ### 6. (Optional) Seed Database
 
@@ -175,45 +174,52 @@ rfsbase/
 │   │   ├── app/             # App Router pages and layouts
 │   │   │   ├── (marketing)/ # Public pages (about, pricing)
 │   │   │   ├── (app)/       # Authenticated app pages
-│   │   │   │   └── ideas/   # Ideas CRUD pages
+│   │   │   │   ├── ideas/   # Ideas feature (colocated)
+│   │   │   │   │   ├── _hooks/      # Feature-specific hooks
+│   │   │   │   │   ├── _components/ # Feature-specific components
+│   │   │   │   │   └── [id]/        # Dynamic route
+│   │   │   │   │       └── _components/
+│   │   │   │   ├── profile/         # Profile feature
+│   │   │   │   │   ├── _types.ts    # Colocated types
+│   │   │   │   │   └── [id]/
+│   │   │   │   │       └── _components/
+│   │   │   │   └── ...
 │   │   │   ├── (auth)/      # Authentication pages
-│   │   │   └── api/         # API routes (AI endpoints)
+│   │   │   └── api/         # API routes (Better Auth)
+│   │   │       └── auth/[...all]/
+│   │   ├── lib/
+│   │   │   ├── server/      # Server Actions (colocated by domain)
+│   │   │   │   ├── ideas.ts
+│   │   │   │   ├── comments.ts
+│   │   │   │   ├── users.ts
+│   │   │   │   ├── auth.ts  # Auth utilities (requireAuth)
+│   │   │   │   └── types.ts # Shared type mappers
+│   │   │   ├── auth.ts      # Better Auth configuration
+│   │   │   ├── auth-client.ts
+│   │   │   ├── db/surreal.ts
+│   │   │   └── hooks/
 │   │   ├── components/      # Shared UI components
-│   │   ├── lib/             # Utilities, hooks, stores
-│   │   ├── test/            # Test utilities and mocks
-│   │   └── types/           # TypeScript type definitions
+│   │   └── types/           # TypeScript re-exports
 │   ├── e2e/                 # Playwright E2E tests
 │   └── public/              # Static assets
 │
-├── backend/                  # Rust/Axum backend API
-│   └── src/
-│       ├── auth/            # Authentication handlers
-│       ├── config/          # Configuration management
-│       ├── db/              # Database layer and migrations
-│       ├── models/          # Data models and schemas
-│       ├── routes/          # API route handlers
-│       └── services/        # Business logic services
-│
 ├── packages/
-│   └── shared/              # Shared TypeBox schemas and validators
+│   └── shared/              # Shared TypeBox schemas
 │       └── src/
-│           ├── schemas/     # Type definitions
-│           └── validators/  # Validation utilities
+│           └── schemas/
 │
 ├── config/                   # JSON configuration files
-│   ├── app.config.json      # Application settings
-│   ├── theme.config.json    # Design tokens
-│   ├── categories.config.json
-│   └── routes.config.json
+│   ├── app.config.json
+│   ├── theme.config.json
+│   └── categories.config.json
 │
 ├── docker/                   # Docker configuration
-│   ├── backend.Dockerfile
 │   └── frontend.Dockerfile
 │
-├── docker-compose.yml        # Development Docker setup
-├── turbo.json               # Turborepo configuration
-├── pnpm-workspace.yaml      # pnpm workspace definition
-└── package.json             # Root package with scripts
+├── docker-compose.yml
+├── turbo.json
+├── pnpm-workspace.yaml
+└── package.json
 ```
 
 ---
@@ -257,22 +263,6 @@ pnpm build
 
 # Clean build artifacts
 pnpm clean
-```
-
-### Backend Development
-
-```bash
-# Navigate to backend
-cd backend
-
-# Run in development mode
-cargo run
-
-# Run tests
-cargo test
-
-# Build release binary
-cargo build --release
 ```
 
 ### Database Management
@@ -336,25 +326,38 @@ docker compose -f docker-compose.prod.yml up -d
 
 | Service | Port | Description |
 |---------|------|-------------|
-| Frontend | 3000 | Next.js application |
-| Backend | 3001 | Rust/Axum API server |
+| Next.js | 3000 | Frontend + Server Actions + API Routes |
 | SurrealDB | 8000 | Database |
 
 ---
 
-## API Documentation
+## Architecture
 
-The backend exposes a RESTful API at `http://localhost:3001`. Key endpoints include:
+### Consolidated Next.js Architecture
 
-- `POST /api/auth/*` - Authentication endpoints
-- `GET /api/ideas` - List ideas with pagination and filters
-- `POST /api/ideas` - Create a new idea
-- `GET /api/ideas/:id` - Get idea details
-- `PUT /api/ideas/:id` - Update an idea
-- `DELETE /api/ideas/:id` - Delete an idea
-- `POST /api/ideas/:id/vote` - Vote on an idea
-- `GET /api/ideas/:id/comments` - Get comments for an idea
-- `POST /api/ideas/:id/comments` - Add a comment
+All server-side logic is in Next.js:
+- **Server Actions** for mutations (ideas, comments, votes)
+- **API Routes** for Better Auth (`/api/auth/[...all]`)
+- **SurrealDB** accessed directly from Server Actions
+
+### Key Patterns
+
+```typescript
+// Server Action with auth wrapper
+'use server'
+import { requireAuth } from '@/lib/server/auth'
+import { getSurrealDB } from '@/lib/db/surreal'
+
+export async function createIdea(data: CreateIdeaInput) {
+  return requireAuth(async (userId) => {
+    const db = await getSurrealDB()
+    // ... create idea
+  })
+}
+
+// Client-side data fetching with hooks
+// Hooks are colocated in app/(app)/ideas/_hooks/
+```
 
 ---
 

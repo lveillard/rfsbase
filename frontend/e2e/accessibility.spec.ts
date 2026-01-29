@@ -40,20 +40,20 @@ test.describe('Accessibility', () => {
 	})
 
 	test.describe('ARIA Labels', () => {
-		test('should have proper labels on form inputs', async ({ page }) => {
+		test('should have proper aria labels on OAuth buttons', async ({ page }) => {
 			await page.goto('/login')
 
-			// Email input should have label
-			const emailInput = page.getByLabel(/email/i)
-			await expect(emailInput).toBeVisible()
+			// OAuth buttons should have accessible names
+			await expect(page.getByRole('button', { name: /google/i })).toBeVisible()
+			await expect(page.getByRole('button', { name: /github/i })).toBeVisible()
 		})
 
 		test('should have proper labels on signup form', async ({ page }) => {
 			await page.goto('/signup')
 
-			// Name and email inputs should have labels
-			await expect(page.getByLabel(/name/i)).toBeVisible()
-			await expect(page.getByLabel(/email/i)).toBeVisible()
+			// YC verification input should have placeholder (acts as label)
+			// Click "Yes" to show YC input
+			await expect(page.getByText(/yc founder/i)).toBeVisible()
 		})
 
 		test('should have accessible theme toggle', async ({ page }) => {
@@ -104,11 +104,12 @@ test.describe('Accessibility', () => {
 		test('should show focus ring on interactive elements', async ({ page }) => {
 			await page.goto('/login')
 
-			const emailInput = page.getByLabel(/email/i)
-			await emailInput.focus()
+			// Focus first OAuth button
+			const googleButton = page.getByRole('button', { name: /google/i })
+			await googleButton.focus()
 
 			// Element should be focused
-			await expect(emailInput).toBeFocused()
+			await expect(googleButton).toBeFocused()
 		})
 
 		test('should show focus on button when tabbed', async ({ page }) => {

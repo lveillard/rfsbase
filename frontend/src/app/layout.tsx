@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Toaster } from 'sonner'
 import './globals.css'
 import appConfig from '@config/app.config.json'
-import { AuthProvider } from '@/lib/auth'
+import { QueryProvider } from '@/lib/providers'
 import { ThemeProvider } from '@/lib/theme/provider'
 
 export const metadata: Metadata = {
@@ -79,8 +79,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body className="min-h-screen bg-background text-text antialiased">
-				<ThemeProvider>
-					<AuthProvider>
+				<QueryProvider>
+					<ThemeProvider>
 						{children}
 						<Toaster
 							position="bottom-right"
@@ -88,8 +88,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 								className: 'bg-surface border border-border text-text',
 							}}
 						/>
-					</AuthProvider>
-				</ThemeProvider>
+					</ThemeProvider>
+				</QueryProvider>
 			</body>
 		</html>
 	)

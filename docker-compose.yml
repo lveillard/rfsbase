@@ -1,47 +1,25 @@
-version: '3.8'
-
 services:
-  # SurrealDB Database
+  # SurrealDB Database - Internal only
   surrealdb:
-    image: surrealdb/surrealdb:v2.1
+    build:
+      context: .
+      dockerfile: docker/surrealdb.Dockerfile
+    image: rfsbase/surrealdb:dev
     container_name: rfsbase-db
-    command: start --log trace --user root --pass root file:/data/database.db
+    command: ["start", "--log", "info", "--bind", "0.0.0.0:8000", "--user", "root", "--pass", "root", "surrealkv:/data/database"]
     volumes:
       - surrealdb_data:/data
     ports:
       - "8000:8000"
-    environment:
-      - SURREAL_PATH=/data/database.db
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD", "/surreal", "isready", "--endpoint", "http://localhost:8000"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 10s
 
-  # Backend API (Axum/Rust)
-  backend:
-    build:
-      context: ./backend
-      dockerfile: ../docker/backend.Dockerfile
-    container_name: rfsbase-api
-    environment:
-      - RUST_LOG=info
-      - SURREAL_URL=ws://surrealdb:8000
-      - SURREAL_NS=rfsbase
-      - SURREAL_DB=main
-      - SURREAL_USER=root
-      - SURREAL_PASS=root
-      - JWT_SECRET=${JWT_SECRET:-your-super-secret-jwt-key-min-32-chars}
-      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
-    ports:
-      - "3001:3001"
-    depends_on:
-      surrealdb:
-        condition: service_healthy
-    restart: unless-stopped
-
-  # Frontend (Next.js)
+  # Frontend (Next.js) - Includes API Routes and Server Actions
   frontend:
     build:
       context: .
@@ -49,12 +27,22 @@ services:
     container_name: rfsbase-web
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=http://localhost:3001
-      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+      - SURREAL_URL=http://surrealdb:8000
+      - SURREAL_NS=rfsbase
+      - SURREAL_DB=main
+      - SURREAL_USER=root
+      - SURREAL_PASS=root
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
     ports:
       - "3000:3000"
     depends_on:
-      - backend
+      surrealdb:
+        condition: service_healthy
     restart: unless-stopped
 
 volumes:

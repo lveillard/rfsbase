@@ -5,8 +5,8 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { Brand, ThemeToggle } from '@/components/layout'
 import { Avatar } from '@/components/ui'
-import { useAuthStore } from '@/lib/auth'
-import { cn } from '@/lib/utils'
+import { signOut, useSession } from '@/lib/auth-client'
+import { cn, parseId } from '@/lib/utils'
 
 const navItems = [
 	{ href: '/ideas', label: 'Ideas', icon: Lightbulb },
@@ -23,21 +23,25 @@ interface SidebarProps {
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
 	const pathname = usePathname()
 	const router = useRouter()
-	const { user, logout, isAuthenticated } = useAuthStore()
+
+	// Better Auth native session hook
+	const { data: session, isPending } = useSession()
+	const user = session?.user
+	const isAuthenticated = !!user
 
 	const isNavItemActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`)
 
 	const handleLogout = async () => {
-		await logout()
+		await signOut()
 		router.push('/login')
 	}
 
 	// Default user info for unauthenticated state
-	const displayUser = user ?? {
-		id: '',
-		name: 'Guest',
-		email: '',
-		avatar: undefined,
+	const displayUser = {
+		id: user?.id ?? '',
+		name: user?.name ?? 'Guest',
+		email: user?.email ?? '',
+		avatar: user?.image ?? undefined,
 	}
 
 	return (
@@ -91,19 +95,21 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 				<div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border">
 					<div className="flex items-center gap-3">
 						{isAuthenticated && user ? (
-							<Link href={`/profile/${user.id}`} onClick={onClose}>
-								<Avatar src={user.avatar} name={user.name} size="sm" />
+							<Link href={`/profile/${parseId(user.id)}`} onClick={onClose}>
+								<Avatar src={displayUser.avatar} name={displayUser.name} size="sm" />
 							</Link>
 						) : (
 							<Avatar src={undefined} name={displayUser.name} size="sm" />
 						)}
 						<div className="flex-1 min-w-0">
 							<p className="text-sm font-medium truncate">{displayUser.name}</p>
-							<p className="text-xs text-text-muted truncate">{displayUser.email}</p>
+							<p className="text-xs text-text-muted truncate">
+								{displayUser.email || 'Not signed in'}
+							</p>
 						</div>
 						<div className="flex gap-1">
 							<ThemeToggle />
-							{isAuthenticated && (
+							{isAuthenticated && !isPending && (
 								<button
 									type="button"
 									onClick={handleLogout}

@@ -1,6 +1,6 @@
 import { Type } from '@sinclair/typebox'
 import type { Static } from '@sinclair/typebox'
-import { UserSummarySchema } from './user.js'
+import { UserSummarySchema } from './user'
 
 // Vote counts
 export const VoteCountsSchema = Type.Object({

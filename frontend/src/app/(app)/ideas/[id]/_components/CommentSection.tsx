@@ -1,10 +1,10 @@
 'use client'
 
 import { ArrowBigUp, MoreHorizontal, Reply } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { Avatar, Badge, Button, SkeletonCard, Textarea } from '@/components/ui'
-import { type Comment, commentsApi } from '@/lib/api'
+import { useMemo, useState } from 'react'
+import { Avatar, Badge, Button, Textarea } from '@/components/ui'
 import { cn, formatRelativeTime } from '@/lib/utils'
+import type { Comment } from '@/types'
 
 interface CommentWithReplies extends Omit<Comment, 'replies'> {
 	readonly replies: readonly CommentWithReplies[]
@@ -12,6 +12,7 @@ interface CommentWithReplies extends Omit<Comment, 'replies'> {
 
 interface CommentSectionProps {
 	readonly ideaId: string
+	readonly comments: readonly Comment[]
 	readonly onAddComment: (content: string, parentId?: string) => Promise<void>
 	readonly onUpvote: (commentId: string) => Promise<void>
 }
@@ -69,8 +70,7 @@ function CommentItem({ comment, onReply, onUpvote, depth = 0 }: CommentItemProps
 								onClick={() => onReply(comment.id)}
 								className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs text-text-muted hover:text-text hover:bg-surface-alt transition-colors"
 							>
-								<Reply className="h-3.5 w-3.5" />
-								Reply
+								<Reply className="h-3.5 w-3.5" /> Reply
 							</button>
 						)}
 						<button
@@ -116,56 +116,35 @@ const organizeComments = (flatComments: readonly Comment[]): readonly CommentWit
 		flatComments.map((c) => [c.id, { ...c, replies: [] as CommentWithReplies[] }]),
 	)
 
-	return flatComments.reduce<CommentWithReplies[]>((roots, comment) => {
+	const roots: CommentWithReplies[] = []
+	for (const comment of flatComments) {
 		const node = byId.get(comment.id)!
 		if (comment.parentId) {
 			const parent = byId.get(comment.parentId)
-			if (parent) {
-				parent.replies = [...parent.replies, node]
-			}
+			if (parent) parent.replies.push(node)
 		} else {
-			roots = [...roots, node]
+			roots.push(node)
 		}
-		return roots
-	}, [])
+	}
+	return roots
 }
 
 // Pure function: count total comments including replies
 const countComments = (comments: readonly CommentWithReplies[]): number =>
 	comments.reduce((total, c) => total + 1 + countComments(c.replies), 0)
 
-export function CommentSection({ ideaId, onAddComment, onUpvote }: CommentSectionProps) {
-	const [comments, setComments] = useState<readonly CommentWithReplies[]>([])
-	const [isLoading, setIsLoading] = useState(true)
-	const [error, setError] = useState<string | null>(null)
+export function CommentSection({
+	comments,
+	onAddComment,
+	onUpvote,
+}: Omit<CommentSectionProps, 'ideaId'>) {
+	const organizedComments = useMemo(() => organizeComments(comments), [comments])
 	const [newComment, setNewComment] = useState('')
 	const [replyingTo, setReplyingTo] = useState<string | null>(null)
 	const [replyContent, setReplyContent] = useState('')
 	const [isSubmitting, setIsSubmitting] = useState(false)
 
-	const totalComments = countComments(comments)
-
-	const fetchComments = async () => {
-		setIsLoading(true)
-		setError(null)
-		try {
-			const response = await commentsApi.list(ideaId)
-			if (response.success) {
-				setComments(organizeComments(response.data))
-			} else {
-				setError(response.error.message)
-			}
-		} catch (err) {
-			setError(err instanceof Error ? err.message : 'Failed to load comments')
-		} finally {
-			setIsLoading(false)
-		}
-	}
-
-	useEffect(() => {
-		fetchComments()
-		// eslint-disable-next-line react-compiler/react-compiler
-	}, [ideaId])
+	const totalComments = countComments(organizedComments)
 
 	const handleSubmitComment = async () => {
 		const content = newComment.trim()
@@ -174,7 +153,6 @@ export function CommentSection({ ideaId, onAddComment, onUpvote }: CommentSectio
 		try {
 			await onAddComment(content)
 			setNewComment('')
-			await fetchComments()
 		} finally {
 			setIsSubmitting(false)
 		}
@@ -188,7 +166,6 @@ export function CommentSection({ ideaId, onAddComment, onUpvote }: CommentSectio
 			await onAddComment(content, replyingTo)
 			setReplyContent('')
 			setReplyingTo(null)
-			await fetchComments()
 		} finally {
 			setIsSubmitting(false)
 		}
@@ -199,32 +176,9 @@ export function CommentSection({ ideaId, onAddComment, onUpvote }: CommentSectio
 		setReplyContent('')
 	}
 
-	const handleUpvoteComment = async (commentId: string) => {
-		await onUpvote(commentId)
-		await fetchComments()
-	}
-
-	if (isLoading) {
-		return (
-			<section id="comments" className="scroll-mt-20">
-				<h3 className="text-lg font-semibold mb-4">Comments</h3>
-				<SkeletonCard />
-			</section>
-		)
-	}
-
 	return (
 		<section id="comments" className="scroll-mt-20">
 			<h3 className="text-lg font-semibold mb-4">Comments ({totalComments})</h3>
-
-			{error && (
-				<div className="mb-4 p-3 bg-error-muted text-error rounded-lg text-sm">
-					{error}
-					<Button variant="ghost" size="sm" onClick={fetchComments} className="ml-2">
-						Retry
-					</Button>
-				</div>
-			)}
 
 			<div className="mb-6">
 				<Textarea
@@ -246,18 +200,14 @@ export function CommentSection({ ideaId, onAddComment, onUpvote }: CommentSectio
 			</div>
 
 			<div className="space-y-6">
-				{comments.length === 0 ? (
+				{organizedComments.length === 0 ? (
 					<p className="text-center text-text-muted py-8">
 						No comments yet. Be the first to share your thoughts!
 					</p>
 				) : (
-					comments.map((comment) => (
+					organizedComments.map((comment) => (
 						<div key={comment.id}>
-							<CommentItem
-								comment={comment}
-								onReply={setReplyingTo}
-								onUpvote={handleUpvoteComment}
-							/>
+							<CommentItem comment={comment} onReply={setReplyingTo} onUpvote={onUpvote} />
 							{replyingTo === comment.id && (
 								<div className="ml-11 mt-3">
 									<Textarea

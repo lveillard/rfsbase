@@ -55,7 +55,7 @@ test.describe('Theme', () => {
 		await expect(html).toHaveClass(/light/)
 	})
 
-	test('should persist theme preference', async ({ page, context }) => {
+	test('should persist theme preference', async ({ page }) => {
 		await page.goto('/')
 
 		// Find theme toggle

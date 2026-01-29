@@ -28,10 +28,12 @@ function Skeleton({ className, variant = 'rectangular', width, height, lines = 1
 
 	if (variant === 'text' && lines > 1) {
 		return (
+			// biome-ignore lint/a11y/useSemanticElements: output element styling is complex
 			<div className={cn('space-y-2', className)} role="status" aria-label="Loading">
 				{Array.from({ length: lines }, (_, index) => (
 					<div
-						key={index}
+						// biome-ignore lint/suspicious/noArrayIndexKey: skeleton lines are static
+						key={`line-${index}`}
 						className={cn(combinedStyles, index === lines - 1 && 'w-3/4')}
 						style={style}
 					/>
@@ -41,6 +43,7 @@ function Skeleton({ className, variant = 'rectangular', width, height, lines = 1
 	}
 
 	return (
+		// biome-ignore lint/a11y/useSemanticElements: output element styling is complex
 		<div
 			className={cn(combinedStyles, className)}
 			style={style}
@@ -68,6 +71,7 @@ interface SkeletonSizeProps {
 
 function SkeletonCard() {
 	return (
+		// biome-ignore lint/a11y/useSemanticElements: output element styling is complex
 		<div
 			className="p-4 sm:p-6 bg-surface border border-border rounded-xl space-y-4"
 			role="status"

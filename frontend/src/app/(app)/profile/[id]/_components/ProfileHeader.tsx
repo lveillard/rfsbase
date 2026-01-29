@@ -4,27 +4,15 @@ import { Calendar, Check, UserMinus, UserPlus } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Avatar, Badge, Button, Card } from '@/components/ui'
-import { usersApi } from '@/lib/api'
-import { formatDate } from '@/lib/utils'
-
-interface ProfileUser {
-	readonly id: string
-	readonly name: string
-	readonly avatar?: string
-	readonly bio?: string
-	readonly verified_email: boolean
-	readonly verified_yc?: {
-		readonly batch?: string
-		readonly company?: string
-	}
-	readonly created_at: string
-}
+import { followUser, unfollowUser } from '@/lib/actions'
+import { formatDate, parseId } from '@/lib/utils'
+import type { ProfileUser } from '../../_types'
 
 interface ProfileHeaderProps {
-	user: ProfileUser
-	isOwnProfile: boolean
-	isFollowing?: boolean
-	onFollowToggle?: () => void
+	readonly user: ProfileUser
+	readonly isOwnProfile: boolean
+	readonly isFollowing?: boolean
+	readonly onFollowToggle?: () => void
 }
 
 export function ProfileHeader({
@@ -38,13 +26,12 @@ export function ProfileHeader({
 
 	const handleFollowToggle = async () => {
 		if (isOwnProfile) return
-
 		setIsLoading(true)
 		try {
 			if (following) {
-				await usersApi.unfollow(user.id)
+				await unfollowUser(parseId(user.id))
 			} else {
-				await usersApi.follow(user.id)
+				await followUser(parseId(user.id))
 			}
 			setFollowing((prev) => !prev)
 			onFollowToggle?.()
@@ -75,14 +62,12 @@ export function ProfileHeader({
 								<h1 className="text-2xl font-bold truncate">{user.name}</h1>
 								{user.verified_yc && (
 									<Badge variant="warning" size="md">
-										<Check className="h-3 w-3 mr-1" />
-										YC {user.verified_yc.batch}
+										<Check className="h-3 w-3 mr-1" /> YC {user.verified_yc.batch}
 									</Badge>
 								)}
 								{user.verified_email && !user.verified_yc && (
 									<Badge variant="success" size="sm">
-										<Check className="h-3 w-3 mr-1" />
-										Verified
+										<Check className="h-3 w-3 mr-1" /> Verified
 									</Badge>
 								)}
 							</div>
@@ -90,13 +75,11 @@ export function ProfileHeader({
 							{user.verified_yc?.company && (
 								<p className="text-text-secondary mb-2">{user.verified_yc.company}</p>
 							)}
-
 							{user.bio && <p className="text-text-secondary mt-2 max-w-xl">{user.bio}</p>}
 
 							<div className="flex items-center gap-4 mt-3 text-sm text-text-muted">
 								<span className="flex items-center gap-1.5">
-									<Calendar className="h-4 w-4" />
-									Joined {formatDate(user.created_at)}
+									<Calendar className="h-4 w-4" /> Joined {formatDate(user.created_at)}
 								</span>
 							</div>
 						</div>

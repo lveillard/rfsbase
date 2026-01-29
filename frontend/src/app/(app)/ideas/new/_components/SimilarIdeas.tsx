@@ -4,7 +4,7 @@ import { AlertTriangle, ExternalLink, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Badge, Button, Card } from '@/components/ui'
-import { formatNumber } from '@/lib/utils'
+import { formatNumber, parseId } from '@/lib/utils'
 import { useSimilarIdeas } from '../../_hooks'
 
 interface SimilarIdeasProps {
@@ -18,12 +18,10 @@ export function SimilarIdeas({ problemText }: SimilarIdeasProps) {
 		ideas: similarIdeas,
 		isLoading,
 		error,
-	} = useSimilarIdeas({
-		text: problemText,
+	} = useSimilarIdeas(problemText, {
 		threshold: 0.75,
 		limit: 5,
 		minLength: 50,
-		debounceMs: 500,
 	})
 
 	// Reset dismissed state when problem text changes significantly
@@ -71,20 +69,20 @@ export function SimilarIdeas({ problemText }: SimilarIdeasProps) {
 					>
 						<div className="flex-1 min-w-0 mr-3">
 							<Link
-								href={`/ideas/${idea.id}`}
+								href={`/ideas/${parseId(idea.id)}`}
 								className="font-medium text-sm hover:text-primary transition-colors line-clamp-1"
 							>
 								{idea.title}
 							</Link>
 							<div className="flex items-center gap-2 mt-1 text-xs text-text-muted">
-								<span>{formatNumber(idea.votesTotal)} votes</span>
+								<span>{formatNumber(idea.votes)} votes</span>
 								<span>·</span>
 								<Badge variant="primary" size="sm">
 									{Math.round(idea.similarity * 100)}% match
 								</Badge>
 							</div>
 						</div>
-						<Link href={`/ideas/${idea.id}`} target="_blank" className="flex-shrink-0">
+						<Link href={`/ideas/${parseId(idea.id)}`} target="_blank" className="flex-shrink-0">
 							<Button variant="outline" size="sm">
 								<ExternalLink className="h-3.5 w-3.5" />
 							</Button>

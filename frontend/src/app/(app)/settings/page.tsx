@@ -4,20 +4,23 @@ import { Settings as SettingsIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { Card, Skeleton } from '@/components/ui'
-import { useAuthStore } from '@/lib/auth'
+import { useSession } from '@/lib/auth-client'
 import { SettingsForm } from './_components'
 
 export default function SettingsPage() {
 	const router = useRouter()
-	const { user, isAuthenticated, isLoading } = useAuthStore()
+	// Better Auth native session hook
+	const { data: session, isPending } = useSession()
+	const user = session?.user
+	const isAuthenticated = !!user
 
 	useEffect(() => {
-		if (!isLoading && !isAuthenticated) {
+		if (!isPending && !isAuthenticated) {
 			router.push('/login')
 		}
-	}, [isLoading, isAuthenticated, router])
+	}, [isPending, isAuthenticated, router])
 
-	if (isLoading) {
+	if (isPending) {
 		return (
 			<div className="max-w-2xl mx-auto">
 				<Skeleton className="h-8 w-32 mb-6" />
@@ -48,10 +51,10 @@ export default function SettingsPage() {
 			<SettingsForm
 				user={{
 					id: user.id,
-					name: user.name,
-					email: user.email,
-					avatar: user.avatar,
-					bio: user.bio,
+					name: user.name ?? '',
+					email: user.email ?? '',
+					avatar: user.image ?? undefined,
+					bio: undefined, // TODO: Add bio to Better Auth user metadata
 				}}
 			/>
 		</div>

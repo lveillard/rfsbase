@@ -32,7 +32,8 @@
 			"@/*": ["./src/*"],
 			"@config/*": ["../config/*"],
 			"@shared/*": ["../packages/shared/src/*"],
-			"@rfsbase/shared": ["../packages/shared/src/index"]
+			"@rfsbase/shared": ["../packages/shared/src/index"],
+			"surrealdb-better-auth": ["./src/types/surrealdb-better-auth.d.ts"]
 		}
 	},
 	"include": [

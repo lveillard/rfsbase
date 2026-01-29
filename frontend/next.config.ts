@@ -14,6 +14,7 @@ const securityHeaders = [
 const imageRemotePatterns = [
 	{ protocol: 'https' as const, hostname: 'avatars.githubusercontent.com' },
 	{ protocol: 'https' as const, hostname: '*.googleusercontent.com' },
+	{ protocol: 'https' as const, hostname: 'api.dicebear.com' },
 ]
 
 const nextConfig: NextConfig = {
@@ -27,6 +28,8 @@ const nextConfig: NextConfig = {
 
 	images: {
 		remotePatterns: imageRemotePatterns,
+		dangerouslyAllowSVG: true,
+		contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
 	},
 
 	transpilePackages: ['@rfsbase/shared'],

@@ -19,6 +19,7 @@ const SIZE_CLASSES: Record<SpinnerSize, string> = {
 
 function Spinner({ size = 'sm', className, 'aria-label': ariaLabel = 'Loading' }: SpinnerProps) {
 	return (
+		// biome-ignore lint/a11y/useSemanticElements: svg as status indicator
 		<svg
 			className={cn('animate-spin', SIZE_CLASSES[size], className)}
 			xmlns="http://www.w3.org/2000/svg"

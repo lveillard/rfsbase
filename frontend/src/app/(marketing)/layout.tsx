@@ -26,6 +26,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
 		<>
 			<script
 				type="application/ld+json"
+				// biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is static data, safe to inject
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 			/>
 			<Header variant="marketing" />

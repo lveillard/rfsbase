@@ -1,21 +1,52 @@
-import type { Metadata } from 'next'
-import { IdeaForm } from './_components/IdeaForm'
+'use client'
 
-export const metadata: Metadata = {
-	title: 'Share a New Idea',
-	description: 'Share a problem worth solving or a solution worth building',
-}
+import { Lightbulb } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import { Card, Skeleton } from '@/components/ui'
+import { useSession } from '@/lib/auth-client'
+import { IdeaForm } from './_components'
 
 export default function NewIdeaPage() {
-	return (
-		<div>
-			<div className="text-center mb-8">
-				<h1 className="text-2xl font-bold">Share a New Idea</h1>
-				<p className="text-text-secondary mt-2">
-					Describe a problem you&apos;ve experienced or a solution you&apos;d love to see
-				</p>
+	const router = useRouter()
+	const { data: session, isPending } = useSession()
+	const isAuthenticated = !!session?.user
+
+	useEffect(() => {
+		if (!isPending && !isAuthenticated) {
+			router.push('/login')
+		}
+	}, [isPending, isAuthenticated, router])
+
+	if (isPending) {
+		return (
+			<div className="max-w-3xl mx-auto">
+				<Skeleton className="h-8 w-48 mb-6" />
+				<Card padding="lg">
+					<div className="space-y-6">
+						<Skeleton className="h-10 w-full" />
+						<Skeleton className="h-32 w-full" />
+						<Skeleton className="h-32 w-full" />
+					</div>
+				</Card>
 			</div>
-			<IdeaForm />
+		)
+	}
+
+	if (!isAuthenticated) {
+		return null
+	}
+
+	return (
+		<div className="max-w-3xl mx-auto">
+			<div className="flex items-center gap-3 mb-6">
+				<Lightbulb className="h-6 w-6 text-primary" />
+				<h1 className="text-2xl font-bold">Share Your Idea</h1>
+			</div>
+
+			<Card padding="lg">
+				<IdeaForm />
+			</Card>
 		</div>
 	)
 }

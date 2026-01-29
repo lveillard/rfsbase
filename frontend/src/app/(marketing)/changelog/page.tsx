@@ -91,7 +91,8 @@ function ReleaseCard({ release }: { release: Release }) {
 
 			<ul className="space-y-1">
 				{release.changes.map((change, index) => (
-					<ChangeItem key={index} change={change} />
+					// biome-ignore lint/suspicious/noArrayIndexKey: changelog order is static
+					<ChangeItem key={`change-${index}`} change={change} />
 				))}
 			</ul>
 		</Card>

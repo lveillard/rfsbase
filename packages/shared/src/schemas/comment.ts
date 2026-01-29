@@ -1,6 +1,6 @@
 import { Type } from '@sinclair/typebox'
 import type { Static } from '@sinclair/typebox'
-import { UserSummarySchema } from './user.js'
+import { UserSummarySchema } from './user'
 
 // Comment Schema
 export const CommentSchema = Type.Object({

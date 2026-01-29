@@ -15,7 +15,8 @@ export default function IdeasLoading() {
 
 			<div className="space-y-4">
 				{Array.from({ length: 3 }).map((_, i) => (
-					<SkeletonCard key={i} />
+					// biome-ignore lint/suspicious/noArrayIndexKey: skeleton order is static
+					<SkeletonCard key={`skeleton-${i}`} />
 				))}
 			</div>
 		</div>

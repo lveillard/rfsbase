@@ -1,2 +1,8 @@
-export { useCreateIdea, useIdea, useIdeas, useVote } from './useIdeas'
-export { type SimilarIdea, useSimilarIdeas } from './useSimilarIdeas'
+// Colocated hooks for ideas feature
+export {
+	useCreateIdea,
+	useIdea,
+	useIdeas,
+	useSimilarIdeas,
+	useVote,
+} from './use-ideas'

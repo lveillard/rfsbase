@@ -1,0 +1,45 @@
+services:
+  # SurrealDB Database for Development
+  surrealdb:
+    image: surrealdb/surrealdb:latest
+    container_name: rfsbase-db-dev
+    command: ["start", "--log", "debug", "--bind", "0.0.0.0:8000", "--user", "root", "--pass", "root", "surrealkv:/data/database"]
+    volumes:
+      - surrealdb_dev_data:/data
+      - ./backend/src/db/migrations:/seed:ro
+    ports:
+      - "8000:8000"
+    environment:
+      - SURREAL_CAPS_ALLOW_SCRIPTING=true
+    healthcheck:
+      test: ["CMD", "surreal", "isready", "--endpoint", "http://localhost:8000"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+    restart: unless-stopped
+
+  # Optional: SurrealDB for Testing (isolated namespace)
+  surrealdb-test:
+    image: surrealdb/surrealdb:latest
+    container_name: rfsbase-db-test
+    command: ["start", "--log", "error", "--bind", "0.0.0.0:8001", "--user", "root", "--pass", "root", "surrealkv:/data/test"]
+    volumes:
+      - surrealdb_test_data:/data
+      - ./backend/src/db/migrations:/seed:ro
+    ports:
+      - "8001:8001"
+    environment:
+      - SURREAL_CAPS_ALLOW_SCRIPTING=true
+    healthcheck:
+      test: ["CMD", "surreal", "isready", "--endpoint", "http://localhost:8001"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+    profiles:
+      - test
+
+volumes:
+  surrealdb_dev_data:
+  surrealdb_test_data:

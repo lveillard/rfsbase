@@ -4,9 +4,9 @@ import appConfig from '@config/app.config.json'
 import categoriesConfig from '@config/categories.config.json'
 import { Info, Loader2, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Badge, Button, Card, Input, Textarea } from '@/components/ui'
-import { cn } from '@/lib/utils'
+import { cn, parseId } from '@/lib/utils'
 import { useCreateIdea } from '../../_hooks'
 import { SimilarIdeas } from './SimilarIdeas'
 
@@ -29,7 +29,7 @@ export function IdeaForm() {
 	const [currentStep, setCurrentStep] = useState(0)
 	const [isRefining, setIsRefining] = useState(false)
 	const [submitError, setSubmitError] = useState<string | null>(null)
-	const { createIdea, isCreating } = useCreateIdea()
+	const { mutate: createIdea, isPending: isCreating, error, data: createdIdea } = useCreateIdea()
 
 	// Form state
 	const [title, setTitle] = useState('')
@@ -107,9 +107,8 @@ export function IdeaForm() {
 		}
 	}
 
-	const handleSubmit = async () => {
-		setSubmitError(null)
-		const result = await createIdea({
+	const handleSubmit = () => {
+		createIdea({
 			title,
 			problem,
 			solution: solution || undefined,
@@ -118,13 +117,17 @@ export function IdeaForm() {
 			tags: tags.length > 0 ? tags : undefined,
 			links: links.length > 0 ? links : undefined,
 		})
-
-		if (result.success) {
-			router.push(`/ideas/${result.data.id}`)
-		} else {
-			setSubmitError(result.error)
-		}
 	}
+
+	// Handle success/error from mutation
+	useEffect(() => {
+		if (createdIdea) {
+			router.push(`/ideas/${parseId(createdIdea.id)}`)
+		}
+		if (error) {
+			setSubmitError(error.message)
+		}
+	}, [createdIdea, error, router])
 
 	return (
 		<div className="max-w-2xl mx-auto">
