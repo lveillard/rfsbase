@@ -1,60 +1,46 @@
-import { Surreal } from 'surrealdb'
+import Surreal from 'surrealdb'
 
-// Create a singleton SurrealDB instance for Better Auth adapter
 let dbInstance: Surreal | null = null
 let connectionPromise: Promise<Surreal> | null = null
 
 async function connectDB(): Promise<Surreal> {
-	const db = new Surreal()
+	if (dbInstance) return dbInstance
+	if (connectionPromise) return connectionPromise
 
-	await db.connect(process.env.SURREAL_URL!, {
-		auth: {
+	connectionPromise = (async () => {
+		const db = new Surreal()
+		await db.connect(process.env.SURREAL_URL!)
+		await db.signin({
 			username: process.env.SURREAL_USER!,
 			password: process.env.SURREAL_PASS!,
-		},
-	})
-
-	await db.use({
-		namespace: process.env.SURREAL_NS!,
-		database: process.env.SURREAL_DB!,
-	})
-
-	return db
-}
-
-// Singleton pattern with promise caching to avoid multiple connections
-export async function getSurrealDB(): Promise<Surreal> {
-	if (dbInstance) {
-		try {
-			await dbInstance.query('SELECT 1')
-			return dbInstance
-		} catch {
-			dbInstance = null
-			connectionPromise = null
-		}
-	}
-
-	if (!connectionPromise) {
-		connectionPromise = connectDB().then((db) => {
-			dbInstance = db
-			return db
 		})
-	}
+		await db.use({
+			namespace: process.env.SURREAL_NS!,
+			database: process.env.SURREAL_DB!,
+		})
+		console.log('[SurrealDB] Connected')
+		dbInstance = db
+		return db
+	})()
 
 	return connectionPromise
 }
 
-// Export the getter for Better Auth adapter
-export { getSurrealDB as default }
+// Lazy proxy - waits for connection before any operation
+export const db = new Proxy({} as Surreal, {
+	get(_target, prop: string | symbol) {
+		return async (...args: unknown[]) => {
+			const instance = await connectDB()
+			const method = instance[prop as keyof Surreal]
+			if (typeof method === 'function') {
+				return (method as (...args: unknown[]) => unknown).apply(instance, args)
+			}
+			return method
+		}
+	},
+})
 
-// Type helper
-export type QueryResult<T = unknown> = T[][]
-
-// Helper to close connection
-export async function closeSurrealDB(): Promise<void> {
-	if (dbInstance) {
-		await dbInstance.close()
-		dbInstance = null
-		connectionPromise = null
-	}
+// Direct async getter for when you need the raw instance
+export async function getSurrealDB(): Promise<Surreal> {
+	return connectDB()
 }
