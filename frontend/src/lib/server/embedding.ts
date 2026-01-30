@@ -71,7 +71,7 @@ export function generateQueryEmbedding(text: string): Promise<number[] | null> {
  */
 export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
 	const validTexts = texts.filter((t) => t.trim().length > 0)
-	const results = await Promise.all(validTexts.map(generateEmbedding))
+	const results = await Promise.all(validTexts.map((t) => generateEmbedding(t)))
 	return results.filter((r): r is number[] => r !== null)
 }
 
