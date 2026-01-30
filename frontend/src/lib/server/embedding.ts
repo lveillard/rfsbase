@@ -3,11 +3,16 @@
  * Uses IAM role on EC2 - no credentials needed
  */
 
-import { bedrock } from '@ai-sdk/amazon-bedrock'
+import { createAmazonBedrock } from '@ai-sdk/amazon-bedrock'
 import { embed } from 'ai'
 
 // Model configurable via env, default to Cohere v4
 const BEDROCK_MODEL = process.env.BEDROCK_EMBEDDING_MODEL || 'cohere.embed-v4:0'
+
+// Create bedrock provider with explicit region (uses EC2 instance credentials automatically)
+const bedrock = createAmazonBedrock({
+	region: process.env.AWS_REGION || 'us-east-1',
+})
 
 // Cohere v4 with 1024 dimensions (optimal for our use case)
 export const EMBEDDING_DIMENSIONS = 1024
