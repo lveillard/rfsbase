@@ -1,70 +1,33 @@
-# RFSbase EC2 Caddyfile - IP-based access (no domain/SSL)
-# Security hardened configuration
-# Consolidated architecture - Next.js handles API and UI
-#
-# When you get your domain, use Caddyfile instead
+# RFSbase EC2 Caddyfile
+# Cloudflare handles SSL, this runs on HTTP internally
 
 {
-    # Disable admin API for security
     admin off
-
-    # Enable error logging
-    log {
-        level ERROR
-    }
 }
 
-# IP-based access on port 80
 :80 {
-    # Rate limiting - prevent abuse
-    # 100 requests per second per IP with burst of 50
-    rate_limit {
-        zone static_zone {
-            key {remote_host}
-            events 100
-            window 1s
-        }
-    }
-
     # Security headers
     header {
-        # Prevent clickjacking
         X-Frame-Options "DENY"
-        # Prevent MIME type sniffing
         X-Content-Type-Options "nosniff"
-        # XSS protection
         X-XSS-Protection "1; mode=block"
-        # Referrer policy
         Referrer-Policy "strict-origin-when-cross-origin"
-        # Permissions policy
-        Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
-        # Remove server header
         -Server
-        # Content Security Policy (adjust as needed)
-        Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' ws: wss:;"
     }
 
-    # Health check endpoint
-    handle /health {
-        respond "OK" 200
+    # SurrealDB API (for Lambda embeddings)
+    handle /surrealdb/* {
+        uri strip_prefix /surrealdb
+        reverse_proxy surrealdb:8000
     }
 
-    # Frontend and API - everything goes to Next.js
-    handle {
-        reverse_proxy frontend:3000 {
-            # Health checks
-            health_interval 30s
-            health_timeout 5s
-        }
-    }
+    # Everything else goes to Next.js
+    reverse_proxy frontend:3000
 
-    # Compression
     encode gzip zstd
 
-    # Logging
     log {
         output stdout
         format json
-        level INFO
     }
 }
