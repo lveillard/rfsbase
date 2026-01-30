@@ -43,12 +43,16 @@ export async function generateEmbedding(text: string): Promise<number[] | null> 
 		return null
 	}
 
-	// Note: inputType parameter for Cohere is passed but may not be supported by all SDK versions
-	const { embedding } = await embed({
-		model: bedrock.textEmbeddingModel(BEDROCK_MODEL),
-		value: text,
-	})
-	return embedding
+	try {
+		const { embedding } = await embed({
+			model: bedrock.textEmbeddingModel(BEDROCK_MODEL),
+			value: text,
+		})
+		return embedding
+	} catch (error) {
+		console.error('[embedding] Error:', error)
+		throw error // Re-throw so caller can handle it
+	}
 }
 
 // Same embedding for documents and queries (Cohere v4 handles this internally)

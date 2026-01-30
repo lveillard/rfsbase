@@ -48,6 +48,15 @@ export async function POST(request: NextRequest) {
 		try {
 			const embedding = await generateEmbedding(`${idea.title} ${idea.problem}`)
 
+			if (!embedding || embedding.length === 0) {
+				results.push({
+					id: ideaId,
+					status: 'error',
+					error: 'Embedding generation returned null - check AWS_BEDROCK_ENABLED and credentials',
+				})
+				continue
+			}
+
 			await db.query(`UPDATE type::thing('idea', $id) SET embedding = $embedding`, {
 				id: ideaId,
 				embedding,
