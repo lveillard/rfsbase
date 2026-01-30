@@ -64,10 +64,9 @@ export async function POST(request: NextRequest) {
 			const embeddingArray = Array.isArray(embedding) ? embedding : Array.from(embedding as ArrayLike<number>)
 			console.log(`[backfill] Converted array length: ${embeddingArray.length}, sample: [${embeddingArray.slice(0, 3).join(', ')}...]`)
 
-			await db.query(`UPDATE type::thing('idea', $id) SET embedding = $embedding`, {
-				id: ideaId,
-				embedding: embeddingArray,
-			})
+			// Use raw array in query to avoid serialization issues with SurrealDB params
+			const embeddingStr = `[${embeddingArray.join(',')}]`
+			await db.query(`UPDATE type::thing('idea', '${ideaId}') SET embedding = ${embeddingStr}`)
 
 			results.push({ id: ideaId, status: 'success' })
 		} catch (error) {
