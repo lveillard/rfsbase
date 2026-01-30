@@ -344,8 +344,15 @@ resource "aws_lambda_function" "embeddings" {
       SURREAL_DB     = "main"
       SURREAL_USER   = "root"
       SURREAL_PASS   = var.surreal_pass
+      API_KEY        = random_password.embeddings_api_key.result
     }
   }
+}
+
+# API Key for Lambda authentication
+resource "random_password" "embeddings_api_key" {
+  length  = 32
+  special = false
 }
 
 # API Gateway (HTTP API)

@@ -26,3 +26,9 @@ output "embeddings_api_url" {
   description = "Lambda embeddings API Gateway URL"
   value       = aws_apigatewayv2_api.embeddings.api_endpoint
 }
+
+output "embeddings_api_key" {
+  description = "API key for Lambda embeddings (add to Vercel as EMBEDDINGS_API_KEY)"
+  value       = random_password.embeddings_api_key.result
+  sensitive   = true
+}

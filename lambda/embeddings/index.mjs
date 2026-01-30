@@ -70,17 +70,36 @@ export async function handler(event) {
 		'Access-Control-Allow-Origin': '*',
 	}
 
+	// Health check (no auth required)
+	if (event.rawPath === '/health') {
+		return {
+			statusCode: 200,
+			headers,
+			body: JSON.stringify({ status: 'ok', model: MODEL_ID }),
+		}
+	}
+
+	// Validate API key for all other endpoints
+	const apiKey = event.headers?.['x-api-key'] || event.headers?.['X-Api-Key']
+	if (!apiKey || apiKey !== process.env.API_KEY) {
+		return {
+			statusCode: 401,
+			headers,
+			body: JSON.stringify({ error: 'Unauthorized - Invalid or missing API key' }),
+		}
+	}
+
 	try {
 		// Parse body
 		const body = typeof event.body === 'string' ? JSON.parse(event.body) : event.body || {}
 		const { action, text, ideaId } = body
 
-		// Health check
-		if (action === 'health' || event.rawPath === '/health') {
+		// Health check (authenticated)
+		if (action === 'health') {
 			return {
 				statusCode: 200,
 				headers,
-				body: JSON.stringify({ status: 'ok', model: MODEL_ID }),
+				body: JSON.stringify({ status: 'ok', model: MODEL_ID, authenticated: true }),
 			}
 		}
 
