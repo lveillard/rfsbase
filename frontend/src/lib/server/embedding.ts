@@ -4,14 +4,19 @@
  */
 
 import { createAmazonBedrock } from '@ai-sdk/amazon-bedrock'
+import { fromInstanceMetadata } from '@smithy/credential-provider-imds'
 import { embed } from 'ai'
 
 // Model configurable via env, default to Cohere v4
 const BEDROCK_MODEL = process.env.BEDROCK_EMBEDDING_MODEL || 'cohere.embed-v4:0'
 
-// Create bedrock provider with explicit region (uses EC2 instance credentials automatically)
+// Create bedrock provider with EC2 instance credentials
 const bedrock = createAmazonBedrock({
 	region: process.env.AWS_REGION || 'us-east-1',
+	// Use EC2 instance metadata credentials when available
+	credentialProvider: process.env.AWS_ACCESS_KEY_ID
+		? undefined // Use env vars if provided
+		: fromInstanceMetadata({ maxRetries: 3, timeout: 1000 }),
 })
 
 // Cohere v4 with 1024 dimensions (optimal for our use case)
