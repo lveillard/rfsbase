@@ -12,3 +12,5 @@ use_secrets_manager = false
 # export TF_VAR_ssh_public_key="ssh-ed25519 ..."
 # export TF_VAR_openai_api_key="sk-..."
 # export TF_VAR_resend_api_key="re_..."
+# export TF_VAR_surreal_url="https://rfsbase.com"  # SurrealDB HTTP endpoint
+# export TF_VAR_surreal_pass="your-surreal-password"

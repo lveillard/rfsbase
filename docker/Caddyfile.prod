@@ -20,7 +20,13 @@
         -Server
     }
 
-    # Everything goes to Next.js (frontend + API routes + Server Actions)
+    # SurrealDB API (for Lambda embeddings)
+    handle /surrealdb/* {
+        uri strip_prefix /surrealdb
+        reverse_proxy surrealdb:8000
+    }
+
+    # Everything else goes to Next.js (frontend + API routes + Server Actions)
     reverse_proxy frontend:3000
 
     encode gzip zstd

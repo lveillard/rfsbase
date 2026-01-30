@@ -60,3 +60,17 @@ variable "resend_api_key" {
   default   = ""
   sensitive = true
 }
+
+# Lambda Embeddings
+variable "surreal_url" {
+  description = "SurrealDB HTTP URL for Lambda embeddings"
+  type        = string
+  default     = ""
+}
+
+variable "surreal_pass" {
+  description = "SurrealDB password for Lambda embeddings"
+  type        = string
+  default     = ""
+  sensitive   = true
+}

@@ -21,3 +21,8 @@ output "backup_bucket" {
 output "secrets_arn" {
   value = var.use_secrets_manager ? aws_secretsmanager_secret.main[0].arn : null
 }
+
+output "embeddings_api_url" {
+  description = "Lambda embeddings API Gateway URL"
+  value       = aws_apigatewayv2_api.embeddings.api_endpoint
+}

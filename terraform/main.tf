@@ -3,6 +3,7 @@ terraform {
   required_providers {
     aws    = { source = "hashicorp/aws", version = "~> 5.0" }
     random = { source = "hashicorp/random", version = "~> 3.6" }
+    null   = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -263,4 +264,130 @@ resource "aws_iam_role_policy" "backups" {
       Resource = [aws_s3_bucket.backups.arn, "${aws_s3_bucket.backups.arn}/*"]
     }]
   })
+}
+
+# =============================================================================
+# Lambda for Embeddings (Bedrock)
+# =============================================================================
+
+# IAM Role for Lambda
+resource "aws_iam_role" "lambda_embeddings" {
+  name = "rfsbase-${var.environment}-lambda-embeddings"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action    = "sts:AssumeRole"
+      Effect    = "Allow"
+      Principal = { Service = "lambda.amazonaws.com" }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_basic" {
+  role       = aws_iam_role.lambda_embeddings.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+resource "aws_iam_role_policy" "lambda_bedrock" {
+  name = "bedrock-invoke"
+  role = aws_iam_role.lambda_embeddings.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "bedrock:InvokeModel",
+        "bedrock:InvokeModelWithResponseStream"
+      ]
+      Resource = [
+        "arn:aws:bedrock:*::foundation-model/amazon.titan-embed-text-v2:0",
+        "arn:aws:bedrock:*::foundation-model/amazon.titan-embed-*"
+      ]
+    }]
+  })
+}
+
+# Lambda Function - install dependencies before zipping
+resource "null_resource" "lambda_embeddings_deps" {
+  triggers = {
+    package_json = filemd5("${path.module}/../lambda/embeddings/package.json")
+  }
+  provisioner "local-exec" {
+    command     = "npm install --production"
+    working_dir = "${path.module}/../lambda/embeddings"
+  }
+}
+
+data "archive_file" "lambda_embeddings" {
+  type        = "zip"
+  source_dir  = "${path.module}/../lambda/embeddings"
+  output_path = "${path.module}/../lambda/embeddings.zip"
+  depends_on  = [null_resource.lambda_embeddings_deps]
+}
+
+resource "aws_lambda_function" "embeddings" {
+  filename         = data.archive_file.lambda_embeddings.output_path
+  function_name    = "rfsbase-${var.environment}-embeddings"
+  role             = aws_iam_role.lambda_embeddings.arn
+  handler          = "index.handler"
+  runtime          = "nodejs20.x"
+  source_code_hash = data.archive_file.lambda_embeddings.output_base64sha256
+  timeout          = 60
+  memory_size      = 256
+
+  environment {
+    variables = {
+      BEDROCK_REGION = var.aws_region
+      BEDROCK_MODEL  = "amazon.titan-embed-text-v2:0"
+      SURREAL_URL    = var.surreal_url
+      SURREAL_NS     = "rfsbase"
+      SURREAL_DB     = "main"
+      SURREAL_USER   = "root"
+      SURREAL_PASS   = var.surreal_pass
+    }
+  }
+}
+
+# API Gateway (HTTP API)
+resource "aws_apigatewayv2_api" "embeddings" {
+  name          = "rfsbase-${var.environment}-embeddings"
+  protocol_type = "HTTP"
+  cors_configuration {
+    allow_origins = ["*"]
+    allow_methods = ["POST", "GET", "OPTIONS"]
+    allow_headers = ["Content-Type", "Authorization"]
+  }
+}
+
+resource "aws_apigatewayv2_stage" "embeddings" {
+  api_id      = aws_apigatewayv2_api.embeddings.id
+  name        = "$default"
+  auto_deploy = true
+}
+
+resource "aws_apigatewayv2_integration" "embeddings" {
+  api_id                 = aws_apigatewayv2_api.embeddings.id
+  integration_type       = "AWS_PROXY"
+  integration_uri        = aws_lambda_function.embeddings.invoke_arn
+  payload_format_version = "2.0"
+}
+
+resource "aws_apigatewayv2_route" "embeddings" {
+  api_id    = aws_apigatewayv2_api.embeddings.id
+  route_key = "POST /"
+  target    = "integrations/${aws_apigatewayv2_integration.embeddings.id}"
+}
+
+resource "aws_apigatewayv2_route" "embeddings_health" {
+  api_id    = aws_apigatewayv2_api.embeddings.id
+  route_key = "GET /health"
+  target    = "integrations/${aws_apigatewayv2_integration.embeddings.id}"
+}
+
+resource "aws_lambda_permission" "apigw" {
+  statement_id  = "AllowAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.embeddings.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.embeddings.execution_arn}/*/*"
 }
