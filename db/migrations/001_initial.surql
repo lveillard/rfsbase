@@ -91,8 +91,7 @@ DEFINE FIELD IF NOT EXISTS created_at ON follows TYPE datetime DEFAULT time::now
 DEFINE TABLE IF NOT EXISTS upvoted TYPE RELATION SCHEMAFULL;
 DEFINE FIELD IF NOT EXISTS created_at ON upvoted TYPE datetime DEFAULT time::now();
 
--- Vector Index: Disabled for now due to SurrealDB HNSW index validation issues
--- Semantic search will still work via full table scan, which is fast enough for small datasets
--- DEFINE INDEX IF NOT EXISTS idea_embedding_idx ON idea FIELDS embedding HNSW DIMENSION 1024 DIST COSINE TYPE F32 EFC 200 M 16;
+-- Vector Index (HNSW for Titan v2 embeddings)
+DEFINE INDEX IF NOT EXISTS idea_embedding_idx ON idea FIELDS embedding HNSW DIMENSION 1024 DIST COSINE;
 
 RETURN "Schema initialized";

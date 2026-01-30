@@ -1,5 +1,5 @@
 # Multi-stage build: extract binary from official image, run in Debian
-FROM surrealdb/surrealdb:v2.5 AS source
+FROM surrealdb/surrealdb:v2.6.0 AS source
 
 FROM debian:bookworm-slim
 
