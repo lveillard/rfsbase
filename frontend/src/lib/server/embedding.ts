@@ -30,11 +30,16 @@ export function isEmbeddingAvailable(): boolean {
 	return process.env.AWS_BEDROCK_ENABLED === 'true'
 }
 
+type InputType = 'search_document' | 'search_query'
+
 /**
  * Generate embedding for text using Bedrock
  * Returns null if Bedrock not enabled
  */
-export async function generateEmbedding(text: string): Promise<number[] | null> {
+export async function generateEmbedding(
+	text: string,
+	inputType: InputType = 'search_document',
+): Promise<number[] | null> {
 	if (!text || text.trim().length === 0) {
 		return null
 	}
@@ -47,12 +52,19 @@ export async function generateEmbedding(text: string): Promise<number[] | null> 
 	const { embedding } = await embed({
 		model: bedrock.textEmbeddingModel(BEDROCK_MODEL),
 		value: text,
+		experimental_providerMetadata: {
+			bedrock: { inputType },
+		},
 	})
 	return embedding
 }
 
-// Alias for search queries (same as document embedding for Titan)
-export const generateQueryEmbedding = generateEmbedding
+/**
+ * Generate embedding for search queries
+ */
+export function generateQueryEmbedding(text: string): Promise<number[] | null> {
+	return generateEmbedding(text, 'search_query')
+}
 
 /**
  * Generate embeddings in batch
