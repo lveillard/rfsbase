@@ -30,16 +30,11 @@ export function isEmbeddingAvailable(): boolean {
 	return process.env.AWS_BEDROCK_ENABLED === 'true'
 }
 
-type InputType = 'search_document' | 'search_query'
-
 /**
  * Generate embedding for text using Bedrock
  * Returns null if Bedrock not enabled
  */
-export async function generateEmbedding(
-	text: string,
-	inputType: InputType = 'search_document',
-): Promise<number[] | null> {
+export async function generateEmbedding(text: string): Promise<number[] | null> {
 	if (!text || text.trim().length === 0) {
 		return null
 	}
@@ -49,22 +44,16 @@ export async function generateEmbedding(
 		return null
 	}
 
+	// Note: inputType parameter for Cohere is passed but may not be supported by all SDK versions
 	const { embedding } = await embed({
 		model: bedrock.textEmbeddingModel(BEDROCK_MODEL),
 		value: text,
-		providerOptions: {
-			bedrock: { inputType },
-		},
 	})
 	return embedding
 }
 
-/**
- * Generate embedding for search queries
- */
-export function generateQueryEmbedding(text: string): Promise<number[] | null> {
-	return generateEmbedding(text, 'search_query')
-}
+// Same embedding for documents and queries (Cohere v4 handles this internally)
+export const generateQueryEmbedding = generateEmbedding
 
 /**
  * Generate embeddings in batch
