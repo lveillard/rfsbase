@@ -1,5 +1,6 @@
 /**
- * Embedding generation using AWS Bedrock (Titan v2)
+ * Embedding generation using AWS Bedrock (Cohere v4)
+ * Uses cross-region inference profile for automatic load balancing
  * Uses IAM role on EC2 - no credentials needed
  */
 
@@ -7,8 +8,8 @@ import { createAmazonBedrock } from '@ai-sdk/amazon-bedrock'
 import { fromInstanceMetadata } from '@smithy/credential-provider-imds'
 import { embed } from 'ai'
 
-// Model configurable via env, default to Titan v2 (available by default, no subscription needed)
-const BEDROCK_MODEL = process.env.BEDROCK_EMBEDDING_MODEL || 'amazon.titan-embed-text-v2:0'
+// Model configurable via env, default to Cohere v4 via cross-region inference profile
+const BEDROCK_MODEL = process.env.BEDROCK_EMBEDDING_MODEL || 'us.cohere.embed-v4:0'
 
 // Create bedrock provider with EC2 instance credentials
 const bedrock = createAmazonBedrock({
@@ -19,7 +20,7 @@ const bedrock = createAmazonBedrock({
 		: fromInstanceMetadata({ maxRetries: 3, timeout: 1000 }),
 })
 
-// Titan v2 with 1024 dimensions
+// Cohere v4 with 1024 dimensions
 export const EMBEDDING_DIMENSIONS = 1024
 
 /**
