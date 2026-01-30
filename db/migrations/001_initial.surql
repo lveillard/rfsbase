@@ -28,7 +28,7 @@ DEFINE FIELD IF NOT EXISTS target_audience ON idea TYPE option<string>;
 DEFINE FIELD IF NOT EXISTS category ON idea TYPE string;
 DEFINE FIELD IF NOT EXISTS tags ON idea TYPE array<string> DEFAULT [];
 DEFINE FIELD IF NOT EXISTS links ON idea TYPE array<string> DEFAULT [];
-DEFINE FIELD IF NOT EXISTS embedding ON idea TYPE option<array>;
+DEFINE FIELD IF NOT EXISTS embedding ON idea TYPE option<array<float>>;
 DEFINE FIELD IF NOT EXISTS votes_problem ON idea TYPE int DEFAULT 0;
 DEFINE FIELD IF NOT EXISTS votes_solution ON idea TYPE int DEFAULT 0;
 DEFINE FIELD IF NOT EXISTS votes_total ON idea TYPE int DEFAULT 0;
