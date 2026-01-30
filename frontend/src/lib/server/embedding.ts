@@ -4,19 +4,14 @@
  */
 
 import { createAmazonBedrock } from '@ai-sdk/amazon-bedrock'
-import { fromInstanceMetadata } from '@smithy/credential-provider-imds'
 import { embed } from 'ai'
 
-// Model configurable via env, default to Titan v2 (simpler API, works with Vercel AI SDK)
+// Model configurable via env, default to Titan v2
 const BEDROCK_MODEL = process.env.BEDROCK_EMBEDDING_MODEL || 'amazon.titan-embed-text-v2:0'
 
-// Create bedrock provider with EC2 instance credentials
+// Create bedrock provider - AWS SDK auto-detects EC2 instance credentials
 const bedrock = createAmazonBedrock({
 	region: process.env.AWS_REGION || 'us-east-1',
-	// Use EC2 instance metadata credentials when available
-	credentialProvider: process.env.AWS_ACCESS_KEY_ID
-		? undefined // Use env vars if provided
-		: fromInstanceMetadata({ maxRetries: 3, timeout: 1000 }),
 })
 
 // Titan v2 with 1024 dimensions
