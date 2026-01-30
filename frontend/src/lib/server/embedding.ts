@@ -1,5 +1,5 @@
 /**
- * Embedding generation using AWS Bedrock (Cohere v4)
+ * Embedding generation using AWS Bedrock (Titan v2)
  * Uses IAM role on EC2 - no credentials needed
  */
 
@@ -7,8 +7,8 @@ import { createAmazonBedrock } from '@ai-sdk/amazon-bedrock'
 import { fromInstanceMetadata } from '@smithy/credential-provider-imds'
 import { embed } from 'ai'
 
-// Model configurable via env, default to Cohere v4
-const BEDROCK_MODEL = process.env.BEDROCK_EMBEDDING_MODEL || 'cohere.embed-v4:0'
+// Model configurable via env, default to Titan v2 (available by default, no subscription needed)
+const BEDROCK_MODEL = process.env.BEDROCK_EMBEDDING_MODEL || 'amazon.titan-embed-text-v2:0'
 
 // Create bedrock provider with EC2 instance credentials
 const bedrock = createAmazonBedrock({
@@ -19,7 +19,7 @@ const bedrock = createAmazonBedrock({
 		: fromInstanceMetadata({ maxRetries: 3, timeout: 1000 }),
 })
 
-// Cohere v4 with 1024 dimensions (optimal for our use case)
+// Titan v2 with 1024 dimensions
 export const EMBEDDING_DIMENSIONS = 1024
 
 /**
@@ -29,18 +29,11 @@ export function isEmbeddingAvailable(): boolean {
 	return process.env.AWS_BEDROCK_ENABLED === 'true'
 }
 
-type InputType = 'search_document' | 'search_query'
-
 /**
  * Generate embedding for text using Bedrock
- * @param text - Text to embed
- * @param inputType - 'search_document' for indexing, 'search_query' for searching
  * Returns null if Bedrock not enabled
  */
-export async function generateEmbedding(
-	text: string,
-	inputType: InputType = 'search_document',
-): Promise<number[] | null> {
+export async function generateEmbedding(text: string): Promise<number[] | null> {
 	if (!text || text.trim().length === 0) {
 		return null
 	}
@@ -53,26 +46,19 @@ export async function generateEmbedding(
 	const { embedding } = await embed({
 		model: bedrock.textEmbeddingModel(BEDROCK_MODEL),
 		value: text,
-		providerOptions: {
-			bedrock: { inputType },
-		},
 	})
 	return embedding
 }
 
-/**
- * Generate embedding for search query
- */
-export async function generateQueryEmbedding(text: string): Promise<number[] | null> {
-	return generateEmbedding(text, 'search_query')
-}
+// Alias for search queries (same as document embedding for Titan)
+export const generateQueryEmbedding = generateEmbedding
 
 /**
- * Generate embeddings in batch (for documents)
+ * Generate embeddings in batch
  */
 export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
 	const validTexts = texts.filter((t) => t.trim().length > 0)
-	const results = await Promise.all(validTexts.map((t) => generateEmbedding(t, 'search_document')))
+	const results = await Promise.all(validTexts.map(generateEmbedding))
 	return results.filter((r): r is number[] => r !== null)
 }
 
