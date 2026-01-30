@@ -9,15 +9,71 @@ import { embed } from 'ai'
 
 // Model configurable via env, default to Titan v2
 const BEDROCK_MODEL = process.env.BEDROCK_EMBEDDING_MODEL || 'amazon.titan-embed-text-v2:0'
+const AWS_REGION = process.env.AWS_REGION || 'us-east-1'
 
-// Create bedrock provider with explicit instance metadata credentials
-const bedrock = createAmazonBedrock({
-	region: process.env.AWS_REGION || 'us-east-1',
-	credentialProvider: fromInstanceMetadata({
-		maxRetries: 3,
-		timeout: 1000,
-	}),
+// Credential provider for EC2 instance roles
+const credentialsProvider = fromInstanceMetadata({
+	maxRetries: 3,
+	timeout: 1000,
 })
+
+// Cache for credentials and bedrock instance
+let cachedCredentials: {
+	accessKeyId: string
+	secretAccessKey: string
+	sessionToken?: string
+	expiration?: Date
+} | null = null
+
+let bedrockInstance: ReturnType<typeof createAmazonBedrock> | null = null
+
+/**
+ * Get or refresh AWS credentials from instance metadata
+ */
+async function getCredentials() {
+	// Check if cached credentials are still valid (with 5 min buffer)
+	if (cachedCredentials?.expiration) {
+		const expirationBuffer = 5 * 60 * 1000 // 5 minutes
+		if (new Date().getTime() < cachedCredentials.expiration.getTime() - expirationBuffer) {
+			return cachedCredentials
+		}
+	}
+
+	console.log('[embedding] Fetching credentials from instance metadata...')
+	const creds = await credentialsProvider()
+	console.log('[embedding] Got credentials, expires:', creds.expiration)
+
+	cachedCredentials = {
+		accessKeyId: creds.accessKeyId,
+		secretAccessKey: creds.secretAccessKey,
+		sessionToken: creds.sessionToken,
+		expiration: creds.expiration,
+	}
+
+	// Reset bedrock instance when credentials change
+	bedrockInstance = null
+
+	return cachedCredentials
+}
+
+/**
+ * Get or create bedrock provider with current credentials
+ */
+async function getBedrock() {
+	const creds = await getCredentials()
+
+	if (!bedrockInstance) {
+		console.log('[embedding] Creating Bedrock provider with credentials')
+		bedrockInstance = createAmazonBedrock({
+			region: AWS_REGION,
+			accessKeyId: creds.accessKeyId,
+			secretAccessKey: creds.secretAccessKey,
+			sessionToken: creds.sessionToken,
+		})
+	}
+
+	return bedrockInstance
+}
 
 // Titan v2 with 1024 dimensions
 export const EMBEDDING_DIMENSIONS = 1024
@@ -44,18 +100,21 @@ export async function generateEmbedding(text: string): Promise<number[] | null> 
 	}
 
 	try {
-		const { embedding } = await embed({
+		console.log('[embedding] Generating embedding for text:', text.substring(0, 50) + '...')
+		const bedrock = await getBedrock()
+		const result = await embed({
 			model: bedrock.textEmbeddingModel(BEDROCK_MODEL),
 			value: text,
 		})
-		return embedding
+		console.log('[embedding] Embedding length:', result.embedding?.length ?? 0)
+		return result.embedding
 	} catch (error) {
 		console.error('[embedding] Error:', error)
 		throw error // Re-throw so caller can handle it
 	}
 }
 
-// Same embedding for documents and queries (Cohere v4 handles this internally)
+// Same embedding for documents and queries (Titan handles this internally)
 export const generateQueryEmbedding = generateEmbedding
 
 /**
