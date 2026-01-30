@@ -21,6 +21,7 @@
 		"@ai-sdk/amazon-bedrock": "^4.0.41",
 		"@rfsbase/shared": "workspace:*",
 		"@sinclair/typebox": "^0.34.48",
+		"@smithy/credential-provider-imds": "^4.2.8",
 		"@tanstack/react-query": "^5.90.20",
 		"@tanstack/react-query-devtools": "^5.91.2",
 		"ai": "^6.0.50",

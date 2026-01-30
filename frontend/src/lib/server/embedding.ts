@@ -1,17 +1,22 @@
 /**
  * Embedding generation using AWS Bedrock (Titan v2)
- * Uses IAM role on EC2 - no credentials needed
+ * Uses IAM role on EC2 via instance metadata
  */
 
 import { createAmazonBedrock } from '@ai-sdk/amazon-bedrock'
+import { fromInstanceMetadata } from '@smithy/credential-provider-imds'
 import { embed } from 'ai'
 
 // Model configurable via env, default to Titan v2
 const BEDROCK_MODEL = process.env.BEDROCK_EMBEDDING_MODEL || 'amazon.titan-embed-text-v2:0'
 
-// Create bedrock provider - AWS SDK auto-detects EC2 instance credentials
+// Create bedrock provider with explicit instance metadata credentials
 const bedrock = createAmazonBedrock({
 	region: process.env.AWS_REGION || 'us-east-1',
+	credentialProvider: fromInstanceMetadata({
+		maxRetries: 3,
+		timeout: 1000,
+	}),
 })
 
 // Titan v2 with 1024 dimensions
