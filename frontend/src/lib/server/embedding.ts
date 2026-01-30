@@ -39,9 +39,7 @@ async function getCredentials() {
 		}
 	}
 
-	console.log('[embedding] Fetching credentials from instance metadata...')
 	const creds = await credentialsProvider()
-	console.log('[embedding] Got credentials, expires:', creds.expiration)
 
 	cachedCredentials = {
 		accessKeyId: creds.accessKeyId,
@@ -63,7 +61,6 @@ async function getBedrock() {
 	const creds = await getCredentials()
 
 	if (!bedrockInstance) {
-		console.log('[embedding] Creating Bedrock provider with credentials')
 		bedrockInstance = createAmazonBedrock({
 			region: AWS_REGION,
 			accessKeyId: creds.accessKeyId,
@@ -100,17 +97,15 @@ export async function generateEmbedding(text: string): Promise<number[] | null> 
 	}
 
 	try {
-		console.log('[embedding] Generating embedding for text:', text.substring(0, 50) + '...')
 		const bedrock = await getBedrock()
 		const result = await embed({
 			model: bedrock.textEmbeddingModel(BEDROCK_MODEL),
 			value: text,
 		})
-		console.log('[embedding] Embedding length:', result.embedding?.length ?? 0)
 		return result.embedding
 	} catch (error) {
 		console.error('[embedding] Error:', error)
-		throw error // Re-throw so caller can handle it
+		throw error
 	}
 }
 

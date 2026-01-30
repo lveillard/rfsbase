@@ -57,12 +57,8 @@ export async function POST(request: NextRequest) {
 				continue
 			}
 
-			// Debug: Log embedding type and length
-			console.log(`[backfill] Embedding for ${ideaId}: type=${typeof embedding}, isArray=${Array.isArray(embedding)}, length=${embedding.length}`)
-
 			// Convert to regular array if needed (in case it's a Float32Array or similar)
 			const embeddingArray = Array.isArray(embedding) ? embedding : Array.from(embedding as ArrayLike<number>)
-			console.log(`[backfill] Converted array length: ${embeddingArray.length}, sample: [${embeddingArray.slice(0, 3).join(', ')}...]`)
 
 			// Use raw array in query to avoid serialization issues with SurrealDB params
 			const embeddingStr = `[${embeddingArray.join(',')}]`
