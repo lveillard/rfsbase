@@ -52,7 +52,7 @@ export async function generateEmbedding(
 	const { embedding } = await embed({
 		model: bedrock.textEmbeddingModel(BEDROCK_MODEL),
 		value: text,
-		experimental_providerMetadata: {
+		providerOptions: {
 			bedrock: { inputType },
 		},
 	})
