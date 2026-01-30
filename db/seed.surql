@@ -6,7 +6,7 @@
 -- Create YC Partner users
 CREATE user:harj_taggar SET
   name = 'Harj Taggar',
-  email = 'harj_taggar@ycombinator.com',
+  email = 'harj@ycombinator.com',
   verified_email = true,
   yc_type = 'partner',
   created_at = time::now(),
@@ -14,7 +14,7 @@ CREATE user:harj_taggar SET
 
 CREATE user:david_lieb SET
   name = 'David Lieb',
-  email = 'david_lieb@ycombinator.com',
+  email = 'david@ycombinator.com',
   verified_email = true,
   yc_type = 'partner',
   created_at = time::now(),
@@ -22,7 +22,7 @@ CREATE user:david_lieb SET
 
 CREATE user:aaron_epstein SET
   name = 'Aaron Epstein',
-  email = 'aaron_epstein@ycombinator.com',
+  email = 'aaron@ycombinator.com',
   verified_email = true,
   yc_type = 'partner',
   created_at = time::now(),
@@ -30,7 +30,7 @@ CREATE user:aaron_epstein SET
 
 CREATE user:pete_koomen SET
   name = 'Pete Koomen',
-  email = 'pete_koomen@ycombinator.com',
+  email = 'pete@ycombinator.com',
   verified_email = true,
   yc_type = 'partner',
   created_at = time::now(),
@@ -38,7 +38,7 @@ CREATE user:pete_koomen SET
 
 CREATE user:andrew_miklas SET
   name = 'Andrew Miklas',
-  email = 'andrew_miklas@ycombinator.com',
+  email = 'andrew@ycombinator.com',
   verified_email = true,
   yc_type = 'partner',
   created_at = time::now(),
@@ -46,7 +46,7 @@ CREATE user:andrew_miklas SET
 
 CREATE user:gustaf_alstromer SET
   name = 'Gustaf Alstromer',
-  email = 'gustaf_alstromer@ycombinator.com',
+  email = 'gustaf@ycombinator.com',
   verified_email = true,
   yc_type = 'partner',
   created_at = time::now(),
@@ -54,15 +54,7 @@ CREATE user:gustaf_alstromer SET
 
 CREATE user:jared_friedman SET
   name = 'Jared Friedman',
-  email = 'jared_friedman@ycombinator.com',
-  verified_email = true,
-  yc_type = 'partner',
-  created_at = time::now(),
-  updated_at = time::now();
-
-CREATE user:gustaf_alstr_mer SET
-  name = 'Gustaf Alströmer',
-  email = 'gustaf_alstr_mer@ycombinator.com',
+  email = 'jared@ycombinator.com',
   verified_email = true,
   yc_type = 'partner',
   created_at = time::now(),
@@ -70,7 +62,7 @@ CREATE user:gustaf_alstr_mer SET
 
 CREATE user:diana_hu SET
   name = 'Diana Hu',
-  email = 'diana_hu@ycombinator.com',
+  email = 'diana@ycombinator.com',
   verified_email = true,
   yc_type = 'partner',
   created_at = time::now(),
@@ -78,7 +70,7 @@ CREATE user:diana_hu SET
 
 CREATE user:tom_blomfield SET
   name = 'Tom Blomfield',
-  email = 'tom_blomfield@ycombinator.com',
+  email = 'tom@ycombinator.com',
   verified_email = true,
   yc_type = 'partner',
   created_at = time::now(),
@@ -86,7 +78,7 @@ CREATE user:tom_blomfield SET
 
 CREATE user:tyler_bosmeny SET
   name = 'Tyler Bosmeny',
-  email = 'tyler_bosmeny@ycombinator.com',
+  email = 'tyler@ycombinator.com',
   verified_email = true,
   yc_type = 'partner',
   created_at = time::now(),
@@ -94,7 +86,7 @@ CREATE user:tyler_bosmeny SET
 
 CREATE user:garry_tan SET
   name = 'Garry Tan',
-  email = 'garry_tan@ycombinator.com',
+  email = 'garry@ycombinator.com',
   verified_email = true,
   yc_type = 'partner',
   created_at = time::now(),
@@ -102,7 +94,7 @@ CREATE user:garry_tan SET
 
 CREATE user:nicolas_dessaigne SET
   name = 'Nicolas Dessaigne',
-  email = 'nicolas_dessaigne@ycombinator.com',
+  email = 'nicolas@ycombinator.com',
   verified_email = true,
   yc_type = 'partner',
   created_at = time::now(),
@@ -110,7 +102,7 @@ CREATE user:nicolas_dessaigne SET
 
 CREATE user:dalton_caldwell SET
   name = 'Dalton Caldwell',
-  email = 'dalton_caldwell@ycombinator.com',
+  email = 'dalton@ycombinator.com',
   verified_email = true,
   yc_type = 'partner',
   created_at = time::now(),
@@ -118,7 +110,7 @@ CREATE user:dalton_caldwell SET
 
 CREATE user:brad_flora SET
   name = 'Brad Flora',
-  email = 'brad_flora@ycombinator.com',
+  email = 'brad@ycombinator.com',
   verified_email = true,
   yc_type = 'partner',
   created_at = time::now(),
@@ -126,7 +118,7 @@ CREATE user:brad_flora SET
 
 CREATE user:surbhi_sarna SET
   name = 'Surbhi Sarna',
-  email = 'surbhi_sarna@ycombinator.com',
+  email = 'surbhi@ycombinator.com',
   verified_email = true,
   yc_type = 'partner',
   created_at = time::now(),
@@ -261,7 +253,7 @@ CREATE idea:voice_ai_ddfd SET
   category = 'ai',
   tags = ['S25', 'agents', 'voice', 'llm'],
   video_url = 'https://youtube.com/watch?v=_NGqEjFjB0U',
-  author = user:gustaf_alstr_mer,
+  author = user:gustaf_alstromer,
   votes_problem = 53,
   votes_solution = 17,
   votes_total = 0,
@@ -306,7 +298,7 @@ CREATE idea:healthcare_ai_c199 SET
   category = 'health',
   tags = ['S25', 'agents', 'llm', 'healthcare', 'infrastructure'],
   video_url = 'https://youtube.com/watch?v=hJ4L9SseAuE',
-  author = user:gustaf_alstr_mer,
+  author = user:gustaf_alstromer,
   votes_problem = 14,
   votes_solution = 7,
   votes_total = 0,
@@ -426,7 +418,7 @@ CREATE idea:ai_for_personal_finance_b3fd SET
   category = 'fintech',
   tags = ['S25', 'llm', 'fintech'],
   video_url = 'https://youtube.com/watch?v=-6YQTNlIzbQ',
-  author = user:gustaf_alstr_mer,
+  author = user:gustaf_alstromer,
   votes_problem = 19,
   votes_solution = 31,
   votes_total = 0,
