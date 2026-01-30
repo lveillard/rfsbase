@@ -12,7 +12,6 @@ const ideaKeys = {
 	list: (filters: ListIdeasFilters) => [...ideaKeys.lists(), filters] as const,
 	details: () => [...ideaKeys.all, 'detail'] as const,
 	detail: (id: string) => [...ideaKeys.details(), id] as const,
-	similar: (text: string) => [...ideaKeys.all, 'similar', text] as const,
 }
 
 interface ListIdeasFilters {
@@ -193,48 +192,15 @@ export function useVote(ideaId: string): UseVoteResult {
 	return { vote: mutate, isPending }
 }
 
-interface UseSimilarIdeasResult {
-	readonly ideas: readonly SimilarIdeaResult[]
-	readonly isLoading: boolean
-	readonly error: Error | null
-}
-
-export function useSimilarIdeas(
-	text: string,
-	options: {
-		readonly threshold?: number
-		readonly limit?: number
-		readonly excludeId?: string
-		readonly minLength?: number
-	} = {},
-): UseSimilarIdeasResult {
-	const { threshold = 0.75, limit = 5, excludeId, minLength = 50 } = options
-
-	const { data, isLoading, error } = useQuery({
-		queryKey: ideaKeys.similar(text),
-		queryFn: () =>
+// On-demand similarity search (e.g., on form submit)
+export function useFindSimilarIdeas() {
+	return useMutation({
+		mutationFn: (params: { text: string; threshold?: number; limit?: number; excludeId?: string }) =>
 			findSimilarIdeas({
-				text,
-				threshold,
-				limit,
-				excludeId,
+				text: params.text,
+				threshold: params.threshold ?? 0.7,
+				limit: params.limit ?? 5,
+				excludeId: params.excludeId,
 			}),
-		// Only fetch if text is long enough
-		enabled: text.length >= minLength,
-		// Don't retry on 404s (no similar ideas)
-		retry: (failureCount, error) => {
-			if (error instanceof Error && error.message.includes('not found')) {
-				return false
-			}
-			return failureCount < 2
-		},
-		// Results stale after 30 seconds (embedding expensive)
-		staleTime: 30 * 1000,
 	})
-
-	return {
-		ideas: data ?? [],
-		isLoading,
-		error: error ? (error instanceof Error ? error : new Error(String(error))) : null,
-	}
 }

@@ -7,7 +7,7 @@ import { getSurrealDB } from '@/lib/db/surreal'
 import { Errors } from '@/lib/errors'
 import { requireAuth } from '@/lib/server/auth'
 import { all, first, parseId } from '@/lib/server/db'
-import { generateEmbedding } from '@/lib/server/embedding'
+import { generateEmbedding, generateQueryEmbedding } from '@/lib/server/embedding'
 import { rateLimits } from '@/lib/server/rate-limit'
 import { mapAuthor, mapVotes } from '@/lib/server/types'
 import { checkRateLimitOrThrow } from './utils'
@@ -102,14 +102,15 @@ export async function createIdea(input: unknown): Promise<Idea> {
 
 		const db = await getSurrealDB()
 
-		const textToEmbed = `${validated.title} ${validated.problem}`
-		const embedding = await generateEmbedding(textToEmbed)
+		// Generate embedding if provider is available
+		const embedding = await generateEmbedding(`${validated.title} ${validated.problem}`)
 
 		const result = await db.query(
 			`CREATE idea SET
 				author = type::thing('user', $userId),
 				title = $title, problem = $problem, category = $category,
-				tags = $tags, links = $links, video_url = $videoUrl, embedding = $embedding,
+				tags = $tags, links = $links, video_url = $videoUrl,
+				embedding = $embedding,
 				votes_problem = 0, votes_solution = 0, votes_total = 0,
 				comment_count = 0, solution_count = 0,
 				created_at = time::now(), updated_at = time::now()
@@ -122,7 +123,7 @@ export async function createIdea(input: unknown): Promise<Idea> {
 				tags: validated.tags ?? [],
 				links: validated.links ?? [],
 				videoUrl: validated.videoUrl ?? null,
-				embedding,
+				embedding: embedding ?? null,
 			},
 		)
 
@@ -156,9 +157,18 @@ export async function voteIdea(ideaId: string, voteType: VoteType): Promise<void
 export async function findSimilarIdeas(input: unknown): Promise<readonly SimilarIdeaResult[]> {
 	const query = Value.Parse(SimilarIdeaQuerySchema, input)
 
-	const embedding = await generateEmbedding(query.text)
+	// Use search_query input type for Cohere
+	const embedding = await generateQueryEmbedding(query.text)
+
+	// No embedding provider configured - return empty (graceful degradation)
+	if (!embedding) {
+		return []
+	}
 
 	const db = await getSurrealDB()
+
+	const threshold = query.threshold ?? 0.7
+	const limit = query.limit ?? 5
 
 	const result = await db.query(
 		`SELECT id, title, problem, category, votes_total,
@@ -171,18 +181,19 @@ export async function findSimilarIdeas(input: unknown): Promise<readonly Similar
 		LIMIT $limit`,
 		{
 			embedding,
-			threshold: query.threshold,
-			limit: query.limit,
+			threshold,
+			limit,
 			excludeId: query.excludeId ?? null,
 		},
 	)
 
-	return all<Record<string, unknown>>(result).map((r) => ({
-		id: parseId(r.id),
-		title: String(r.title),
-		problem: String(r.problem),
-		category: String(r.category),
-		votes: Number(r.votes_total ?? 0),
-		similarity: Number(r.similarity),
-	}))
+	return all<Record<string, unknown>>(result)
+		.map((r) => ({
+			id: parseId(r.id),
+			title: String(r.title),
+			problem: String(r.problem),
+			category: String(r.category),
+			votes: Number(r.votes_total ?? 0),
+			similarity: Number(r.similarity),
+		}))
 }

@@ -107,7 +107,7 @@ DEFINE FIELD IF NOT EXISTS created_at ON upvoted TYPE datetime DEFAULT time::now
 -- VECTOR INDEX (for semantic search)
 -- ============================================
 
-DEFINE INDEX IF NOT EXISTS idea_embedding_idx ON idea FIELDS embedding MTREE DIMENSION 1536 DIST COSINE;
+DEFINE INDEX IF NOT EXISTS idea_embedding_idx ON idea FIELDS embedding HNSW DIMENSION 1024 DIST COSINE TYPE F32 EFC 200 M 16;
 
 -- ============================================
 -- EVENTS (auto-update timestamps)

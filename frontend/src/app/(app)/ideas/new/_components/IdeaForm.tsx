@@ -1,17 +1,24 @@
 'use client'
 
+import type { SimilarIdeaResult } from '@rfsbase/shared'
 import appConfig from '@config/app.config.json'
 import categoriesConfig from '@config/categories.config.json'
+import { ExternalLink } from 'lucide-react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Badge, Button, Card, Input, Textarea } from '@/components/ui'
 import { cn, parseId } from '@/lib/utils'
-import { useCreateIdea } from '../../_hooks'
+import { useCreateIdea, useFindSimilarIdeas } from '../../_hooks'
 
 export function IdeaForm() {
 	const router = useRouter()
 	const [submitError, setSubmitError] = useState<string | null>(null)
+	const [similarIdeas, setSimilarIdeas] = useState<readonly SimilarIdeaResult[]>([])
+	const [showSimilar, setShowSimilar] = useState(false)
+
 	const { mutate: createIdea, isPending: isCreating, error, data: createdIdea } = useCreateIdea()
+	const { mutateAsync: findSimilar, isPending: isSearching } = useFindSimilarIdeas()
 
 	// Form state
 	const [title, setTitle] = useState('')
@@ -40,14 +47,42 @@ export function IdeaForm() {
 		setTags(tags.filter((t) => t !== tag))
 	}
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault()
+	const submitIdea = () =>
 		createIdea({
 			title,
 			problem,
 			category,
 			tags: tags.length > 0 ? tags : undefined,
 		})
+
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault()
+		setSubmitError(null)
+
+		// If already showing similar and user confirms, create the idea
+		if (showSimilar) {
+			submitIdea()
+			return
+		}
+
+		// First check for similar ideas
+		try {
+			const similar = await findSimilar({ text: `${title} ${problem}`, threshold: 0.7, limit: 5 })
+			if (similar.length > 0) {
+				setSimilarIdeas(similar)
+				setShowSimilar(true)
+			} else {
+				submitIdea()
+			}
+		} catch {
+			// If similarity search fails, create anyway
+			submitIdea()
+		}
+	}
+
+	const handleBack = () => {
+		setShowSimilar(false)
+		setSimilarIdeas([])
 	}
 
 	useEffect(() => {
@@ -58,6 +93,63 @@ export function IdeaForm() {
 			setSubmitError(error.message)
 		}
 	}, [createdIdea, error, router])
+
+	// Show similar ideas screen
+	if (showSimilar && similarIdeas.length > 0) {
+		return (
+			<div className="max-w-2xl mx-auto">
+				<Card padding="lg" className="space-y-6">
+					<div>
+						<h2 className="text-xl font-semibold">Similar ideas found</h2>
+						<p className="text-text-secondary mt-1">
+							We found {similarIdeas.length} similar idea{similarIdeas.length > 1 ? 's' : ''}. Consider joining the discussion instead of creating a duplicate.
+						</p>
+					</div>
+
+					<div className="space-y-3">
+						{similarIdeas.map((idea) => (
+							<Link
+								key={idea.id}
+								href={`/ideas/${idea.id}`}
+								className="block p-4 rounded-lg border border-border hover:border-accent hover:bg-surface-alt transition-colors"
+							>
+								<div className="flex items-start justify-between gap-3">
+									<div className="flex-1 min-w-0">
+										<h3 className="font-medium truncate">{idea.title}</h3>
+										<p className="text-sm text-text-secondary mt-1 line-clamp-2">{idea.problem}</p>
+										<div className="flex items-center gap-3 mt-2 text-xs text-text-muted">
+											<span>{Math.round(idea.similarity * 100)}% similar</span>
+											<span>•</span>
+											<span>{idea.votes} votes</span>
+										</div>
+									</div>
+									<ExternalLink className="h-4 w-4 text-text-muted flex-shrink-0" />
+								</div>
+							</Link>
+						))}
+					</div>
+
+					{submitError && (
+						<div className="p-3 bg-error-muted text-error rounded-lg text-sm">{submitError}</div>
+					)}
+
+					<div className="flex gap-3 pt-4 border-t border-border">
+						<Button variant="outline" onClick={handleBack} className="flex-1">
+							Go back & edit
+						</Button>
+						<Button
+							onClick={handleSubmit}
+							disabled={isCreating}
+							isLoading={isCreating}
+							className="flex-1"
+						>
+							Create anyway
+						</Button>
+					</div>
+				</Card>
+			</div>
+		)
+	}
 
 	return (
 		<form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
@@ -159,8 +251,13 @@ export function IdeaForm() {
 					<div className="p-3 bg-error-muted text-error rounded-lg text-sm">{submitError}</div>
 				)}
 
-				<Button type="submit" disabled={!canSubmit || isCreating} isLoading={isCreating} className="w-full">
-					Publish Idea
+				<Button
+					type="submit"
+					disabled={!canSubmit || isCreating || isSearching}
+					isLoading={isCreating || isSearching}
+					className="w-full"
+				>
+					{isSearching ? 'Checking for similar ideas...' : 'Publish Idea'}
 				</Button>
 			</Card>
 		</form>
