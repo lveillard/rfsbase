@@ -62,7 +62,7 @@ services:
       - SURREAL_PASS=${SURREAL_PASS:-root}
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
-      - AWS_BEDROCK_ENABLED=false  # Disabled until EC2 credential detection is fixed
+      - AWS_BEDROCK_ENABLED=true
       - AWS_REGION=${AWS_REGION:-us-east-1}
       - BEDROCK_EMBEDDING_MODEL=${BEDROCK_EMBEDDING_MODEL:-amazon.titan-embed-text-v2:0}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
