@@ -147,8 +147,8 @@ CREATE idea:retraining_workers_for_the_ai_economy_c67a SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-09-03T09:00:00.000Z',
-  updated_at = '2025-09-03T09:00:00.000Z';
+  created_at = d'2025-09-03T09:00:00Z',
+  updated_at = d'2025-09-03T09:00:00Z';
 
 CREATE idea:video_generation_as_a_primitive_fea4 SET
   title = 'Video Generation as a Primitive',
@@ -162,8 +162,8 @@ CREATE idea:video_generation_as_a_primitive_fea4 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-09-03T09:00:00.000Z',
-  updated_at = '2025-09-03T09:00:00.000Z';
+  created_at = d'2025-09-03T09:00:00Z',
+  updated_at = d'2025-09-03T09:00:00Z';
 
 CREATE idea:the_first_10person_100b_company_2c69 SET
   title = 'The First 10-person, $100B Company',
@@ -177,8 +177,8 @@ CREATE idea:the_first_10person_100b_company_2c69 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-09-04T09:00:00.000Z',
-  updated_at = '2025-09-04T09:00:00.000Z';
+  created_at = d'2025-09-04T09:00:00Z',
+  updated_at = d'2025-09-04T09:00:00Z';
 
 CREATE idea:infrastructure_for_multiagent_systems_d757 SET
   title = 'Infrastructure for Multi-Agent Systems',
@@ -192,8 +192,8 @@ CREATE idea:infrastructure_for_multiagent_systems_d757 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-09-05T09:00:00.000Z',
-  updated_at = '2025-09-05T09:00:00.000Z';
+  created_at = d'2025-09-05T09:00:00Z',
+  updated_at = d'2025-09-05T09:00:00Z';
 
 CREATE idea:ai_native_enterprise_software_f1c2 SET
   title = 'AI Native Enterprise Software',
@@ -207,8 +207,8 @@ CREATE idea:ai_native_enterprise_software_f1c2 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-09-07T09:00:00.000Z',
-  updated_at = '2025-09-07T09:00:00.000Z';
+  created_at = d'2025-09-07T09:00:00Z',
+  updated_at = d'2025-09-07T09:00:00Z';
 
 CREATE idea:using_llms_instead_of_government_consult_4b7a SET
   title = 'Using LLMs Instead of Government Consulting',
@@ -222,8 +222,8 @@ CREATE idea:using_llms_instead_of_government_consult_4b7a SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-09-08T09:00:00.000Z',
-  updated_at = '2025-09-08T09:00:00.000Z';
+  created_at = d'2025-09-08T09:00:00Z',
+  updated_at = d'2025-09-08T09:00:00Z';
 
 CREATE idea:fullstack_ai_companies_32dc SET
   title = 'Full-stack AI Companies',
@@ -237,8 +237,8 @@ CREATE idea:fullstack_ai_companies_32dc SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-04-04T09:00:00.000Z',
-  updated_at = '2025-04-04T09:00:00.000Z';
+  created_at = d'2025-04-04T09:00:00Z',
+  updated_at = d'2025-04-04T09:00:00Z';
 
 CREATE idea:more_design_founders_4b5f SET
   title = 'More Design Founders',
@@ -252,8 +252,8 @@ CREATE idea:more_design_founders_4b5f SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-04-05T09:00:00.000Z',
-  updated_at = '2025-04-05T09:00:00.000Z';
+  created_at = d'2025-04-05T09:00:00Z',
+  updated_at = d'2025-04-05T09:00:00Z';
 
 CREATE idea:voice_ai_ddfd SET
   title = 'Voice AI',
@@ -267,8 +267,8 @@ CREATE idea:voice_ai_ddfd SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-04-05T09:00:00.000Z',
-  updated_at = '2025-04-05T09:00:00.000Z';
+  created_at = d'2025-04-05T09:00:00Z',
+  updated_at = d'2025-04-05T09:00:00Z';
 
 CREATE idea:ai_for_scientific_advancement_da29 SET
   title = 'AI for Scientific Advancement',
@@ -282,8 +282,8 @@ CREATE idea:ai_for_scientific_advancement_da29 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-04-07T09:00:00.000Z',
-  updated_at = '2025-04-07T09:00:00.000Z';
+  created_at = d'2025-04-07T09:00:00Z',
+  updated_at = d'2025-04-07T09:00:00Z';
 
 CREATE idea:ai_personal_assistant_6a42 SET
   title = 'AI Personal Assistant',
@@ -297,8 +297,8 @@ CREATE idea:ai_personal_assistant_6a42 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-04-08T09:00:00.000Z',
-  updated_at = '2025-04-08T09:00:00.000Z';
+  created_at = d'2025-04-08T09:00:00Z',
+  updated_at = d'2025-04-08T09:00:00Z';
 
 CREATE idea:healthcare_ai_c199 SET
   title = 'Healthcare AI',
@@ -312,8 +312,8 @@ CREATE idea:healthcare_ai_c199 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-04-08T09:00:00.000Z',
-  updated_at = '2025-04-08T09:00:00.000Z';
+  created_at = d'2025-04-08T09:00:00Z',
+  updated_at = d'2025-04-08T09:00:00Z';
 
 CREATE idea:ai_personal_tutor_for_everyone_25b8 SET
   title = 'AI Personal Tutor for Everyone',
@@ -327,8 +327,8 @@ CREATE idea:ai_personal_tutor_for_everyone_25b8 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-04-10T09:00:00.000Z',
-  updated_at = '2025-04-10T09:00:00.000Z';
+  created_at = d'2025-04-10T09:00:00Z',
+  updated_at = d'2025-04-10T09:00:00Z';
 
 CREATE idea:software_tools_to_make_robots_0dfa SET
   title = 'Software Tools To Make Robots',
@@ -342,8 +342,8 @@ CREATE idea:software_tools_to_make_robots_0dfa SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-04-11T09:00:00.000Z',
-  updated_at = '2025-04-11T09:00:00.000Z';
+  created_at = d'2025-04-11T09:00:00Z',
+  updated_at = d'2025-04-11T09:00:00Z';
 
 CREATE idea:the_future_of_education_73c7 SET
   title = 'The Future of Education',
@@ -357,8 +357,8 @@ CREATE idea:the_future_of_education_73c7 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-04-11T09:00:00.000Z',
-  updated_at = '2025-04-11T09:00:00.000Z';
+  created_at = d'2025-04-11T09:00:00Z',
+  updated_at = d'2025-04-11T09:00:00Z';
 
 CREATE idea:ai_residential_security_4aba SET
   title = 'AI Residential Security',
@@ -372,8 +372,8 @@ CREATE idea:ai_residential_security_4aba SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-04-12T09:00:00.000Z',
-  updated_at = '2025-04-12T09:00:00.000Z';
+  created_at = d'2025-04-12T09:00:00Z',
+  updated_at = d'2025-04-12T09:00:00Z';
 
 CREATE idea:internal_agent_builder_7343 SET
   title = 'Internal Agent Builder',
@@ -387,8 +387,8 @@ CREATE idea:internal_agent_builder_7343 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-04-12T09:00:00.000Z',
-  updated_at = '2025-04-12T09:00:00.000Z';
+  created_at = d'2025-04-12T09:00:00Z',
+  updated_at = d'2025-04-12T09:00:00Z';
 
 CREATE idea:ai_research_labs_68fb SET
   title = 'AI Research Labs',
@@ -402,8 +402,8 @@ CREATE idea:ai_research_labs_68fb SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-04-15T09:00:00.000Z',
-  updated_at = '2025-04-15T09:00:00.000Z';
+  created_at = d'2025-04-15T09:00:00Z',
+  updated_at = d'2025-04-15T09:00:00Z';
 
 CREATE idea:ai_voice_assistants_for_email_c84f SET
   title = 'AI Voice Assistants for Email',
@@ -417,8 +417,8 @@ CREATE idea:ai_voice_assistants_for_email_c84f SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-04-15T09:00:00.000Z',
-  updated_at = '2025-04-15T09:00:00.000Z';
+  created_at = d'2025-04-15T09:00:00Z',
+  updated_at = d'2025-04-15T09:00:00Z';
 
 CREATE idea:ai_for_personal_finance_b3fd SET
   title = 'AI for Personal Finance',
@@ -432,8 +432,8 @@ CREATE idea:ai_for_personal_finance_b3fd SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-04-01T09:00:00.000Z',
-  updated_at = '2025-04-01T09:00:00.000Z';
+  created_at = d'2025-04-01T09:00:00Z',
+  updated_at = d'2025-04-01T09:00:00Z';
 
 CREATE idea:a_secure_ai_app_store_dd28 SET
   title = 'A Secure AI App Store',
@@ -447,8 +447,8 @@ CREATE idea:a_secure_ai_app_store_dd28 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-02T09:00:00.000Z',
-  updated_at = '2025-01-02T09:00:00.000Z';
+  created_at = d'2025-01-02T09:00:00Z',
+  updated_at = d'2025-01-02T09:00:00Z';
 
 CREATE idea:datacenters_eed5 SET
   title = 'Datacenters',
@@ -462,8 +462,8 @@ CREATE idea:datacenters_eed5 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-03T09:00:00.000Z',
-  updated_at = '2025-01-03T09:00:00.000Z';
+  created_at = d'2025-01-03T09:00:00Z',
+  updated_at = d'2025-01-03T09:00:00Z';
 
 CREATE idea:compliance_and_audit_acb4 SET
   title = 'Compliance and Audit',
@@ -477,8 +477,8 @@ CREATE idea:compliance_and_audit_acb4 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-06T09:00:00.000Z',
-  updated_at = '2025-01-06T09:00:00.000Z';
+  created_at = d'2025-01-06T09:00:00Z',
+  updated_at = d'2025-01-06T09:00:00Z';
 
 CREATE idea:browser_computer_automation_3faf SET
   title = 'Browser & Computer Automation',
@@ -492,8 +492,8 @@ CREATE idea:browser_computer_automation_3faf SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-05T09:00:00.000Z',
-  updated_at = '2025-01-05T09:00:00.000Z';
+  created_at = d'2025-01-05T09:00:00Z',
+  updated_at = d'2025-01-05T09:00:00Z';
 
 CREATE idea:ai_personal_staff_for_everyone_bffa SET
   title = 'AI Personal Staff for Everyone',
@@ -507,8 +507,8 @@ CREATE idea:ai_personal_staff_for_everyone_bffa SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-08T09:00:00.000Z',
-  updated_at = '2025-01-08T09:00:00.000Z';
+  created_at = d'2025-01-08T09:00:00Z',
+  updated_at = d'2025-01-08T09:00:00Z';
 
 CREATE idea:devtools_for_ai_agents_8d30 SET
   title = 'Devtools for AI Agents',
@@ -522,8 +522,8 @@ CREATE idea:devtools_for_ai_agents_8d30 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-07T09:00:00.000Z',
-  updated_at = '2025-01-07T09:00:00.000Z';
+  created_at = d'2025-01-07T09:00:00Z',
+  updated_at = d'2025-01-07T09:00:00Z';
 
 CREATE idea:the_future_of_software_engineering_daec SET
   title = 'The Future of Software Engineering',
@@ -537,8 +537,8 @@ CREATE idea:the_future_of_software_engineering_daec SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-09T09:00:00.000Z',
-  updated_at = '2025-01-09T09:00:00.000Z';
+  created_at = d'2025-01-09T09:00:00Z',
+  updated_at = d'2025-01-09T09:00:00Z';
 
 CREATE idea:ai_commercial_open_source_software_aicos_8684 SET
   title = 'AI Commercial Open Source Software (AICOSS)',
@@ -552,8 +552,8 @@ CREATE idea:ai_commercial_open_source_software_aicos_8684 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-09T09:00:00.000Z',
-  updated_at = '2025-01-09T09:00:00.000Z';
+  created_at = d'2025-01-09T09:00:00Z',
+  updated_at = d'2025-01-09T09:00:00Z';
 
 CREATE idea:ai_coding_agents_for_hardwareoptimized_c_3fc5 SET
   title = 'AI Coding Agents for Hardware-Optimized Code',
@@ -567,8 +567,8 @@ CREATE idea:ai_coding_agents_for_hardwareoptimized_c_3fc5 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-11T09:00:00.000Z',
-  updated_at = '2025-01-11T09:00:00.000Z';
+  created_at = d'2025-01-11T09:00:00Z',
+  updated_at = d'2025-01-11T09:00:00Z';
 
 CREATE idea:b2a_software_where_the_customers_will_al_af95 SET
   title = 'B2A: Software Where the Customers Will All Be Agents',
@@ -582,8 +582,8 @@ CREATE idea:b2a_software_where_the_customers_will_al_af95 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-11T09:00:00.000Z',
-  updated_at = '2025-01-11T09:00:00.000Z';
+  created_at = d'2025-01-11T09:00:00Z',
+  updated_at = d'2025-01-11T09:00:00Z';
 
 CREATE idea:vertical_ai_agents_089b SET
   title = 'Vertical AI Agents',
@@ -597,8 +597,8 @@ CREATE idea:vertical_ai_agents_089b SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-14T09:00:00.000Z',
-  updated_at = '2025-01-14T09:00:00.000Z';
+  created_at = d'2025-01-14T09:00:00Z',
+  updated_at = d'2025-01-14T09:00:00Z';
 
 CREATE idea:inference_ai_infrastructure_in_the_world_a4a6 SET
   title = 'Inference AI Infrastructure in the World of Test-Time Compute',
@@ -612,8 +612,8 @@ CREATE idea:inference_ai_infrastructure_in_the_world_a4a6 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-15T09:00:00.000Z',
-  updated_at = '2025-01-15T09:00:00.000Z';
+  created_at = d'2025-01-15T09:00:00Z',
+  updated_at = d'2025-01-15T09:00:00Z';
 
 CREATE idea:government_software_144e SET
   title = 'Government Software',
@@ -627,8 +627,8 @@ CREATE idea:government_software_144e SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-02T09:00:00.000Z',
-  updated_at = '2025-01-02T09:00:00.000Z';
+  created_at = d'2025-01-02T09:00:00Z',
+  updated_at = d'2025-01-02T09:00:00Z';
 
 CREATE idea:public_safety_technology_30cf SET
   title = 'Public Safety Technology',
@@ -642,8 +642,8 @@ CREATE idea:public_safety_technology_30cf SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-04T09:00:00.000Z',
-  updated_at = '2025-01-04T09:00:00.000Z';
+  created_at = d'2025-01-04T09:00:00Z',
+  updated_at = d'2025-01-04T09:00:00Z';
 
 CREATE idea:manufacture_in_the_usa_93a9 SET
   title = 'Manufacture in the USA',
@@ -657,8 +657,8 @@ CREATE idea:manufacture_in_the_usa_93a9 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-06T09:00:00.000Z',
-  updated_at = '2025-01-06T09:00:00.000Z';
+  created_at = d'2025-01-06T09:00:00Z',
+  updated_at = d'2025-01-06T09:00:00Z';
 
 CREATE idea:stablecoins_20_ec68 SET
   title = 'Stablecoins 2.0',
@@ -672,8 +672,8 @@ CREATE idea:stablecoins_20_ec68 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-05T09:00:00.000Z',
-  updated_at = '2025-01-05T09:00:00.000Z';
+  created_at = d'2025-01-05T09:00:00Z',
+  updated_at = d'2025-01-05T09:00:00Z';
 
 CREATE idea:llms_for_chip_design_7b27 SET
   title = 'LLMs for Chip Design',
@@ -687,8 +687,8 @@ CREATE idea:llms_for_chip_design_7b27 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-07T09:00:00.000Z',
-  updated_at = '2025-01-07T09:00:00.000Z';
+  created_at = d'2025-01-07T09:00:00Z',
+  updated_at = d'2025-01-07T09:00:00Z';
 
 CREATE idea:fintech_20_b605 SET
   title = 'Fintech 2.0',
@@ -702,8 +702,8 @@ CREATE idea:fintech_20_b605 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-09T09:00:00.000Z',
-  updated_at = '2025-01-09T09:00:00.000Z';
+  created_at = d'2025-01-09T09:00:00Z',
+  updated_at = d'2025-01-09T09:00:00Z';
 
 CREATE idea:new_space_companies_4d44 SET
   title = 'New Space Companies',
@@ -717,8 +717,8 @@ CREATE idea:new_space_companies_4d44 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-09T09:00:00.000Z',
-  updated_at = '2025-01-09T09:00:00.000Z';
+  created_at = d'2025-01-09T09:00:00Z',
+  updated_at = d'2025-01-09T09:00:00Z';
 
 CREATE idea:aiaided_engineering_tools_1d41 SET
   title = 'AI-Aided Engineering Tools',
@@ -732,8 +732,8 @@ CREATE idea:aiaided_engineering_tools_1d41 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-11T09:00:00.000Z',
-  updated_at = '2025-01-11T09:00:00.000Z';
+  created_at = d'2025-01-11T09:00:00Z',
+  updated_at = d'2025-01-11T09:00:00Z';
 
 CREATE idea:one_million_jobs_20_6641 SET
   title = 'One Million Jobs 2.0',
@@ -747,8 +747,8 @@ CREATE idea:one_million_jobs_20_6641 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2025-01-12T09:00:00.000Z',
-  updated_at = '2025-01-12T09:00:00.000Z';
+  created_at = d'2025-01-12T09:00:00Z',
+  updated_at = d'2025-01-12T09:00:00Z';
 
 CREATE idea:using_machine_learning_to_simulate_the_p_59dc SET
   title = 'Using Machine Learning to Simulate the Physical World',
@@ -762,8 +762,8 @@ CREATE idea:using_machine_learning_to_simulate_the_p_59dc SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2024-06-03T09:00:00.000Z',
-  updated_at = '2024-06-03T09:00:00.000Z';
+  created_at = d'2024-06-03T09:00:00Z',
+  updated_at = d'2024-06-03T09:00:00Z';
 
 CREATE idea:new_defense_technology_d5b0 SET
   title = 'New Defense Technology',
@@ -777,8 +777,8 @@ CREATE idea:new_defense_technology_d5b0 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2024-06-05T09:00:00.000Z',
-  updated_at = '2024-06-05T09:00:00.000Z';
+  created_at = d'2024-06-05T09:00:00Z',
+  updated_at = d'2024-06-05T09:00:00Z';
 
 CREATE idea:commercial_open_source_companies_8a0f SET
   title = 'Commercial Open Source Companies',
@@ -792,8 +792,8 @@ CREATE idea:commercial_open_source_companies_8a0f SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2024-06-05T09:00:00.000Z',
-  updated_at = '2024-06-05T09:00:00.000Z';
+  created_at = d'2024-06-05T09:00:00Z',
+  updated_at = d'2024-06-05T09:00:00Z';
 
 CREATE idea:spatial_computing_e5ac SET
   title = 'Spatial Computing',
@@ -807,8 +807,8 @@ CREATE idea:spatial_computing_e5ac SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2024-06-07T09:00:00.000Z',
-  updated_at = '2024-06-07T09:00:00.000Z';
+  created_at = d'2024-06-07T09:00:00Z',
+  updated_at = d'2024-06-07T09:00:00Z';
 
 CREATE idea:new_enterprise_resource_planning_softwar_2067 SET
   title = 'New Enterprise Resource Planning Software',
@@ -822,8 +822,8 @@ CREATE idea:new_enterprise_resource_planning_softwar_2067 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2024-06-06T09:00:00.000Z',
-  updated_at = '2024-06-06T09:00:00.000Z';
+  created_at = d'2024-06-06T09:00:00Z',
+  updated_at = d'2024-06-06T09:00:00Z';
 
 CREATE idea:developer_tools_inspired_by_existing_int_a707 SET
   title = 'Developer Tools Inspired by Existing Internal Tools',
@@ -837,8 +837,8 @@ CREATE idea:developer_tools_inspired_by_existing_int_a707 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2024-06-08T09:00:00.000Z',
-  updated_at = '2024-06-08T09:00:00.000Z';
+  created_at = d'2024-06-08T09:00:00Z',
+  updated_at = d'2024-06-08T09:00:00Z';
 
 CREATE idea:llms_for_manual_back_office_processes_in_f54c SET
   title = 'LLMs for Manual Back Office Processes in Legacy Enterprises',
@@ -852,8 +852,8 @@ CREATE idea:llms_for_manual_back_office_processes_in_f54c SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2024-06-09T09:00:00.000Z',
-  updated_at = '2024-06-09T09:00:00.000Z';
+  created_at = d'2024-06-09T09:00:00Z',
+  updated_at = d'2024-06-09T09:00:00Z';
 
 CREATE idea:ai_to_build_enterprise_software_4431 SET
   title = 'AI to Build Enterprise Software',
@@ -867,128 +867,128 @@ CREATE idea:ai_to_build_enterprise_software_4431 SET
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2024-06-09T09:00:00.000Z',
-  updated_at = '2024-06-09T09:00:00.000Z';
+  created_at = d'2024-06-09T09:00:00Z',
+  updated_at = d'2024-06-09T09:00:00Z';
 
 CREATE idea:stablecoin_finance_2b8f SET
   title = 'Stablecoin Finance',
   problem = 'Stablecoins are digital currencies that peg their value to some external reference. This is typically the U.S. dollar, but it can be other fiat currencies, assets, or even other digital currencies. Their transactions are recorded on a digital ledger, usually a blockchain. This means they can be traded at any time of day between any two wallets on the same network, transactions settle in seconds, and fees are a fraction of what you see in traditional finance.\n\nThere\'s been much debate about the utility of blockchain technology, but it seems clear that stablecoins will be a big part of the future of money. We know this because YC companies have been effectively incorporating stablecoins into their operations for years now – for cross-border payments, to reduce transaction fees and fraud, to help users protect savings from hyperinflation. This utility is so straightforward it seems inevitable traditional finance will follow suit.\n\nIn fact we\'re seeing signs of this. PayPal recently issued its own stablecoin. Major banks have started offering custody services and making noise about issuing their own.\n\nIt all looks a bit like digital music\'s transition from the realm of outlaw file sharing in the early 2000s to becoming the norm as players like Apple entered the market. Importantly, those major players were all outmatched in the end by Spotify, a startup founded during that same transition moment.\n\n$136b worth of stablecoins have been issued to date but the opportunity seems much more immense still. Only about seven million people have transacted with stablecoins to date, while more than half a billion live in countries with 30%+ inflation. U.S. banks hold $17T in customer deposits which are all up for grabs as well.  And yet the major stablecoin issuers can be counted on one hand and the major liquidity providers with just a few fingers.\n\nWe would like to fund great teams building B2B and consumer products on top of stablecoins, tools and platforms that enable stablecoin finance and more stablecoin protocols themselves.',
   category = 'fintech',
   tags = ['S24', 'fintech'],
-  video_url = NONE,
+  video_url = null,
   author = user:brad_flora,
   votes_problem = 18,
   votes_solution = 17,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2024-06-12T09:00:00.000Z',
-  updated_at = '2024-06-12T09:00:00.000Z';
+  created_at = d'2024-06-12T09:00:00Z',
+  updated_at = d'2024-06-12T09:00:00Z';
 
 CREATE idea:a_way_to_end_cancer_57df SET
   title = 'A Way to End Cancer',
   problem = 'The technology to diagnose cancer at an early stage already exists. Since most cancers are now treatable if caught early enough, this technology would dramatically reduce cancer deaths if rolled out widely and affordably.\n\nThe technology we\'re talking about is an MRI. Modern MRIs are sensitive enough to detect cancer masses as small as a millimeter.\n\nSome companies are already having success on a small scale offering MRIs to patients for a high cash price. However, there is backlash from the medical community as MRIs also create incidental findings (or false positives), that cost our healthcare system valuable time and money to investigate.\n\nFor this to work, the world would need to scale up the number of MRI scans it does by at least 100x. Doing that will require innovations in the MRI hardware, the AI algorithms to interpret scans and reduce false positives, and the business models and consumer marketing to make it a viable business.  We\'re interested in funding companies looking to tackle this multifaceted problem.\n\nWhile much exciting progress is being made on cancer therapeutics, finding cancer early enough for our existing therapeutics to be curative might be the opportunity with the greatest potential impact.',
   category = 'health',
   tags = ['S24', 'healthcare'],
-  video_url = NONE,
+  video_url = null,
   author = user:surbhi_sarna,
   votes_problem = 45,
   votes_solution = 31,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2024-06-12T09:00:00.000Z',
-  updated_at = '2024-06-12T09:00:00.000Z';
+  created_at = d'2024-06-12T09:00:00Z',
+  updated_at = d'2024-06-12T09:00:00Z';
 
 CREATE idea:foundation_models_for_biological_systems_bb87 SET
   title = 'Foundation Models for Biological Systems',
   problem = 'The vast majority of scientific innovation fails – either on the bench during early experimentation or while in clinical trials.\n\nFoundation models built around the vast amount of data we now have will not only enable scientists to know what path to pursue much quicker than before, but have the potential to unlock new scientific approaches to disease. Foundation models built around text and images are enabling the next-generation of consumer products; we believe foundation models built around biological systems will do the same for healthcare.\n\nWe are interested in funding highly technical founders building foundational models from scratch in any part of biology or medicine.',
   category = 'health',
   tags = ['S24', 'healthcare'],
-  video_url = NONE,
+  video_url = null,
   author = user:surbhi_sarna,
   votes_problem = 17,
   votes_solution = 30,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2024-06-13T09:00:00.000Z',
-  updated_at = '2024-06-13T09:00:00.000Z';
+  created_at = d'2024-06-13T09:00:00Z',
+  updated_at = d'2024-06-13T09:00:00Z';
 
 CREATE idea:the_managed_service_organization_model_f_35e2 SET
   title = 'The Managed Service Organization Model for Healthcare',
   problem = 'Private equity is consuming small and large private clinics all over the country. By the time more junior healthcare workers are paid, they only make a fraction of what they are billing. This causes them to be overworked but underpaid, as much of the revenue goes to overhead and the private equity owner of the clinic.\n\nA new startup model has emerged as an alternative to PE ownership: the MSO (Managed Service Organizations) model.\n\nThe MSO model enables doctors to run their own clinics by (1) providing them software that can handle back office tasks such as billing and scheduling and (2) channeling patients to them.\n\nThese functions are largely what PE ownership provides. Doctors who are part of an MSO model can continue to run small, physician-owned practices while competing successfully with large, PE-owned conglomerates.\n\nYC has funded several companies doing this in different verticals: Nourish (nutritionists), LunaJoy (mental health for women), Finni Health (autism care for children), and others.\n\nWe are interested in investing in this MSO (Managed Service Organizations) model across every vertical in healthcare.',
   category = 'health',
   tags = ['S24', 'healthcare'],
-  video_url = NONE,
+  video_url = null,
   author = user:surbhi_sarna,
   votes_problem = 27,
   votes_solution = 7,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2024-06-13T09:00:00.000Z',
-  updated_at = '2024-06-13T09:00:00.000Z';
+  created_at = d'2024-06-13T09:00:00Z',
+  updated_at = d'2024-06-13T09:00:00Z';
 
 CREATE idea:eliminating_middlemen_in_healthcare_13db SET
   title = 'Eliminating Middlemen in Healthcare',
   problem = 'The US spends more money per person on healthcare than any other developed nation, yet our patient outcomes are no better.  Much of our spend goes to paying middlemen — which in our view includes everyone not directly providing care to patients.\n\nA recent report on medicare spending on drugs found that 70% of spend went to middlemen (primarily PBMs, wholesalers, and pharmacies) and only 30% to the pharmaceutical companies who make the drugs.  Similar dynamics exist in every other vertical — hospital care, medical equipment, insurance, etc.\n\nThere are many ways startups could attack these inefficiencies, from using AI to automate repetitive human jobs to exploring new and better business models for providing care.  In the spirit of Jeff Bezos\' "your margin is my opportunity", we believe it\'s possible to build a highly profitable business and make the system more efficient at the same time.',
   category = 'health',
   tags = ['S24', 'healthcare'],
-  video_url = NONE,
+  video_url = null,
   author = user:surbhi_sarna,
   votes_problem = 29,
   votes_solution = 26,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2024-06-15T09:00:00.000Z',
-  updated_at = '2024-06-15T09:00:00.000Z';
+  created_at = d'2024-06-15T09:00:00Z',
+  updated_at = d'2024-06-15T09:00:00Z';
 
 CREATE idea:small_finetuned_models_as_an_alternative_86c8 SET
   title = 'Small Fine-tuned Models as an Alternative to Giant Generic Ones',
   problem = 'Giant generic models with a lot of parameters are very impressive. But they are also very costly and often come with latency and privacy challenges. Fortunately, smaller open-source models like Llama2 and Mistral have already demonstrated that, when finely tuned with appropriate data, they can yield comparable results at a fraction of the cost.\n\nMoreover, as new hardware continues to be integrated into our phones and laptops, the prospect of running these models at the edge becomes increasingly feasible, unlocking a multitude of new use cases.\n\nWe are eager to support companies engaged in developing or fine-tuning such specialized models or creating tools to facilitate their construction.',
   category = 'hardware',
   tags = ['S24'],
-  video_url = NONE,
+  video_url = null,
   author = user:nicolas_dessaigne,
   votes_problem = 25,
   votes_solution = 15,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2024-06-03T09:00:00.000Z',
-  updated_at = '2024-06-03T09:00:00.000Z';
+  created_at = d'2024-06-03T09:00:00Z',
+  updated_at = d'2024-06-03T09:00:00Z';
 
 CREATE idea:explainable_ai_223e SET
   title = 'Explainable AI',
   problem = 'Would you trust an AI to diagnose you? Would you swear that a model is unbiased? Or more simply, how can we be sure that a model doesn\'t hallucinate an answer?\n\nUnderstanding model behavior is very challenging, but we believe that in contexts where trust is paramount it is essential for an AI model to be interpretable. Its responses need to be explainable.\n\nFor society to reap the full benefits of AI, more work needs to be done on explainable AI. We are interested in funding people building new interpretable models or tools to explain the output of existing models.',
   category = 'ai',
   tags = ['S24'],
-  video_url = NONE,
+  video_url = null,
   author = user:diana_hu,
   votes_problem = 12,
   votes_solution = 13,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2024-06-02T09:00:00.000Z',
-  updated_at = '2024-06-02T09:00:00.000Z';
+  created_at = d'2024-06-02T09:00:00Z',
+  updated_at = d'2024-06-02T09:00:00Z';
 
 CREATE idea:applying_machine_learning_to_robotics_1eee SET
   title = 'Applying Machine Learning to Robotics',
   problem = 'Robotics hasn\'t yet had its GPT moment, but we think it\'s close.\n\nYC has followed robotics closely for two decades. In fact, one of YC\'s founders, Trevor Blackwell, is a pioneering roboticist who built the first dynamically balancing bipedal robot.\n\nFor decades, everyone has known that robots are the future, as any science fiction novel will show. But that future proved elusive because previous generations of robots were expensive and brittle, requiring controlled conditions. With the rapid improvements in foundation models, it\'s finally possible to make robots that have human-level perception and judgment. That\'s been the missing piece.\n\nWhile consumer use-cases feature heavily in science fiction, some of the overlooked and most immediately addressable applications for robots are B2B. Specifically, we think promising areas are industrial use-cases like Gecko Robotics (W16), which builds inspection robots, and farm use-cases like Bear Flag Robotics (W18), which builds autonomous tractors and was acquired by John Deere.\n\nWe\'re interested in funding people building software tools to help other people to make robots, along with people building the robots themselves.',
   category = 'education',
   tags = ['S24', 'robotics'],
-  video_url = NONE,
+  video_url = null,
   author = user:diana_hu,
   votes_problem = 38,
   votes_solution = 31,
   votes_total = 0,
   comment_count = 0,
   solution_count = 0,
-  created_at = '2024-06-03T09:00:00.000Z',
-  updated_at = '2024-06-03T09:00:00.000Z';
+  created_at = d'2024-06-03T09:00:00Z',
+  updated_at = d'2024-06-03T09:00:00Z';
 
 -- Calculate total votes
 UPDATE idea SET votes_total = votes_problem + votes_solution;
