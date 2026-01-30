@@ -94,4 +94,4 @@ DEFINE FIELD IF NOT EXISTS created_at ON upvoted TYPE datetime DEFAULT time::now
 -- Vector Index (HNSW for Cohere v4 embeddings)
 DEFINE INDEX IF NOT EXISTS idea_embedding_idx ON idea FIELDS embedding HNSW DIMENSION 1024 DIST COSINE TYPE F32 EFC 200 M 16;
 
-SELECT "Schema initialized" AS status;
+RETURN "Schema initialized";
