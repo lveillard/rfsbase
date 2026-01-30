@@ -9,7 +9,7 @@ USE DATABASE main;
 DEFINE TABLE IF NOT EXISTS user SCHEMAFULL;
 DEFINE FIELD IF NOT EXISTS name ON user TYPE string;
 DEFINE FIELD IF NOT EXISTS email ON user TYPE string;
-DEFINE FIELD IF NOT EXISTS emailVerified ON user TYPE option<datetime>;
+DEFINE FIELD IF NOT EXISTS emailVerified ON user TYPE bool DEFAULT false;
 DEFINE FIELD IF NOT EXISTS image ON user TYPE option<string>;
 DEFINE FIELD IF NOT EXISTS avatar ON user TYPE option<string>;
 DEFINE FIELD IF NOT EXISTS bio ON user TYPE option<string>;

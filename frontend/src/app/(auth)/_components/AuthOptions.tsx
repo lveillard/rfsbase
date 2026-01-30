@@ -32,9 +32,30 @@ export function AuthOptions({ requiredEmail, ycData }: AuthOptionsProps) {
 	const handleOAuth = async (provider: 'google' | 'github') => {
 		setIsLoading(true)
 		setError('')
+
+		// Reset loading state if user closes popup without completing auth
+		const resetOnFocus = () => {
+			// Wait a bit to check if auth actually completed
+			setTimeout(() => {
+				setIsLoading(false)
+			}, 500)
+		}
+
+		// Listen for window focus (user closed popup and returned)
+		window.addEventListener('focus', resetOnFocus, { once: true })
+
+		// Fallback timeout in case focus event doesn't fire
+		const timeout = setTimeout(() => {
+			window.removeEventListener('focus', resetOnFocus)
+			setIsLoading(false)
+		}, 60000) // 60 seconds
+
 		try {
 			await authClient.signIn.social({ provider, callbackURL: '/ideas' })
+			// If successful, auth will redirect - cleanup not needed
 		} catch {
+			clearTimeout(timeout)
+			window.removeEventListener('focus', resetOnFocus)
 			setError('Something went wrong. Try again.')
 			setIsLoading(false)
 		}
