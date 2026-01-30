@@ -31,6 +31,7 @@ RUN pnpm build
 
 # Build frontend
 WORKDIR /app/frontend
+ENV DOCKER_BUILD=true
 RUN pnpm build
 
 # Production stage

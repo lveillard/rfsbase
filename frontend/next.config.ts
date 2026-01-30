@@ -21,8 +21,8 @@ const nextConfig: NextConfig = {
 	// React Compiler - stable in Next.js 16
 	reactCompiler: true,
 
-	// Output standalone for Docker deployment
-	output: 'standalone',
+	// Output standalone for Docker deployment only (not Vercel)
+	...(process.env.DOCKER_BUILD === 'true' && { output: 'standalone' }),
 
 	images: {
 		remotePatterns: imageRemotePatterns,
