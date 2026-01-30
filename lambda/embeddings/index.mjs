@@ -40,19 +40,18 @@ async function generateEmbedding(text) {
 /**
  * Execute SurrealDB query
  */
-async function surrealQuery(query, params = {}) {
+async function surrealQuery(query) {
 	const auth = Buffer.from(`${SURREAL_USER}:${SURREAL_PASS}`).toString('base64')
 
 	const response = await fetch(`${SURREAL_URL}/sql`, {
 		method: 'POST',
 		headers: {
 			'Authorization': `Basic ${auth}`,
-			'NS': SURREAL_NS,
-			'DB': SURREAL_DB,
-			'Content-Type': 'application/json',
+			'surreal-ns': SURREAL_NS,
+			'surreal-db': SURREAL_DB,
 			'Accept': 'application/json',
 		},
-		body: JSON.stringify({ query, params }),
+		body: query,
 	})
 
 	if (!response.ok) {
@@ -115,9 +114,13 @@ export async function handler(event) {
 
 			const embedding = await generateEmbedding(text)
 
-			// Store in SurrealDB - use raw array to avoid serialization issues
+			// Store in SurrealDB - strip table prefix if present
+			let id = ideaId
+			if (id.includes(':')) {
+				id = id.split(':').slice(1).join(':')
+			}
 			const embeddingStr = `[${embedding.join(',')}]`
-			await surrealQuery(`UPDATE type::thing('idea', '${ideaId}') SET embedding = ${embeddingStr}`)
+			await surrealQuery(`UPDATE idea:${id} SET embedding = ${embeddingStr}`)
 
 			return {
 				statusCode: 200,
@@ -135,7 +138,7 @@ export async function handler(event) {
 			const result = await surrealQuery(`
 				SELECT id, title, problem
 				FROM idea
-				WHERE embedding IS NONE OR embedding IS NULL
+				WHERE embedding IS NONE OR embedding IS NULL OR array::len(embedding) = 0
 			`)
 
 			const ideas = result[0]?.result || []
@@ -150,12 +153,17 @@ export async function handler(event) {
 
 			const results = []
 			for (const idea of ideas) {
-				const id = typeof idea.id === 'object' ? idea.id.id : String(idea.id)
+				// Extract ID - can be object {id: 'table:id'}, string 'table:id', or just 'id'
+				let id = typeof idea.id === 'object' ? idea.id.id : String(idea.id)
+				// Strip table prefix if present (e.g., 'idea:xxx' -> 'xxx')
+				if (id.includes(':')) {
+					id = id.split(':').slice(1).join(':')
+				}
 				try {
 					const text = `${idea.title} ${idea.problem}`
 					const embedding = await generateEmbedding(text)
 					const embeddingStr = `[${embedding.join(',')}]`
-					await surrealQuery(`UPDATE type::thing('idea', '${id}') SET embedding = ${embeddingStr}`)
+					await surrealQuery(`UPDATE idea:${id} SET embedding = ${embeddingStr}`)
 					results.push({ id, status: 'success' })
 				} catch (err) {
 					results.push({ id, status: 'error', error: err.message })
