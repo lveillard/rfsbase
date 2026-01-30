@@ -57,9 +57,16 @@ export async function POST(request: NextRequest) {
 				continue
 			}
 
+			// Debug: Log embedding type and length
+			console.log(`[backfill] Embedding for ${ideaId}: type=${typeof embedding}, isArray=${Array.isArray(embedding)}, length=${embedding.length}`)
+
+			// Convert to regular array if needed (in case it's a Float32Array or similar)
+			const embeddingArray = Array.isArray(embedding) ? embedding : Array.from(embedding as ArrayLike<number>)
+			console.log(`[backfill] Converted array length: ${embeddingArray.length}, sample: [${embeddingArray.slice(0, 3).join(', ')}...]`)
+
 			await db.query(`UPDATE type::thing('idea', $id) SET embedding = $embedding`, {
 				id: ideaId,
-				embedding,
+				embedding: embeddingArray,
 			})
 
 			results.push({ id: ideaId, status: 'success' })
