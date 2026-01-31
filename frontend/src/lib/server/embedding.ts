@@ -1,124 +1,90 @@
 /**
- * Embedding generation using AWS Bedrock (Titan v2)
- * Uses IAM role on EC2 via instance metadata
+ * Embedding generation using Fastembed API
+ * Self-hosted on surrealdb-others EC2 with bge-large-en-v1.5 model
  */
 
-import { createAmazonBedrock } from '@ai-sdk/amazon-bedrock'
-import { fromInstanceMetadata } from '@smithy/credential-provider-imds'
-import { embed } from 'ai'
+const EMBED_URL = process.env.EMBED_URL
+const EMBED_API_KEY = process.env.EMBED_API_KEY
 
-// Model configurable via env, default to Titan v2
-const BEDROCK_MODEL = process.env.BEDROCK_EMBEDDING_MODEL || 'amazon.titan-embed-text-v2:0'
-const AWS_REGION = process.env.AWS_REGION || 'us-east-1'
-
-// Credential provider for EC2 instance roles
-const credentialsProvider = fromInstanceMetadata({
-	maxRetries: 3,
-	timeout: 1000,
-})
-
-// Cache for credentials and bedrock instance
-let cachedCredentials: {
-	accessKeyId: string
-	secretAccessKey: string
-	sessionToken?: string
-	expiration?: Date
-} | null = null
-
-let bedrockInstance: ReturnType<typeof createAmazonBedrock> | null = null
-
-/**
- * Get or refresh AWS credentials from instance metadata
- */
-async function getCredentials() {
-	// Check if cached credentials are still valid (with 5 min buffer)
-	if (cachedCredentials?.expiration) {
-		const expirationBuffer = 5 * 60 * 1000 // 5 minutes
-		if (Date.now() < cachedCredentials.expiration.getTime() - expirationBuffer) {
-			return cachedCredentials
-		}
-	}
-
-	const creds = await credentialsProvider()
-
-	cachedCredentials = {
-		accessKeyId: creds.accessKeyId,
-		secretAccessKey: creds.secretAccessKey,
-		sessionToken: creds.sessionToken,
-		expiration: creds.expiration,
-	}
-
-	// Reset bedrock instance when credentials change
-	bedrockInstance = null
-
-	return cachedCredentials
-}
-
-/**
- * Get or create bedrock provider with current credentials
- */
-async function getBedrock() {
-	const creds = await getCredentials()
-
-	if (!bedrockInstance) {
-		bedrockInstance = createAmazonBedrock({
-			region: AWS_REGION,
-			accessKeyId: creds.accessKeyId,
-			secretAccessKey: creds.secretAccessKey,
-			sessionToken: creds.sessionToken,
-		})
-	}
-
-	return bedrockInstance
-}
-
-// Titan v2 with 1024 dimensions
+// bge-large-en-v1.5 uses 1024 dimensions (same as Titan)
 export const EMBEDDING_DIMENSIONS = 1024
 
 /**
  * Check if embedding is available
  */
 export function isEmbeddingAvailable(): boolean {
-	return process.env.AWS_BEDROCK_ENABLED === 'true'
+	return !!EMBED_URL
 }
 
 /**
- * Generate embedding for text using Bedrock
- * Returns null if Bedrock not enabled
+ * Generate embedding for text using Fastembed API
+ * Returns null if not configured
  */
 export async function generateEmbedding(text: string): Promise<number[] | null> {
 	if (!text || text.trim().length === 0) {
 		return null
 	}
 
-	if (process.env.AWS_BEDROCK_ENABLED !== 'true') {
-		console.warn('[embedding] Skipped - AWS_BEDROCK_ENABLED not set')
+	if (!EMBED_URL) {
+		console.warn('[embedding] Skipped - EMBED_URL not set')
 		return null
 	}
 
 	try {
-		const bedrock = await getBedrock()
-		const result = await embed({
-			model: bedrock.textEmbeddingModel(BEDROCK_MODEL),
-			value: text,
+		const response = await fetch(EMBED_URL, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				...(EMBED_API_KEY && { 'X-API-Key': EMBED_API_KEY }),
+			},
+			body: JSON.stringify({ texts: [text] }),
 		})
-		return result.embedding
+
+		if (!response.ok) {
+			throw new Error(`Fastembed API error: ${response.status} ${response.statusText}`)
+		}
+
+		const data = (await response.json()) as { embeddings: number[][] }
+		return data.embeddings[0] ?? null
 	} catch (error) {
 		console.error('[embedding] Error:', error)
 		throw error
 	}
 }
 
-// Same embedding for documents and queries (Titan handles this internally)
+// Same embedding for documents and queries
 export const generateQueryEmbedding = generateEmbedding
 
 /**
- * Generate embeddings in batch
+ * Generate embeddings in batch (more efficient)
  */
 export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
 	const validTexts = texts.filter((t) => t.trim().length > 0)
-	const results = await Promise.all(validTexts.map((t) => generateEmbedding(t)))
-	return results.filter((r): r is number[] => r !== null)
+
+	if (validTexts.length === 0 || !EMBED_URL) {
+		return []
+	}
+
+	try {
+		const response = await fetch(EMBED_URL, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				...(EMBED_API_KEY && { 'X-API-Key': EMBED_API_KEY }),
+			},
+			body: JSON.stringify({ texts: validTexts }),
+		})
+
+		if (!response.ok) {
+			throw new Error(`Fastembed API error: ${response.status} ${response.statusText}`)
+		}
+
+		const data = (await response.json()) as { embeddings: number[][] }
+		return data.embeddings
+	} catch (error) {
+		console.error('[embedding] Batch error:', error)
+		throw error
+	}
 }
 
 /**
@@ -130,20 +96,20 @@ export async function checkEmbeddingHealth(): Promise<{
 	model?: string
 	error?: string
 }> {
-	if (process.env.AWS_BEDROCK_ENABLED !== 'true') {
+	if (!EMBED_URL) {
 		return { status: 'disabled', provider: 'none' }
 	}
 
 	try {
 		const result = await generateEmbedding('health check')
 		return result
-			? { status: 'healthy', provider: 'bedrock', model: BEDROCK_MODEL }
-			: { status: 'unhealthy', provider: 'bedrock', model: BEDROCK_MODEL }
+			? { status: 'healthy', provider: 'fastembed', model: 'bge-large-en-v1.5' }
+			: { status: 'unhealthy', provider: 'fastembed', model: 'bge-large-en-v1.5' }
 	} catch (error) {
 		return {
 			status: 'unhealthy',
-			provider: 'bedrock',
-			model: BEDROCK_MODEL,
+			provider: 'fastembed',
+			model: 'bge-large-en-v1.5',
 			error: error instanceof Error ? error.message : 'Unknown error',
 		}
 	}
