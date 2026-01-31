@@ -9,6 +9,7 @@ async function connectDB(): Promise<Surreal> {
 
 	connectionPromise = (async () => {
 		const db = new Surreal()
+		// SDK translates username/password to user/pass for RPC
 		await db.connect(process.env.SURREAL_URL!)
 		await db.signin({
 			username: process.env.SURREAL_USER!,

@@ -25,7 +25,7 @@ export async function GET() {
 async function checkDatabaseHealth() {
 	try {
 		const db = await getSurrealDB()
-		await db.query('SELECT 1')
+		await db.query('RETURN 1')
 		return { status: 'healthy' as const, provider: 'surrealdb' }
 	} catch (error) {
 		return {
