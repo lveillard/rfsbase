@@ -2,6 +2,7 @@
 
 import categoriesConfig from '@config/categories.config.json'
 import { ChevronDown, Filter, X } from 'lucide-react'
+import posthog from 'posthog-js'
 import { useState } from 'react'
 import { Badge, Button } from '@/components/ui'
 import { cn } from '@/lib/utils'
@@ -100,7 +101,13 @@ export function IdeaFilters({
 	}
 
 	const handleCategoryClick = (categoryId: string) => {
-		onCategoryChange(selectedCategory === categoryId ? undefined : categoryId)
+		const newCategory = selectedCategory === categoryId ? undefined : categoryId
+		onCategoryChange(newCategory)
+		posthog.capture('ideas_filtered', {
+			filter_type: 'category',
+			category: newCategory,
+			sort_by: sortBy,
+		})
 	}
 
 	const handleTagClick = (tag: string) => {
@@ -108,12 +115,37 @@ export function IdeaFilters({
 			? selectedTags.filter((t) => t !== tag)
 			: [...selectedTags, tag]
 		onTagsChange(newTags)
+		posthog.capture('ideas_filtered', {
+			filter_type: 'tag',
+			tag,
+			tags_count: newTags.length,
+			sort_by: sortBy,
+		})
+	}
+
+	const handleSortChange = (sort: SortOption) => {
+		onSortChange(sort)
+		posthog.capture('ideas_filtered', {
+			filter_type: 'sort',
+			sort_by: sort,
+			category: selectedCategory,
+			tags_count: selectedTags.length,
+		})
+	}
+
+	const handleTimeRangeChange = (range: TimeRange) => {
+		onTimeRangeChange(range)
+		posthog.capture('ideas_filtered', {
+			filter_type: 'time_range',
+			time_range: range,
+			sort_by: sortBy,
+		})
 	}
 
 	return (
 		<div className="space-y-4">
 			<div className="flex flex-wrap items-center justify-between gap-4">
-				<SortTabs sortBy={sortBy} onSortChange={onSortChange} />
+				<SortTabs sortBy={sortBy} onSortChange={handleSortChange} />
 
 				<Button
 					variant={showFilters ? 'secondary' : 'outline'}
@@ -144,7 +176,7 @@ export function IdeaFilters({
 								<button
 									type="button"
 									key={value}
-									onClick={() => onTimeRangeChange(value)}
+									onClick={() => handleTimeRangeChange(value)}
 									className={pillButtonClass(timeRange === value)}
 								>
 									{label}

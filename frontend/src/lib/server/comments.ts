@@ -5,6 +5,7 @@ import { CommentCreateSchema } from '@rfsbase/shared'
 import { Value } from '@sinclair/typebox/value'
 import { getSurrealDB } from '@/lib/db/surreal'
 import { Errors } from '@/lib/errors'
+import { getPostHogClient } from '@/lib/posthog-server'
 import { requireAuth } from '@/lib/server/auth'
 import { all, first, parseId } from '@/lib/server/db'
 import { rateLimits } from '@/lib/server/rate-limit'
@@ -77,7 +78,22 @@ export async function createComment(ideaId: string, input: unknown): Promise<Com
 		const created = first<Record<string, unknown>>(commentResult)
 		if (!created) throw Errors.internal('Failed to create comment')
 
-		return mapComment(created)
+		const comment = mapComment(created)
+
+		// Track comment creation server-side
+		const posthog = getPostHogClient()
+		posthog.capture({
+			distinctId: userId,
+			event: 'comment_created',
+			properties: {
+				comment_id: comment.id,
+				idea_id: ideaId,
+				is_reply: !!validated.parentId,
+				content_length: validated.content.length,
+			},
+		})
+
+		return comment
 	})
 }
 
@@ -108,7 +124,19 @@ export async function upvoteComment(commentId: string): Promise<number> {
 			commentId,
 		})
 
-		return Number(first<{ upvotes: number }>(result)?.upvotes ?? 0)
+		const upvotes = Number(first<{ upvotes: number }>(result)?.upvotes ?? 0)
+
+		// Track comment upvote server-side
+		const posthog = getPostHogClient()
+		posthog.capture({
+			distinctId: userId,
+			event: 'comment_upvoted',
+			properties: {
+				comment_id: commentId,
+			},
+		})
+
+		return upvotes
 	})
 }
 

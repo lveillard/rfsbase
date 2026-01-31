@@ -5,6 +5,7 @@ import { UserUpdateSchema } from '@rfsbase/shared'
 import { Value } from '@sinclair/typebox/value'
 import { getSurrealDB } from '@/lib/db/surreal'
 import { Errors } from '@/lib/errors'
+import { getPostHogClient } from '@/lib/posthog-server'
 import { getSession, requireAuth } from '@/lib/server/auth'
 import { all, first, parseId } from '@/lib/server/db'
 
@@ -103,7 +104,20 @@ export async function updateProfile(input: unknown): Promise<User> {
 		const row = first<Record<string, unknown>>(result)
 		if (!row) throw Errors.internal('Failed to update profile')
 
-		return mapUser(row)
+		const user = mapUser(row)
+
+		// Track profile update server-side
+		const posthog = getPostHogClient()
+		posthog.capture({
+			distinctId: userId,
+			event: 'profile_updated',
+			properties: {
+				has_avatar: !!user.avatar,
+				has_bio: !!user.bio,
+			},
+		})
+
+		return user
 	})
 }
 
@@ -155,6 +169,16 @@ export async function followUser(targetUserId: string): Promise<void> {
 			SET created_at = time::now()`,
 			{ userId, targetUserId },
 		)
+
+		// Track user follow server-side
+		const posthog = getPostHogClient()
+		posthog.capture({
+			distinctId: userId,
+			event: 'user_followed',
+			properties: {
+				target_user_id: targetUserId,
+			},
+		})
 	})
 }
 
@@ -166,6 +190,16 @@ export async function unfollowUser(targetUserId: string): Promise<void> {
 			`DELETE follows WHERE in = type::thing('user', $userId) AND out = type::thing('user', $targetUserId)`,
 			{ userId, targetUserId },
 		)
+
+		// Track user unfollow server-side
+		const posthog = getPostHogClient()
+		posthog.capture({
+			distinctId: userId,
+			event: 'user_unfollowed',
+			properties: {
+				target_user_id: targetUserId,
+			},
+		})
 	})
 }
 

@@ -1,0 +1,122 @@
+[
+	{
+		"event": "signup_started",
+		"description": "User started the signup flow by clicking Yes/No for YC founder question",
+		"properties": ["is_yc_founder"],
+		"file": "frontend/src/app/(auth)/signup/_components/SignupForm.tsx"
+	},
+	{
+		"event": "yc_verification_attempted",
+		"description": "User attempted to verify their YC founder status",
+		"properties": [],
+		"file": "frontend/src/app/(auth)/signup/_components/SignupForm.tsx"
+	},
+	{
+		"event": "yc_verification_succeeded",
+		"description": "YC founder verification was successful",
+		"properties": ["batch", "company"],
+		"file": "frontend/src/app/(auth)/signup/_components/SignupForm.tsx"
+	},
+	{
+		"event": "yc_verification_failed",
+		"description": "YC founder verification failed",
+		"properties": ["error"],
+		"file": "frontend/src/app/(auth)/signup/_components/SignupForm.tsx"
+	},
+	{
+		"event": "auth_method_clicked",
+		"description": "User clicked an authentication method (Google, GitHub, or magic link)",
+		"properties": ["method", "has_yc_data"],
+		"file": "frontend/src/app/(auth)/_components/AuthOptions.tsx"
+	},
+	{
+		"event": "magic_link_sent",
+		"description": "Magic link email was sent successfully",
+		"properties": ["has_yc_data"],
+		"file": "frontend/src/app/(auth)/_components/AuthOptions.tsx"
+	},
+	{
+		"event": "idea_form_submitted",
+		"description": "User submitted the idea creation form (client-side, before similar check)",
+		"properties": ["category", "tags_count", "title_length", "problem_length"],
+		"file": "frontend/src/app/(app)/ideas/new/_components/IdeaForm.tsx"
+	},
+	{
+		"event": "similar_ideas_shown",
+		"description": "User was shown similar ideas before creating their idea",
+		"properties": ["similar_count", "top_similarity"],
+		"file": "frontend/src/app/(app)/ideas/new/_components/IdeaForm.tsx"
+	},
+	{
+		"event": "idea_created_despite_similar",
+		"description": "User chose to create idea anyway after seeing similar ideas",
+		"properties": ["similar_count", "category"],
+		"file": "frontend/src/app/(app)/ideas/new/_components/IdeaForm.tsx"
+	},
+	{
+		"event": "idea_created",
+		"description": "User successfully created a new startup idea (server-side)",
+		"properties": ["idea_id", "category", "tags_count", "has_embedding"],
+		"file": "frontend/src/lib/server/ideas.ts"
+	},
+	{
+		"event": "vote_clicked",
+		"description": "User clicked a vote button on an idea (client-side)",
+		"properties": ["idea_id", "vote_type", "previous_vote"],
+		"file": "frontend/src/app/(app)/ideas/[id]/_components/VoteButtons.tsx"
+	},
+	{
+		"event": "idea_voted",
+		"description": "User voted on an idea (problem or solution vote, server-side)",
+		"properties": ["idea_id", "vote_type"],
+		"file": "frontend/src/lib/server/ideas.ts"
+	},
+	{
+		"event": "comment_submitted",
+		"description": "User submitted a comment or reply (client-side)",
+		"properties": ["is_reply", "content_length"],
+		"file": "frontend/src/app/(app)/ideas/[id]/_components/CommentSection.tsx"
+	},
+	{
+		"event": "comment_created",
+		"description": "User created a comment on an idea (server-side)",
+		"properties": ["comment_id", "idea_id", "is_reply", "content_length"],
+		"file": "frontend/src/lib/server/comments.ts"
+	},
+	{
+		"event": "comment_upvoted",
+		"description": "User upvoted a comment (server-side)",
+		"properties": ["comment_id"],
+		"file": "frontend/src/lib/server/comments.ts"
+	},
+	{
+		"event": "profile_form_submitted",
+		"description": "User submitted their profile settings form (client-side)",
+		"properties": ["has_avatar", "has_bio"],
+		"file": "frontend/src/app/(app)/settings/_components/SettingsForm.tsx"
+	},
+	{
+		"event": "profile_updated",
+		"description": "User updated their profile settings (server-side)",
+		"properties": ["has_avatar", "has_bio"],
+		"file": "frontend/src/lib/server/users.ts"
+	},
+	{
+		"event": "user_followed",
+		"description": "User followed another user (server-side)",
+		"properties": ["target_user_id"],
+		"file": "frontend/src/lib/server/users.ts"
+	},
+	{
+		"event": "user_unfollowed",
+		"description": "User unfollowed another user (server-side)",
+		"properties": ["target_user_id"],
+		"file": "frontend/src/lib/server/users.ts"
+	},
+	{
+		"event": "ideas_filtered",
+		"description": "User applied filters or changed sort on ideas list",
+		"properties": ["filter_type", "sort_by", "category", "tag", "tags_count", "time_range"],
+		"file": "frontend/src/app/(app)/ideas/_components/IdeaFilters.tsx"
+	}
+]

@@ -1,6 +1,7 @@
 'use client'
 
 import { Check, ThumbsUp } from 'lucide-react'
+import posthog from 'posthog-js'
 import { Card } from '@/components/ui'
 import { cn, formatNumber } from '@/lib/utils'
 import type { VoteCounts, VoteType } from '@/types'
@@ -69,6 +70,11 @@ export function VoteButtons({ ideaId, votes, userVote }: VoteButtonsProps) {
 
 	const handleVote = (type: VoteType) => {
 		if (isPending || userVote === type) return
+		posthog.capture('vote_clicked', {
+			idea_id: ideaId,
+			vote_type: type,
+			previous_vote: userVote,
+		})
 		vote(type)
 	}
 

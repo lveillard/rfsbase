@@ -42,3 +42,8 @@ pnpm-debug.log*
 
 # Lambda
 lambda/*.zip
+
+.vercel
+.env*.local
+.env.production
+nul

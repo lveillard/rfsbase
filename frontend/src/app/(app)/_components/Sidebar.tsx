@@ -3,6 +3,7 @@
 import { Bell, Lightbulb, LogOut, PlusCircle, Search, Settings } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import posthog from 'posthog-js'
 import { Brand, ThemeToggle } from '@/components/layout'
 import { Avatar } from '@/components/ui'
 import { signOut, useSession } from '@/lib/auth-client'
@@ -32,6 +33,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 	const isNavItemActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`)
 
 	const handleLogout = async () => {
+		posthog.reset()
 		await signOut()
 		router.push('/login')
 	}

@@ -1,6 +1,7 @@
 'use client'
 
 import { AlertCircle, Github, Lock, Mail } from 'lucide-react'
+import posthog from 'posthog-js'
 import { useEffect, useState } from 'react'
 import { Button, Card, Input } from '@/components/ui'
 import { authClient } from '@/lib/auth-client'
@@ -33,6 +34,11 @@ export function AuthOptions({ requiredEmail, ycData }: AuthOptionsProps) {
 		setIsLoading(true)
 		setError('')
 
+		posthog.capture('auth_method_clicked', {
+			method: provider,
+			has_yc_data: !!ycData,
+		})
+
 		// Reset loading state if user closes popup without completing auth
 		const resetOnFocus = () => {
 			// Wait a bit to check if auth actually completed
@@ -53,11 +59,12 @@ export function AuthOptions({ requiredEmail, ycData }: AuthOptionsProps) {
 		try {
 			await authClient.signIn.social({ provider, callbackURL: '/ideas' })
 			// If successful, auth will redirect - cleanup not needed
-		} catch {
+		} catch (err) {
 			clearTimeout(timeout)
 			window.removeEventListener('focus', resetOnFocus)
 			setError('Something went wrong. Try again.')
 			setIsLoading(false)
+			posthog.captureException(err)
 		}
 	}
 
@@ -72,13 +79,22 @@ export function AuthOptions({ requiredEmail, ycData }: AuthOptionsProps) {
 			return
 		}
 
+		posthog.capture('auth_method_clicked', {
+			method: 'magic_link',
+			has_yc_data: !!ycData,
+		})
+
 		setIsLoading(true)
 		setError('')
 		try {
 			await authClient.signIn.magicLink({ email: targetEmail, callbackURL: '/ideas' })
 			setSent(true)
-		} catch {
+			posthog.capture('magic_link_sent', {
+				has_yc_data: !!ycData,
+			})
+		} catch (err) {
 			setError('Could not send link. Try again.')
+			posthog.captureException(err)
 		} finally {
 			setIsLoading(false)
 		}

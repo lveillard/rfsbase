@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Toaster } from 'sonner'
 import './globals.css'
 import appConfig from '@config/app.config.json'
+import { PostHogIdentify } from '@/components/PostHogIdentify'
 import { QueryProvider } from '@/lib/providers'
 import { ThemeProvider } from '@/lib/theme/provider'
 
@@ -81,6 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			<body className="min-h-screen bg-background text-text antialiased">
 				<QueryProvider>
 					<ThemeProvider>
+						<PostHogIdentify />
 						{children}
 						<Toaster
 							position="bottom-right"

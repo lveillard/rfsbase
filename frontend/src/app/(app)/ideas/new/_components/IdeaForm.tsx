@@ -1,11 +1,12 @@
 'use client'
 
-import type { SimilarIdeaResult } from '@rfsbase/shared'
 import appConfig from '@config/app.config.json'
 import categoriesConfig from '@config/categories.config.json'
+import type { SimilarIdeaResult } from '@rfsbase/shared'
 import { ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import posthog from 'posthog-js'
 import { useEffect, useState } from 'react'
 import { Badge, Button, Card, Input, Textarea } from '@/components/ui'
 import { cn, parseId } from '@/lib/utils'
@@ -59,8 +60,19 @@ export function IdeaForm() {
 		e.preventDefault()
 		setSubmitError(null)
 
+		posthog.capture('idea_form_submitted', {
+			category,
+			tags_count: tags.length,
+			title_length: title.length,
+			problem_length: problem.length,
+		})
+
 		// If already showing similar and user confirms, create the idea
 		if (showSimilar) {
+			posthog.capture('idea_created_despite_similar', {
+				similar_count: similarIdeas.length,
+				category,
+			})
 			submitIdea()
 			return
 		}
@@ -71,6 +83,10 @@ export function IdeaForm() {
 			if (similar.length > 0) {
 				setSimilarIdeas(similar)
 				setShowSimilar(true)
+				posthog.capture('similar_ideas_shown', {
+					similar_count: similar.length,
+					top_similarity: similar[0]?.similarity,
+				})
 			} else {
 				submitIdea()
 			}
@@ -102,7 +118,8 @@ export function IdeaForm() {
 					<div>
 						<h2 className="text-xl font-semibold">Similar ideas found</h2>
 						<p className="text-text-secondary mt-1">
-							We found {similarIdeas.length} similar idea{similarIdeas.length > 1 ? 's' : ''}. Consider joining the discussion instead of creating a duplicate.
+							We found {similarIdeas.length} similar idea{similarIdeas.length > 1 ? 's' : ''}.
+							Consider joining the discussion instead of creating a duplicate.
 						</p>
 					</div>
 

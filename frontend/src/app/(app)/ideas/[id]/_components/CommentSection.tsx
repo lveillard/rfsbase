@@ -1,6 +1,7 @@
 'use client'
 
 import { ArrowBigUp, MoreHorizontal, Reply } from 'lucide-react'
+import posthog from 'posthog-js'
 import { useMemo, useState } from 'react'
 import { Avatar, Badge, Button, Textarea } from '@/components/ui'
 import { cn, formatRelativeTime } from '@/lib/utils'
@@ -150,6 +151,10 @@ export function CommentSection({
 		const content = newComment.trim()
 		if (!content) return
 		setIsSubmitting(true)
+		posthog.capture('comment_submitted', {
+			is_reply: false,
+			content_length: content.length,
+		})
 		try {
 			await onAddComment(content)
 			setNewComment('')
@@ -162,6 +167,10 @@ export function CommentSection({
 		const content = replyContent.trim()
 		if (!content || !replyingTo) return
 		setIsSubmitting(true)
+		posthog.capture('comment_submitted', {
+			is_reply: true,
+			content_length: content.length,
+		})
 		try {
 			await onAddComment(content, replyingTo)
 			setReplyContent('')

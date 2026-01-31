@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import { createIdea, findSimilarIdeas, getIdea, listIdeas, voteIdea } from '@/lib/actions'
-import type { Idea, IdeaCard, IdeaCreate, SimilarIdeaResult, VoteType } from '@/types'
+import type { Idea, IdeaCard, IdeaCreate, VoteType } from '@/types'
 
 // Query keys for consistent cache management
 const ideaKeys = {
@@ -195,7 +195,12 @@ export function useVote(ideaId: string): UseVoteResult {
 // On-demand similarity search (e.g., on form submit)
 export function useFindSimilarIdeas() {
 	return useMutation({
-		mutationFn: (params: { text: string; threshold?: number; limit?: number; excludeId?: string }) =>
+		mutationFn: (params: {
+			text: string
+			threshold?: number
+			limit?: number
+			excludeId?: string
+		}) =>
 			findSimilarIdeas({
 				text: params.text,
 				threshold: params.threshold ?? 0.7,

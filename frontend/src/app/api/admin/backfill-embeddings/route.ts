@@ -3,7 +3,7 @@
  * Protected by SURREAL_PASS (only server knows it)
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 import { getSurrealDB } from '@/lib/db/surreal'
 import { generateEmbedding } from '@/lib/server/embedding'
 
@@ -58,7 +58,9 @@ export async function POST(request: NextRequest) {
 			}
 
 			// Convert to regular array if needed (in case it's a Float32Array or similar)
-			const embeddingArray = Array.isArray(embedding) ? embedding : Array.from(embedding as ArrayLike<number>)
+			const embeddingArray = Array.isArray(embedding)
+				? embedding
+				: Array.from(embedding as ArrayLike<number>)
 
 			// Use raw array in query to avoid serialization issues with SurrealDB params
 			const embeddingStr = `[${embeddingArray.join(',')}]`
@@ -97,7 +99,9 @@ export async function GET(request: NextRequest) {
 	const db = await getSurrealDB()
 
 	const [withEmbeddings, withoutEmbeddings] = await Promise.all([
-		db.query<{ count: number }[][]>(`SELECT count() as count FROM idea WHERE embedding != NONE GROUP ALL`),
+		db.query<{ count: number }[][]>(
+			`SELECT count() as count FROM idea WHERE embedding != NONE GROUP ALL`,
+		),
 		db.query<{ count: number }[][]>(
 			`SELECT count() as count FROM idea WHERE embedding = NONE OR embedding = NULL GROUP ALL`,
 		),

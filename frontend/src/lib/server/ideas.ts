@@ -5,6 +5,7 @@ import { IdeaCreateSchema, IdeaListFilterSchema, SimilarIdeaQuerySchema } from '
 import { Value } from '@sinclair/typebox/value'
 import { getSurrealDB } from '@/lib/db/surreal'
 import { Errors } from '@/lib/errors'
+import { getPostHogClient } from '@/lib/posthog-server'
 import { requireAuth } from '@/lib/server/auth'
 import { all, first, parseId } from '@/lib/server/db'
 import { generateEmbedding, generateQueryEmbedding } from '@/lib/server/embedding'
@@ -130,7 +131,22 @@ export async function createIdea(input: unknown): Promise<Idea> {
 		const created = first<Record<string, unknown>>(result)
 		if (!created) throw Errors.internal('Failed to create idea')
 
-		return mapIdea(created)
+		const idea = mapIdea(created)
+
+		// Track idea creation server-side
+		const posthog = getPostHogClient()
+		posthog.capture({
+			distinctId: userId,
+			event: 'idea_created',
+			properties: {
+				idea_id: idea.id,
+				category: idea.category,
+				tags_count: idea.tags.length,
+				has_embedding: !!embedding,
+			},
+		})
+
+		return idea
 	})
 }
 
@@ -151,6 +167,17 @@ export async function voteIdea(ideaId: string, voteType: VoteType): Promise<void
 				votes_total = votes_problem + votes_solution`,
 			{ userId, ideaId, voteType },
 		)
+
+		// Track vote server-side
+		const posthog = getPostHogClient()
+		posthog.capture({
+			distinctId: userId,
+			event: 'idea_voted',
+			properties: {
+				idea_id: ideaId,
+				vote_type: voteType,
+			},
+		})
 	})
 }
 
@@ -187,13 +214,12 @@ export async function findSimilarIdeas(input: unknown): Promise<readonly Similar
 		},
 	)
 
-	return all<Record<string, unknown>>(result)
-		.map((r) => ({
-			id: parseId(r.id),
-			title: String(r.title),
-			problem: String(r.problem),
-			category: String(r.category),
-			votes: Number(r.votes_total ?? 0),
-			similarity: Number(r.similarity),
-		}))
+	return all<Record<string, unknown>>(result).map((r) => ({
+		id: parseId(r.id),
+		title: String(r.title),
+		problem: String(r.problem),
+		category: String(r.category),
+		votes: Number(r.votes_total ?? 0),
+		similarity: Number(r.similarity),
+	}))
 }

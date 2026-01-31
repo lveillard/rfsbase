@@ -2,6 +2,7 @@
 
 import { ArrowRight, BadgeCheck, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import posthog from 'posthog-js'
 import { useState } from 'react'
 import { Button, Card } from '@/components/ui'
 import { verifyYcFounder, type YCVerification } from '@/lib/server/yc-verify'
@@ -15,7 +16,13 @@ function YCLogo({ className }: { className?: string }) {
 	return (
 		<svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 			<rect width="24" height="24" rx="4" fill="#FF6600" />
-			<path d="M12 14.5V18M8 6L12 12M16 6L12 12" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+			<path
+				d="M12 14.5V18M8 6L12 12M16 6L12 12"
+				stroke="white"
+				strokeWidth="2.5"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+			/>
 		</svg>
 	)
 }
@@ -36,13 +43,23 @@ export function SignupForm() {
 		setIsVerifying(true)
 		setYcError('')
 
+		posthog.capture('yc_verification_attempted')
+
 		try {
 			const data = await verifyYcFounder(ycInput)
 			setYcData(data)
 			setYcStatus('verified')
+			posthog.capture('yc_verification_succeeded', {
+				batch: data.batch,
+				company: data.company,
+			})
 		} catch (err) {
-			setYcError(err instanceof Error ? err.message : 'Verification failed')
+			const errorMessage = err instanceof Error ? err.message : 'Verification failed'
+			setYcError(errorMessage)
 			setYcData(null)
+			posthog.capture('yc_verification_failed', {
+				error: errorMessage,
+			})
 		} finally {
 			setIsVerifying(false)
 		}
@@ -75,7 +92,10 @@ export function SignupForm() {
 							type="button"
 							variant={ycStatus !== 'not_yc' ? 'primary' : 'outline'}
 							size="sm"
-							onClick={() => setYcStatus('idle')}
+							onClick={() => {
+								setYcStatus('idle')
+								posthog.capture('signup_started', { is_yc_founder: true })
+							}}
 							className="flex-1"
 						>
 							Yes
@@ -89,6 +109,7 @@ export function SignupForm() {
 								setYcInput('')
 								setYcData(null)
 								setYcError('')
+								posthog.capture('signup_started', { is_yc_founder: false })
 							}}
 							className="flex-1"
 						>
@@ -154,10 +175,12 @@ export function SignupForm() {
 							<span className="text-sm font-medium">Hey {ycData.name}!</span>
 						</div>
 						<p className="text-sm text-text-secondary">
-							{ycData.title && `${ycData.title} @ `}{ycData.company} · {ycData.batch}
+							{ycData.title && `${ycData.title} @ `}
+							{ycData.company} · {ycData.batch}
 						</p>
 						<p className="text-sm text-text-secondary mt-2">
-							Continue with <strong className="text-accent">{ycData.email}</strong> to get your YC badge
+							Continue with <strong className="text-accent">{ycData.email}</strong> to get your YC
+							badge
 						</p>
 					</div>
 				)}
@@ -167,7 +190,11 @@ export function SignupForm() {
 				<>
 					<AuthOptions
 						requiredEmail={ycData?.email}
-						ycData={ycData ? { batch: ycData.batch, company: ycData.company, linkedin: ycData.linkedin } : undefined}
+						ycData={
+							ycData
+								? { batch: ycData.batch, company: ycData.company, linkedin: ycData.linkedin }
+								: undefined
+						}
 					/>
 
 					<p className="text-center text-xs text-text-muted mt-6">

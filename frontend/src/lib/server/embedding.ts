@@ -34,7 +34,7 @@ async function getCredentials() {
 	// Check if cached credentials are still valid (with 5 min buffer)
 	if (cachedCredentials?.expiration) {
 		const expirationBuffer = 5 * 60 * 1000 // 5 minutes
-		if (new Date().getTime() < cachedCredentials.expiration.getTime() - expirationBuffer) {
+		if (Date.now() < cachedCredentials.expiration.getTime() - expirationBuffer) {
 			return cachedCredentials
 		}
 	}

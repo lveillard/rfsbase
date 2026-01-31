@@ -1,6 +1,7 @@
 'use client'
 
 import { Loader2, Save } from 'lucide-react'
+import posthog from 'posthog-js'
 import { useState } from 'react'
 import { Avatar, Button, Card, FormField, Input, Textarea } from '@/components/ui'
 import { updateProfile } from '@/lib/actions'
@@ -53,6 +54,11 @@ export function SettingsForm({ user }: SettingsFormProps) {
 		setSuccessMessage(null)
 		if (!validate()) return
 
+		posthog.capture('profile_form_submitted', {
+			has_avatar: !!avatar.trim(),
+			has_bio: !!bio.trim(),
+		})
+
 		setIsSubmitting(true)
 		try {
 			await updateProfile({
@@ -64,6 +70,7 @@ export function SettingsForm({ user }: SettingsFormProps) {
 		} catch (error) {
 			console.error('Failed to update profile:', error)
 			setErrors({ name: 'Failed to update profile. Please try again.' })
+			posthog.captureException(error)
 		} finally {
 			setIsSubmitting(false)
 		}
