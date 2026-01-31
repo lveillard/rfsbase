@@ -1,21 +1,18 @@
 'use client'
 
+import type { UserStats } from '@rfsbase/shared'
 import { ArrowBigUp, Lightbulb, MessageSquare, Users } from 'lucide-react'
 import { Card } from '@/components/ui'
 import { formatNumber } from '@/lib/utils'
 
 interface ProfileStatsProps {
-	ideasCount: number
-	votesReceived: number
-	commentsCount: number
-	followersCount: number
-	followingCount: number
+	readonly stats: UserStats
 }
 
 interface StatItemProps {
-	icon: React.ReactNode
-	value: number
-	label: string
+	readonly icon: React.ReactNode
+	readonly value: number
+	readonly label: string
 }
 
 function StatItem({ icon, value, label }: StatItemProps) {
@@ -30,29 +27,31 @@ function StatItem({ icon, value, label }: StatItemProps) {
 	)
 }
 
-export function ProfileStats({
-	ideasCount,
-	votesReceived,
-	commentsCount,
-	followersCount,
-	followingCount,
-}: ProfileStatsProps) {
+export function ProfileStats({ stats }: ProfileStatsProps) {
 	return (
 		<Card padding="none">
 			<div className="grid grid-cols-2 sm:grid-cols-5 divide-x divide-y sm:divide-y-0 divide-border">
-				<StatItem icon={<Lightbulb className="h-5 w-5" />} value={ideasCount} label="Ideas" />
+				<StatItem icon={<Lightbulb className="h-5 w-5" />} value={stats.ideasCount} label="Ideas" />
 				<StatItem
 					icon={<ArrowBigUp className="h-5 w-5" />}
-					value={votesReceived}
+					value={stats.votesReceived}
 					label="Votes Received"
 				/>
 				<StatItem
 					icon={<MessageSquare className="h-5 w-5" />}
-					value={commentsCount}
+					value={stats.commentsCount}
 					label="Comments"
 				/>
-				<StatItem icon={<Users className="h-5 w-5" />} value={followersCount} label="Followers" />
-				<StatItem icon={<Users className="h-5 w-5" />} value={followingCount} label="Following" />
+				<StatItem
+					icon={<Users className="h-5 w-5" />}
+					value={stats.followersCount}
+					label="Followers"
+				/>
+				<StatItem
+					icon={<Users className="h-5 w-5" />}
+					value={stats.followingCount}
+					label="Following"
+				/>
 			</div>
 		</Card>
 	)

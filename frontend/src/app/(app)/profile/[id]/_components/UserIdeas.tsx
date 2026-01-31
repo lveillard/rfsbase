@@ -5,19 +5,20 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Card, Skeleton } from '@/components/ui'
 import { getUserIdeas } from '@/lib/actions'
-import { formatNumber, formatRelativeTime, getCategoryById, parseId } from '@/lib/utils'
-import type { IdeaSummary } from '../../_types'
+import { formatNumber, formatRelativeTime, getCategoryById } from '@/lib/utils'
+
+type IdeaSummary = Awaited<ReturnType<typeof getUserIdeas>>[number]
 
 interface UserIdeasProps {
 	readonly userId: string
 }
 
-function IdeaListItem({ idea }: { idea: IdeaSummary }) {
+function IdeaListItem({ idea }: { readonly idea: IdeaSummary }) {
 	const category = getCategoryById(idea.category)
 
 	return (
 		<Link
-			href={`/ideas/${parseId(idea.id)}`}
+			href={`/ideas/${idea.id}`}
 			className="block p-4 hover:bg-surface-alt/50 transition-colors"
 		>
 			<div className="flex items-start justify-between gap-4">
@@ -72,15 +73,14 @@ function IdeaListSkeleton() {
 }
 
 export function UserIdeas({ userId }: UserIdeasProps) {
-	const [ideas, setIdeas] = useState<IdeaSummary[]>([])
+	const [ideas, setIdeas] = useState<readonly IdeaSummary[]>([])
 	const [isLoading, setIsLoading] = useState(true)
 	const [error, setError] = useState<string | null>(null)
 
 	useEffect(() => {
 		const fetchIdeas = async () => {
 			try {
-				const userIdeas = await getUserIdeas(userId)
-				setIdeas(userIdeas as IdeaSummary[])
+				setIdeas(await getUserIdeas(userId))
 			} catch (err) {
 				setError('Failed to load ideas')
 				console.error('Failed to fetch user ideas:', err)

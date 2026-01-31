@@ -1,6 +1,6 @@
 'use server'
 
-import type { User, UserSummary } from '@rfsbase/shared'
+import type { User, UserStats, UserSummary } from '@rfsbase/shared'
 import { UserUpdateSchema } from '@rfsbase/shared'
 import { Value } from '@sinclair/typebox/value'
 import { getSurrealDB } from '@/lib/db/surreal'
@@ -9,8 +9,20 @@ import { getPostHogClient } from '@/lib/posthog-server'
 import { getSession, requireAuth } from '@/lib/server/auth'
 import { all, first, parseId } from '@/lib/server/db'
 
-// Pure mapper
-const mapUser = (row: unknown): User => {
+// Pure mappers
+const mapUserSummary = (row: unknown): UserSummary => {
+	const r = row as Record<string, unknown>
+	const ycType = (r.yc_type as 'partner' | 'alumni' | null) ?? null
+	return {
+		id: parseId(r.id),
+		name: String(r.name ?? 'Unknown'),
+		avatar: r.avatar ? String(r.avatar) : undefined,
+		verified: Boolean(r.verified ?? r.verified_email),
+		ycType: ycType === 'partner' || ycType === 'alumni' ? ycType : null,
+	}
+}
+
+const mapUser = (row: unknown, stats: UserStats): User => {
 	const r = row as Record<string, unknown>
 	const ycType = r.yc_type as string | null
 	return {
@@ -29,29 +41,19 @@ const mapUser = (row: unknown): User => {
 					}
 				: undefined,
 		},
-		stats: {
-			ideasCount: Number(r.ideas_count ?? 0),
-			votesReceived: Number(r.votes_received ?? 0),
-			votesGiven: Number(r.votes_given ?? 0),
-			commentsCount: Number(r.comments_count ?? 0),
-			followersCount: Number(r.followers_count ?? 0),
-			followingCount: Number(r.following_count ?? 0),
-		},
+		stats,
 		createdAt: String(r.created_at),
 		updatedAt: String(r.updated_at),
 	}
 }
 
-const mapUserSummary = (row: unknown): UserSummary => {
-	const r = row as Record<string, unknown>
-	const ycType = (r.yc_type as 'partner' | 'alumni' | null) ?? null
-	return {
-		id: parseId(r.id),
-		name: String(r.name ?? 'Unknown'),
-		avatar: r.avatar ? String(r.avatar) : undefined,
-		verified: Boolean(r.verified ?? r.verified_email),
-		ycType: ycType === 'partner' || ycType === 'alumni' ? ycType : null,
-	}
+const DEFAULT_STATS: UserStats = {
+	ideasCount: 0,
+	votesReceived: 0,
+	votesGiven: 0,
+	commentsCount: 0,
+	followersCount: 0,
+	followingCount: 0,
 }
 
 // Build dynamic update query
@@ -65,17 +67,61 @@ const buildUpdateParams = (fields: Record<string, unknown>) => {
 	}
 }
 
-export async function getUser(id: string): Promise<User | null> {
+/**
+ * Get user stats - computed from ideas, votes, follows
+ * Single efficient query with parallel aggregations
+ */
+export async function getUserStats(userId: string): Promise<UserStats> {
 	const db = await getSurrealDB()
 
-	const result = await db.query(
-		`SELECT id, name, email, avatar, bio, verified_email, yc_type, created_at, updated_at
-		FROM type::thing('user', $id)`,
-		{ id },
+	// Single query with all aggregations using LET bindings
+	const result = await db.query<[Record<string, unknown>[]]>(
+		`
+		LET $user_id = type::thing('user', $userId);
+		LET $ideas = (SELECT votes_total, comment_count FROM idea WHERE author = $user_id);
+		LET $followers = (SELECT count() FROM follows WHERE out = $user_id GROUP ALL);
+		LET $following = (SELECT count() FROM follows WHERE in = $user_id GROUP ALL);
+		LET $votes_given = (SELECT count() FROM voted WHERE in = $user_id GROUP ALL);
+
+		RETURN {
+			ideas_count: array::len($ideas),
+			votes_received: math::sum($ideas.votes_total),
+			comments_count: math::sum($ideas.comment_count),
+			followers_count: $followers[0].count ?? 0,
+			following_count: $following[0].count ?? 0,
+			votes_given: $votes_given[0].count ?? 0
+		}
+		`,
+		{ userId },
 	)
 
 	const row = first<Record<string, unknown>>(result)
-	return row ? mapUser(row) : null
+	if (!row) return DEFAULT_STATS
+
+	return {
+		ideasCount: Number(row.ideas_count ?? 0),
+		votesReceived: Number(row.votes_received ?? 0),
+		votesGiven: Number(row.votes_given ?? 0),
+		commentsCount: Number(row.comments_count ?? 0),
+		followersCount: Number(row.followers_count ?? 0),
+		followingCount: Number(row.following_count ?? 0),
+	}
+}
+
+export async function getUser(id: string): Promise<User | null> {
+	const db = await getSurrealDB()
+
+	const [userResult, stats] = await Promise.all([
+		db.query(
+			`SELECT id, name, email, avatar, bio, verified_email, yc_type, created_at, updated_at
+			FROM type::thing('user', $id)`,
+			{ id },
+		),
+		getUserStats(id),
+	])
+
+	const row = first<Record<string, unknown>>(userResult)
+	return row ? mapUser(row, stats) : null
 }
 
 export async function getCurrentUser(): Promise<User | null> {
@@ -96,17 +142,19 @@ export async function updateProfile(input: unknown): Promise<User> {
 			avatar: validated.avatar,
 		})
 
-		const result = await db.query(`UPDATE type::thing('user', $userId) SET ${setClause} RETURN *`, {
-			userId,
-			...params,
-		})
+		const [result, stats] = await Promise.all([
+			db.query(`UPDATE type::thing('user', $userId) SET ${setClause} RETURN *`, {
+				userId,
+				...params,
+			}),
+			getUserStats(userId),
+		])
 
 		const row = first<Record<string, unknown>>(result)
 		if (!row) throw Errors.internal('Failed to update profile')
 
-		const user = mapUser(row)
+		const user = mapUser(row, stats)
 
-		// Track profile update server-side
 		const posthog = getPostHogClient()
 		posthog.capture({
 			distinctId: userId,
@@ -170,14 +218,11 @@ export async function followUser(targetUserId: string): Promise<void> {
 			{ userId, targetUserId },
 		)
 
-		// Track user follow server-side
 		const posthog = getPostHogClient()
 		posthog.capture({
 			distinctId: userId,
 			event: 'user_followed',
-			properties: {
-				target_user_id: targetUserId,
-			},
+			properties: { target_user_id: targetUserId },
 		})
 	})
 }
@@ -191,14 +236,11 @@ export async function unfollowUser(targetUserId: string): Promise<void> {
 			{ userId, targetUserId },
 		)
 
-		// Track user unfollow server-side
 		const posthog = getPostHogClient()
 		posthog.capture({
 			distinctId: userId,
 			event: 'user_unfollowed',
-			properties: {
-				target_user_id: targetUserId,
-			},
+			properties: { target_user_id: targetUserId },
 		})
 	})
 }
@@ -206,10 +248,11 @@ export async function unfollowUser(targetUserId: string): Promise<void> {
 export async function getFollowers(userId: string): Promise<readonly UserSummary[]> {
 	const db = await getSurrealDB()
 
+	// in = follower, out = followed user
 	const result = await db.query(
-		`SELECT follower.id as id, follower.name as name, follower.avatar as avatar,
-			follower.verified_email as verified, follower.yc_type as yc_type
-		FROM follows WHERE following = type::thing('user', $userId)`,
+		`SELECT in.id as id, in.name as name, in.avatar as avatar,
+			in.verified_email as verified, in.yc_type as yc_type
+		FROM follows WHERE out = type::thing('user', $userId)`,
 		{ userId },
 	)
 
@@ -219,10 +262,11 @@ export async function getFollowers(userId: string): Promise<readonly UserSummary
 export async function getFollowing(userId: string): Promise<readonly UserSummary[]> {
 	const db = await getSurrealDB()
 
+	// in = follower (current user), out = followed user
 	const result = await db.query(
-		`SELECT following.id as id, following.name as name, following.avatar as avatar,
-			following.verified_email as verified, following.yc_type as yc_type
-		FROM follows WHERE follower = type::thing('user', $userId)`,
+		`SELECT out.id as id, out.name as name, out.avatar as avatar,
+			out.verified_email as verified, out.yc_type as yc_type
+		FROM follows WHERE in = type::thing('user', $userId)`,
 		{ userId },
 	)
 

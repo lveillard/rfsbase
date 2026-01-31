@@ -7,7 +7,7 @@ import posthog from 'posthog-js'
 import { Brand, ThemeToggle } from '@/components/layout'
 import { Avatar } from '@/components/ui'
 import { signOut, useSession } from '@/lib/auth-client'
-import { cn, parseId } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 
 const navItems = [
 	{ href: '/ideas', label: 'Ideas', icon: Lightbulb },
@@ -26,7 +26,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 	const router = useRouter()
 
 	// Better Auth native session hook
-	const { data: session, isPending } = useSession()
+	const { data: session } = useSession()
 	const user = session?.user
 	const isAuthenticated = !!user
 
@@ -97,7 +97,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 				<div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border">
 					<div className="flex items-center gap-3">
 						{isAuthenticated && user ? (
-							<Link href={`/profile/${parseId(user.id)}`} onClick={onClose}>
+							<Link href="/profile" onClick={onClose}>
 								<Avatar src={displayUser.avatar} name={displayUser.name} size="sm" />
 							</Link>
 						) : (
@@ -111,7 +111,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 						</div>
 						<div className="flex gap-1">
 							<ThemeToggle />
-							{isAuthenticated && !isPending && (
+							{isAuthenticated && (
 								<button
 									type="button"
 									onClick={handleLogout}

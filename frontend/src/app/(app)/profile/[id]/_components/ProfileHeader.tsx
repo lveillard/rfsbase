@@ -1,26 +1,20 @@
 'use client'
 
+import type { User } from '@rfsbase/shared'
 import { Calendar, Check, UserMinus, UserPlus } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Avatar, Badge, Button, Card } from '@/components/ui'
 import { followUser, unfollowUser } from '@/lib/actions'
-import { formatDate, parseId } from '@/lib/utils'
-import type { ProfileUser } from '../../_types'
+import { formatDate } from '@/lib/utils'
 
 interface ProfileHeaderProps {
-	readonly user: ProfileUser
+	readonly user: User
 	readonly isOwnProfile: boolean
 	readonly isFollowing?: boolean
-	readonly onFollowToggle?: () => void
 }
 
-export function ProfileHeader({
-	user,
-	isOwnProfile,
-	isFollowing = false,
-	onFollowToggle,
-}: ProfileHeaderProps) {
+export function ProfileHeader({ user, isOwnProfile, isFollowing = false }: ProfileHeaderProps) {
 	const [following, setFollowing] = useState(isFollowing)
 	const [isLoading, setIsLoading] = useState(false)
 
@@ -32,12 +26,11 @@ export function ProfileHeader({
 		setIsLoading(true)
 		try {
 			if (following) {
-				await unfollowUser(parseId(user.id))
+				await unfollowUser(user.id)
 			} else {
-				await followUser(parseId(user.id))
+				await followUser(user.id)
 			}
 			setFollowing((prev) => !prev)
-			onFollowToggle?.()
 		} catch (error) {
 			console.error('Failed to toggle follow:', error)
 		} finally {

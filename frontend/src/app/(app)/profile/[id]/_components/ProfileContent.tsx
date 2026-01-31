@@ -1,28 +1,24 @@
 'use client'
 
+import type { User } from '@rfsbase/shared'
 import { useSession } from '@/lib/auth-client'
-import type { ProfileStats as ProfileStatsType, ProfileUser } from '../../_types'
 import { ProfileHeader } from './ProfileHeader'
 import { ProfileStats } from './ProfileStats'
 import { UserIdeas } from './UserIdeas'
 
 interface ProfileContentProps {
-	readonly profileUserId: string
-	readonly user: ProfileUser
-	readonly stats: ProfileStatsType
+	readonly user: User
 }
 
-export function ProfileContent({ profileUserId, user, stats }: ProfileContentProps) {
-	// Better Auth native session hook
+export function ProfileContent({ user }: ProfileContentProps) {
 	const { data: session } = useSession()
-	const currentUserId = session?.user?.id
-	const isOwnProfile = currentUserId === profileUserId
+	const isOwnProfile = session?.user?.id === user.id
 
 	return (
 		<div className="max-w-4xl mx-auto space-y-6">
 			<ProfileHeader user={user} isOwnProfile={isOwnProfile} />
-			<ProfileStats {...stats} />
-			<UserIdeas userId={profileUserId} />
+			<ProfileStats stats={user.stats} />
+			<UserIdeas userId={user.id} />
 		</div>
 	)
 }
