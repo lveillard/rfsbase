@@ -30,7 +30,15 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 	const user = session?.user
 	const isAuthenticated = !!user
 
-	const isNavItemActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`)
+	// Exact match for most items, but /ideas should match /ideas/[id] (not /ideas/new)
+	const isNavItemActive = (href: string) => {
+		if (pathname === href) return true
+		// /ideas matches /ideas/[uuid] but not /ideas/new
+		if (href === '/ideas' && pathname.startsWith('/ideas/') && !pathname.startsWith('/ideas/new')) {
+			return true
+		}
+		return false
+	}
 
 	const handleLogout = async () => {
 		posthog.reset()
