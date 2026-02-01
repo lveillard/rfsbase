@@ -1,21 +1,23 @@
 {
   "$schema": "./schemas/categories.schema.json",
   "categories": [
-    { "id": "ai-ml", "label": "AI/ML", "icon": "brain", "color": "#8B5CF6", "description": "Artificial intelligence and machine learning" },
+    { "id": "ai-agents", "label": "AI Agents", "icon": "bot", "color": "#8B5CF6", "description": "Autonomous agents and agentic workflows" },
+    { "id": "ai-infra", "label": "AI Infrastructure", "icon": "server", "color": "#7C3AED", "description": "Models, training, inference, and MLOps" },
+    { "id": "ai-dev", "label": "AI for Devs", "icon": "terminal", "color": "#6366F1", "description": "AI coding assistants and developer tools" },
+    { "id": "ai-apps", "label": "AI Applications", "icon": "sparkles", "color": "#A855F7", "description": "Vertical AI applications and products" },
     { "id": "dev-tools", "label": "Developer Tools", "icon": "code", "color": "#3B82F6", "description": "Tools and platforms for developers" },
     { "id": "healthcare", "label": "Healthcare", "icon": "heart-pulse", "color": "#EF4444", "description": "Healthcare, biotech, and life sciences" },
     { "id": "fintech", "label": "Fintech", "icon": "dollar-sign", "color": "#10B981", "description": "Financial services and payments" },
     { "id": "legal", "label": "Legal", "icon": "scale", "color": "#EC4899", "description": "Legal tech and compliance" },
     { "id": "defense", "label": "Defense & Gov", "icon": "shield", "color": "#DC2626", "description": "Defense tech and government" },
-    { "id": "robotics", "label": "Robotics", "icon": "cpu", "color": "#6366F1", "description": "Robotics and hardware" },
+    { "id": "robotics", "label": "Robotics", "icon": "cpu", "color": "#0EA5E9", "description": "Robotics and hardware" },
     { "id": "climate", "label": "Climate & Energy", "icon": "leaf", "color": "#22C55E", "description": "Climate tech and clean energy" },
     { "id": "enterprise", "label": "Enterprise", "icon": "building-2", "color": "#14B8A6", "description": "B2B and enterprise software" },
     { "id": "consumer", "label": "Consumer", "icon": "users", "color": "#F97316", "description": "Consumer products and apps" },
     { "id": "education", "label": "Education", "icon": "graduation-cap", "color": "#06B6D4", "description": "EdTech and learning" },
-    { "id": "other", "label": "Other", "icon": "sparkles", "color": "#71717A", "description": "Other categories" }
+    { "id": "other", "label": "Other", "icon": "layers", "color": "#71717A", "description": "Other categories" }
   ],
   "popularTags": [
-    "ai",
     "llm",
     "agents",
     "saas",
@@ -27,8 +29,9 @@
     "analytics",
     "security",
     "data",
-    "workflow",
-    "collaboration",
-    "productivity"
+    "rag",
+    "fine-tuning",
+    "multimodal",
+    "voice"
   ]
 }
