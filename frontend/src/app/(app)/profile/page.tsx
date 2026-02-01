@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { getSession } from '@/lib/server/auth'
+import { parseId } from '@/lib/utils'
 
 export default async function MyProfilePage() {
 	const session = await getSession()
@@ -8,5 +9,5 @@ export default async function MyProfilePage() {
 		redirect('/login')
 	}
 
-	redirect(`/profile/${session.user.id}`)
+	redirect(`/profile/${parseId(session.user.id)}`)
 }
