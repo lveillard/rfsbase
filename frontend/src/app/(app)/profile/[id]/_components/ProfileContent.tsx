@@ -3,6 +3,7 @@
 import type { User } from '@rfsbase/shared'
 import { useSession } from '@/lib/auth-client'
 import { ProfileHeader } from './ProfileHeader'
+import { ProfileSettings } from './ProfileSettings'
 import { ProfileStats } from './ProfileStats'
 import { UserIdeas } from './UserIdeas'
 
@@ -19,6 +20,7 @@ export function ProfileContent({ user }: ProfileContentProps) {
 			<ProfileHeader user={user} isOwnProfile={isOwnProfile} />
 			<ProfileStats stats={user.stats} />
 			<UserIdeas userId={user.id} />
+			{isOwnProfile && <ProfileSettings user={user} />}
 		</div>
 	)
 }

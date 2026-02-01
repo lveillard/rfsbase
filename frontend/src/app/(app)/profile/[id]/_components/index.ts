@@ -1,4 +1,5 @@
 export { ProfileContent } from './ProfileContent'
 export { ProfileHeader } from './ProfileHeader'
+export { ProfileSettings } from './ProfileSettings'
 export { ProfileStats } from './ProfileStats'
 export { UserIdeas } from './UserIdeas'

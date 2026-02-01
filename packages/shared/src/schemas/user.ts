@@ -30,6 +30,7 @@ export const UserSchema = Type.Object({
   name: Type.String({ minLength: 1, maxLength: 100 }),
   avatar: Type.Optional(Type.String({ format: 'uri' })),
   bio: Type.Optional(Type.String({ maxLength: 500 })),
+  isPublic: Type.Boolean({ default: true }),
   verified: Type.Object({
     email: Type.Boolean({ default: false }),
     yc: Type.Optional(YCVerificationSchema)
@@ -59,7 +60,8 @@ export const UserUpdateSchema = Type.Partial(
   Type.Object({
     name: Type.String({ minLength: 1, maxLength: 100 }),
     avatar: Type.Optional(Type.String({ format: 'uri' })),
-    bio: Type.Optional(Type.String({ maxLength: 500 }))
+    bio: Type.Optional(Type.String({ maxLength: 500 })),
+    isPublic: Type.Boolean()
   })
 )
 

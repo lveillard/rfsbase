@@ -31,6 +31,7 @@ const mapUser = (row: unknown, stats: UserStats): User => {
 		email: String(r.email),
 		avatar: r.avatar ? String(r.avatar) : undefined,
 		bio: r.bio ? String(r.bio) : undefined,
+		isPublic: r.is_public !== false, // default true
 		verified: {
 			email: Boolean(r.verified_email),
 			yc: ycType
@@ -113,7 +114,7 @@ export async function getUser(id: string): Promise<User | null> {
 
 	const [userResult, stats] = await Promise.all([
 		db.query(
-			`SELECT id, name, email, avatar, bio, verified_email, yc_type, created_at, updated_at
+			`SELECT id, name, email, avatar, bio, is_public, verified_email, yc_type, created_at, updated_at
 			FROM type::thing('user', $id)`,
 			{ id },
 		),
@@ -140,6 +141,7 @@ export async function updateProfile(input: unknown): Promise<User> {
 			name: validated.name,
 			bio: validated.bio,
 			avatar: validated.avatar,
+			is_public: validated.isPublic,
 		})
 
 		const [result, stats] = await Promise.all([
@@ -271,4 +273,42 @@ export async function getFollowing(userId: string): Promise<readonly UserSummary
 	)
 
 	return all(result).map(mapUserSummary)
+}
+
+export async function deleteAccount(): Promise<void> {
+	return requireAuth(async (userId) => {
+		const db = await getSurrealDB()
+
+		// Delete all user data in a transaction-like manner
+		await db.query(
+			`
+			LET $user_id = type::thing('user', $userId);
+			-- Delete user's votes
+			DELETE voted WHERE in = $user_id;
+			-- Delete votes on user's ideas
+			DELETE voted WHERE out.author = $user_id;
+			-- Delete user's comments
+			DELETE comment WHERE author = $user_id;
+			-- Delete comments on user's ideas
+			DELETE comment WHERE idea.author = $user_id;
+			-- Delete user's ideas
+			DELETE idea WHERE author = $user_id;
+			-- Delete follows
+			DELETE follows WHERE in = $user_id OR out = $user_id;
+			-- Delete sessions
+			DELETE session WHERE userId = $user_id;
+			-- Delete accounts (OAuth)
+			DELETE account WHERE userId = $user_id;
+			-- Delete the user
+			DELETE $user_id;
+			`,
+			{ userId },
+		)
+
+		const posthog = getPostHogClient()
+		posthog.capture({
+			distinctId: userId,
+			event: 'account_deleted',
+		})
+	})
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Bell, Lightbulb, LogOut, PlusCircle, Search, Settings } from 'lucide-react'
+import { Bell, Lightbulb, LogOut, PlusCircle, Search } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import posthog from 'posthog-js'
@@ -13,7 +13,6 @@ const navItems = [
 	{ href: '/ideas', label: 'Ideas', icon: Lightbulb },
 	{ href: '/ideas/new', label: 'New Idea', icon: PlusCircle },
 	{ href: '/notifications', label: 'Notifications', icon: Bell },
-	{ href: '/settings', label: 'Settings', icon: Settings },
 ] as const
 
 interface SidebarProps {

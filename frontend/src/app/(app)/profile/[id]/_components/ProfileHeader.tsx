@@ -2,7 +2,6 @@
 
 import type { User } from '@rfsbase/shared'
 import { Calendar, Check, UserMinus, UserPlus } from 'lucide-react'
-import Link from 'next/link'
 import { useState } from 'react'
 import { Avatar, Badge, Button, Card } from '@/components/ui'
 import { followUser, unfollowUser } from '@/lib/actions'
@@ -38,6 +37,9 @@ export function ProfileHeader({ user, isOwnProfile, isFollowing = false }: Profi
 		}
 	}
 
+	// Only show bio if profile is public or it's own profile
+	const showBio = user.isPublic || isOwnProfile
+
 	return (
 		<Card padding="lg">
 			<div className="flex flex-col sm:flex-row gap-6">
@@ -68,7 +70,9 @@ export function ProfileHeader({ user, isOwnProfile, isFollowing = false }: Profi
 								)}
 							</div>
 
-							{user.bio && <p className="text-text-secondary mt-2 max-w-xl">{user.bio}</p>}
+							{showBio && user.bio && (
+								<p className="text-text-secondary mt-2 max-w-xl">{user.bio}</p>
+							)}
 
 							<div className="flex items-center gap-4 mt-3 text-sm text-text-muted">
 								<span className="flex items-center gap-1.5">
@@ -88,12 +92,6 @@ export function ProfileHeader({ user, isOwnProfile, isFollowing = false }: Profi
 							>
 								{following ? 'Unfollow' : 'Follow'}
 							</Button>
-						)}
-
-						{isOwnProfile && (
-							<Link href="/settings">
-								<Button variant="outline">Edit Profile</Button>
-							</Link>
 						)}
 					</div>
 				</div>
