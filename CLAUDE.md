@@ -12,7 +12,7 @@ RFSbase is a "Request for Startup" idea board where founders share problems, pro
 - **Backend**: Next.js API Routes + Server Actions (consolidated architecture)
 - **Database**: SurrealDB 2.5+ (multi-model with vector search)
 - **Auth**: Better Auth with SurrealDB Adapter
-- **AI**: Vercel AI SDK + OpenAI embeddings
+- **AI**: Vercel AI SDK + Fastembed (bge-large-en-v1.5)
 - **Build**: Turborepo + pnpm workspaces
 
 ## Architecture (Consolidated)
@@ -148,7 +148,7 @@ Graph relations (using SurrealDB RELATE):
 - `follows` - user follows user
 - `upvoted` - user upvotes comment
 
-Vector search: Ideas have 1536-dim OpenAI embeddings indexed with MTREE for semantic similarity search.
+Vector search: Ideas have 1024-dim embeddings (bge-large-en-v1.5) indexed with MTREE for semantic similarity search.
 
 ## Data Flow
 
@@ -225,10 +225,7 @@ GOOGLE_CLIENT_SECRET=
 GITHUB_CLIENT_ID=
 GITHUB_CLIENT_SECRET=
 
-# AI
-OPENAI_API_KEY=
+# Embeddings (self-hosted Fastembed)
+EMBED_URL=
+EMBED_API_KEY=
 ```
-
-## Infrastructure Notes
-
-**Terraform + EC2**: Changing `user_data` in terraform (e.g., toggling `use_secrets_manager`) will DESTROY and recreate the EC2 instance - update Cloudflare DNS if IP changes.
